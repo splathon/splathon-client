@@ -27,7 +27,14 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: any
 
+flutter_icons:
+  android: true 
+  ios: true
+  image_path: "assets/images/icon-splathon-app.png"
+  # Need run follow command to update app icons
+  # $flutter pub pub run flutter_launcher_icons:main
 
 # For information on the generic Dart part of this file, see the
 # following page: https://www.dartlang.org/tools/pub/pubspec
