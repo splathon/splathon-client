@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:splathon_app/styles/text.dart';
+import 'package:openapi/api.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -7,6 +8,17 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+
+  SampleObj _responseObj;
+
+  void _callLoginApi() {    
+    var client = new Sample1Api();
+    var result = client.getUserById(1);
+    result.then(
+      (sampleObj) => setState(() { this._responseObj = sampleObj; } )
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -39,11 +51,12 @@ class _LoginState extends State<Login> {
                 new Center(
                   child: new RaisedButton(
                     child: SplaText('login'),
-                    onPressed: () {
+                    onPressed: _callLoginApi,
+                    /*onPressed: () {
                       // TODO: Implement login function
                       // とりあえず何もせず遷移させる
                       Navigator.of(context).pushReplacementNamed("/home");
-                    },
+                    },*/
                   ),
                 ),
               ],
