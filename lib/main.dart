@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:splathon_app/views/splash.dart';
 import 'package:splathon_app/views/login.dart';
+import 'package:splathon_app/views/hometabbedbar.dart';
 import 'package:splathon_app/views/home.dart';
 
 void main() {
@@ -9,7 +10,7 @@ void main() {
     routes: <String, WidgetBuilder>{
       '/': (_) => new Splash(),
       '/login': (_) => new Login(),
-      '/home': (_) => new Home(),
+      '/home': (_) => new HomeTabbedBar(),
     },
   ));
 }
