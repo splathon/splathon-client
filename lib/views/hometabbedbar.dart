@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:splathon_app/styles/text.dart';
 import 'package:splathon_app/styles/color.dart';
 import 'package:splathon_app/views/result.dart';
+import 'package:splathon_app/views/notification.dart';
 
 /**
  * Reference
@@ -40,9 +41,7 @@ class HomeTabbedBarState extends State<HomeTabbedBar> with SingleTickerProviderS
         physics: NeverScrollableScrollPhysics(),
         // TODO: Set each Views
         children: <Widget>[
-            Center(
-              child: Text("Notifications"),
-            ),
+            new Notifications(),
             new ResultTabbedBar(),
             Center(
               child: Text("Ranking"),
