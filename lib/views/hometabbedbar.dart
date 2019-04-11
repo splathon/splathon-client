@@ -59,16 +59,20 @@ class HomeTabbedBarState extends State<HomeTabbedBar> with SingleTickerProviderS
             isScrollable: false,
             tabs: <Tab>[
               new Tab(
-                icon: new Icon(Icons.sms),
+                text: "お知らせ",
+                icon: Image.asset('assets/images/icon_notification.png'),
               ),
               new Tab(
-                icon: new Icon(Icons.whatshot),
+                text: 'リザルト',
+                icon: Image.asset('assets/images/icon_result.png'),
               ),
               new Tab(
-                icon: new Icon(Icons.format_list_numbered),
+                text: 'ランキング',
+                icon: Image.asset('assets/images/icon_ranking.png'),
               ),
               new Tab(
-                icon: new Icon(Icons.camera_front),
+                text: '受付コード',
+                icon: Image.asset('assets/images/icon_reception.png'),
               ),
             ],
             controller: controller,

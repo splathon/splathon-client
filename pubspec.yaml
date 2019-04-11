@@ -79,6 +79,12 @@ flutter:
   # For details regarding fonts from package dependencies,
   # see https://flutter.io/custom-fonts/#from-packages
   
+  assets:
+   - assets/images/icon_notification.png
+   - assets/images/icon_result.png
+   - assets/images/icon_ranking.png
+   - assets/images/icon_reception.png
+
   fonts:
     - family: Splatfont
       fonts:
