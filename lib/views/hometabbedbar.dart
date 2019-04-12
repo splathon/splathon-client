@@ -3,6 +3,7 @@ import 'package:splathon_app/styles/text.dart';
 import 'package:splathon_app/styles/color.dart';
 import 'package:splathon_app/views/result.dart';
 import 'package:splathon_app/views/notification.dart';
+import 'package:splathon_app/views/reception.dart';
 
 /**
  * Reference
@@ -46,9 +47,7 @@ class HomeTabbedBarState extends State<HomeTabbedBar> with SingleTickerProviderS
             Center(
               child: Text("Ranking"),
             ),
-            Center(
-              child: Text("Reception"),
-            ),
+            new ReceptionTabbedBar(),
           ],
         controller: controller,
       ),
