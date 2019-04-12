@@ -13,31 +13,33 @@ class ResultTabbedBar extends StatelessWidget {
       length: choices.length,
       child: new Stack(
         children: <Widget>[
-          TabBar(
-            isScrollable: false,
-            indicatorColor: splaBlueColor,
-            labelColor: splaBlueColor,
-            tabs: choices.map((TabView tabView) {
-              return new Container(
-                height: 70.0,
-                child: new Tab(
-                  text: tabView.title,
-                  icon: Icon(tabView.icon),
-                ),
-              );
-            }).toList(),
-          ),
           TabBarView(
             children: [
               Padding(
-                padding: const EdgeInsets.only(top: 70.0),
+                padding: const EdgeInsets.only(top: 60.0),
                 child: TabViewCard(tabView: choices[0],),
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 70.0),
+                padding: const EdgeInsets.only(top: 60.0),
                 child: TabViewCard(tabView: choices[1],),
               ),
             ],
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 24.0, left: 24.0, right: 24.0),
+            child: TabBar(
+              isScrollable: false,
+              indicatorColor: splaBlueColor,
+              labelColor: splaBlueColor,
+              tabs: choices.map((TabView tabView) {
+                return new Container(
+                  height: 36.0,
+                  child: new Tab(
+                    text: tabView.title,
+                  ),
+                );
+              }).toList(),
+            ),
           ),
         ],
       )
@@ -53,8 +55,8 @@ class TabView {
 }
 
 const List<TabView> choices = const <TabView>[
-  const TabView(title: 'あなたの試合結果', icon: Icons.assignment_ind),
-  const TabView(title: '全ての試合結果', icon: Icons.whatshot),
+  const TabView(title: 'あなたの試合結果'),
+  const TabView(title: '全ての試合結果'),
 ];
 
 class TabViewCard extends StatelessWidget {
@@ -72,7 +74,6 @@ class TabViewCard extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Icon(tabView.icon, size: 128.0, color: textStyle.color),
             Text(tabView.title, style: textStyle),
           ],
         ),
