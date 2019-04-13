@@ -86,6 +86,9 @@ flutter:
    - assets/images/icon_result.png
    - assets/images/icon_ranking.png
    - assets/images/icon_reception.png
+   - assets/images/crown1.png
+   - assets/images/crown2.png
+   - assets/images/crown3.png
 
   fonts:
     - family: Splatfont

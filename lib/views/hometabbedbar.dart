@@ -4,6 +4,7 @@ import 'package:splathon_app/styles/color.dart';
 import 'package:splathon_app/views/result.dart';
 import 'package:splathon_app/views/notification.dart';
 import 'package:splathon_app/views/reception.dart';
+import 'package:splathon_app/views/rankings.dart';
 
 /**
  * Reference
@@ -44,9 +45,7 @@ class HomeTabbedBarState extends State<HomeTabbedBar> with SingleTickerProviderS
         children: <Widget>[
             new Notifications(),
             new ResultTabbedBar(),
-            Center(
-              child: Text("Ranking"),
-            ),
+            new Rankings(),
             new ReceptionTabbedBar(),
           ],
         controller: controller,
