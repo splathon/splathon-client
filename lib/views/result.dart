@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:splathon_app/styles/text.dart';
 import 'package:splathon_app/styles/color.dart';
+import 'package:splathon_app/views/myresult.dart';
 
 /**
  * Reference Google Sample Code
@@ -17,16 +18,16 @@ class ResultTabbedBar extends StatelessWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.only(top: 60.0),
-                child: TabViewCard(tabView: choices[0],),
+                child: EachResult(),
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 60.0),
-                child: TabViewCard(tabView: choices[1],),
+                child: EachResult(),
               ),
             ],
           ),
           Padding(
-            padding: const EdgeInsets.only(top: 24.0, left: 24.0, right: 24.0),
+            padding: const EdgeInsets.only(top: 20.0, left: 20.0, right: 20.0),
             child: TabBar(
               isScrollable: false,
               indicatorColor: splaBlueColor,
@@ -34,7 +35,7 @@ class ResultTabbedBar extends StatelessWidget {
               labelStyle: tabStyle,
               tabs: choices.map((TabView tabView) {
                 return new Container(
-                  height: 36.0,
+                  height: 40.0,
                   child: new Tab(
                     text: tabView.title,
                   ),
@@ -62,7 +63,7 @@ class TabView {
 }
 
 const List<TabView> choices = const <TabView>[
-  const TabView(title: 'あなたの試合結果'),
+  const TabView(title: '各チームの試合結果'),
   const TabView(title: '全ての試合結果'),
 ];
 

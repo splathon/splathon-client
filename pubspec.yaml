@@ -89,6 +89,7 @@ flutter:
    - assets/images/crown1.png
    - assets/images/crown2.png
    - assets/images/crown3.png
+   - assets/images/arrowRight.png
 
   fonts:
     - family: Splatfont
