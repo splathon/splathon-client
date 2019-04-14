@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:splathon_app/styles/text.dart';
 import 'package:splathon_app/styles/color.dart';
 import 'package:splathon_app/views/myresult.dart';
+import 'package:splathon_app/views/resultdetail.dart';
 
 /**
  * Reference Google Sample Code
@@ -22,7 +23,7 @@ class ResultTabbedBar extends StatelessWidget {
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 60.0),
-                child: EachResult(),
+                child: ResultDetail(),
               ),
             ],
           ),
