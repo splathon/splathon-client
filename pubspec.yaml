@@ -90,6 +90,8 @@ flutter:
    - assets/images/crown2.png
    - assets/images/crown3.png
    - assets/images/arrowRight.png
+   - assets/images/goldInc.png
+   - assets/images/silverInc.png
 
   fonts:
     - family: Splatfont
