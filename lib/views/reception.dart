@@ -27,7 +27,7 @@ class ReceptionTabbedBar extends StatelessWidget {
             ],
           ),
           Padding(
-            padding: const EdgeInsets.only(top: 24.0, left: 24.0, right: 24.0),
+            padding: const EdgeInsets.only(top: 20.0, left: 20.0, right: 20.0),
             child: TabBar(
               isScrollable: false,
               indicatorColor: splaBlueColor,
@@ -35,7 +35,7 @@ class ReceptionTabbedBar extends StatelessWidget {
               labelStyle: tabStyle,
               tabs: choices.map((TabView tabView) {
                 return new Container(
-                  height: 36.0,
+                  height: 40.0,
                   child: new Tab(
                     text: tabView.title,
                   ),
