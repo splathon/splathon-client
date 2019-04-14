@@ -32,6 +32,7 @@ class ReceptionTabbedBar extends StatelessWidget {
               isScrollable: false,
               indicatorColor: splaBlueColor,
               labelColor: splaBlueColor,
+              labelStyle: tabStyle,
               tabs: choices.map((TabView tabView) {
                 return new Container(
                   height: 36.0,
@@ -46,6 +47,12 @@ class ReceptionTabbedBar extends StatelessWidget {
       )
     );
   }
+
+  static const TextStyle tabStyle = TextStyle(
+    fontFamily: 'Splatfont',
+    color: splaBlueColor,
+    fontSize: 18.0,
+  );
 }
 
 class TabView {
