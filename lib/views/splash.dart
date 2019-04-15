@@ -10,7 +10,8 @@ class _SplashState extends State<Splash> {
   void initState() {
     super.initState();
 
-    new Future.delayed(const Duration(seconds: 3))
+    // 通信処理未実装なのでとりあえず1秒のSplash
+    new Future.delayed(const Duration(seconds: 1))
         .then((value) => handleTimeout());
   }
 
