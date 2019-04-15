@@ -92,6 +92,7 @@ flutter:
    - assets/images/arrowRight.png
    - assets/images/goldInc.png
    - assets/images/silverInc.png
+   - assets/images/arrowUp.png
 
   fonts:
     - family: Splatfont
