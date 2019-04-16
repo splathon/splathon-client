@@ -55,7 +55,7 @@ class ResultApi {
     if(response.statusCode >= 400) {
       throw new ApiException(response.statusCode, response.body);
     } else if(response.body != null) {
-      return apiClient.deserialize(response.body, 'Results') as Results;
+      return apiClient.deserialize(utf8.decode(response.bodyBytes), 'Results') as Results;
     } else {
       return null;
     }

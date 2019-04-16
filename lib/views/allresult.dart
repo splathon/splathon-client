@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:splathon_app/styles/text.dart';
 import 'package:splathon_app/styles/color.dart';
 import 'package:english_words/english_words.dart';
+import 'dart:async';
+import 'package:openapi/api.dart';
 
 class AllResult extends StatefulWidget {
   AllResult({Key key}) : super(key: key);
@@ -10,120 +12,54 @@ class AllResult extends StatefulWidget {
   _AllResultState createState() => _AllResultState();
 }
 
+BuildContext sharedContext;
+
 class _AllResultState extends State<AllResult> {
+  // ViewModel
+  Results _model;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchData();
+  }
+
   @override
   Widget build(BuildContext context) {
     sharedContext = context;
     return buildAllResult();
   }
 
+  Future fetchData() async {
+    var client = new ResultApi();
+    var result = client.getResult(9);
+    result.then(
+      (resultsObj) => setState(() { this._model = resultsObj; } )
+    );
+  }
+
   Widget buildAllResult() {
+    if (_model == null) {
+      // Loading
+      return new Center(
+        child: const CircularProgressIndicator(),
+      );
+    }
+
     return ListView.builder(
       itemBuilder: (BuildContext context, int index) =>
-        MatchItem(data[index]),
-      itemCount: data.length,
+        MatchItem(_model.qualifiers[index]),
+      itemCount: _model.qualifiers.length,
     );
   }
 }
 
-BuildContext sharedContext;
-
-class MatchRound {
-  MatchRound(this.title, [this.children = const <MatchTable>[]]);
-
-  final String title;
-  final List<MatchTable> children;
-}
-
-class MatchTable {
-  MatchTable(this.title, [this.children = const <MatchResult>[]]);
-
-  final String title;
-  final List<MatchResult> children;
-}
-
-class MatchResult {
-  MatchResult(this.title);
-  final String title;
-}
-
-// TODO: Remove mock data
-final List<MatchRound> data = <MatchRound>[
-  MatchRound(
-    '予選 ROUND1',
-    <MatchTable>[
-      MatchTable('A卓',
-        <MatchResult>[
-          MatchResult('Item'),
-          MatchResult('Item'),
-          MatchResult('Item'),
-        ],
-      ),
-      MatchTable('B卓',
-        <MatchResult>[
-          MatchResult('Item'),
-          MatchResult('Item'),
-        ],
-      ),
-      MatchTable('C卓',
-        <MatchResult>[
-          MatchResult('Item'),
-          MatchResult('Item'),
-        ],
-      ),
-    ],
-  ),
-  MatchRound(
-    '予選 ROUND2',
-    <MatchTable>[
-      MatchTable('A卓',
-        <MatchResult>[
-          MatchResult('Item'),
-          MatchResult('Item'),
-        ],
-      ),
-      MatchTable('B卓',
-        <MatchResult>[
-          MatchResult('Item'),
-          MatchResult('Item'),
-        ],
-      ),
-    ],
-  ),
-  MatchRound(
-    '予選 ROUND3',
-    <MatchTable>[
-      MatchTable('A卓',
-        <MatchResult>[
-          MatchResult('Item'),
-          MatchResult('Item'),
-        ],
-      ),
-      MatchTable('B卓',
-        <MatchResult>[
-          MatchResult('Item'),
-          MatchResult('Item'),
-          MatchResult('Item'),
-        ],
-      ),
-      MatchTable('C卓',
-        <MatchResult>[
-          MatchResult('Item'),
-          MatchResult('Item'),
-          MatchResult('Item'),
-          MatchResult('Item'),
-        ],
-      ),
-    ],
-  ),
-];
-
 class MatchItem extends StatelessWidget {
   const MatchItem(this.match);
 
-  final MatchRound match;
+  final Round match;
 
-  Widget _buildMatch(MatchRound root, BuildContext context) {
+  Widget _buildMatch(Round round, BuildContext context) {
     return new Container(
       foregroundDecoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10.0),
@@ -135,9 +71,9 @@ class MatchItem extends StatelessWidget {
       margin: const EdgeInsets.only(top: 10, left: 20, right: 20),
       child: ExpansionTile(
         backgroundColor: splaBlueColor,
-        key: PageStorageKey<MatchRound>(root),
-        title: Text(root.title, style: roundClosedTitleStyle,),
-        children: root.children.map((root) => _buildTable(root, context)).toList(),
+        key: PageStorageKey<Round>(round),
+        title: Text(round.name, style: roundClosedTitleStyle,),
+        children: round.rooms.map((room) => _buildTable(round, room, context)).toList(),
         trailing: Image.asset('assets/images/arrowUp.png'),
         onExpansionChanged: (isExpanded) => {          
         },
@@ -145,108 +81,134 @@ class MatchItem extends StatelessWidget {
     );
   }
 
-  Widget _buildTable(MatchTable root, BuildContext context) {
+  Widget _buildTable(Round round, Room room, BuildContext context) {
     return new Container(
       color: backgroundBlueColor,
       child: ExpansionTile(
-        key: PageStorageKey<MatchTable>(root),
-        title: Text(root.title, style: roundClosedTitleStyle,),
-        children: root.children.map((root) => _buildResult(root, context)).toList(),
+        key: PageStorageKey<Room>(room),
+        title: Text(room.name, style: roundClosedTitleStyle,),
+        children: room.matches.map((match) => _buildResult(round, room, match, context)).toList(),
       ),
     );
   }
 
   // TODO: Rebase
-  Widget _buildResult(MatchResult root, BuildContext context) {
+  Widget _buildResult(Round round, Room room, Match2 match, BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     
+    int order = match.order;
     return GestureDetector(
       onTap: () { 
         Navigator.of(context).pushNamed("/result");
       },
-      child: new Container(//
-    // )
-
-    // return new Container(
-      foregroundDecoration: BoxDecoration(
-        border: Border(
-          bottom: BorderSide(
-            color: borderblueColor,
-            width: 1,
-          ),
-        ),
-      ),
-      color: Colors.white,
-      padding: const EdgeInsets.only(left: 14.0, right: 14.0),
-      height: 82.0,
-      child: Row(
-        mainAxisSize: MainAxisSize.max,
-        children: <Widget>[
-          Expanded(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Container(
-                  height: 14.0,
-                  child: Text('予選 ROUND1 B卓 第4試合', style: resultTitleStyle),
-                  ),
-                Container(
-                  height: 36.0,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      SizedBox(
-                        width: screenWidth * 0.35,
-                        child: Text('AplatoonZZZからあげ定食', style: resultNameStyle, maxLines: 1,),
-                      ),
-                      Text('vs', style: resultNameStyle),
-                      SizedBox(
-                        width: screenWidth * 0.35,
-                        child: Text('BplatoonXXXカレーライス', style: resultNameStyle, maxLines: 1,),
-                      ),                    
-                    ],
-                  ),
-                ),
-                Container(
-                  height: 18.0,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      Container(
-                        margin: const EdgeInsets.only(left: 6),
-                        padding: const EdgeInsets.only(left: 10.0, right: 10.0,),
-                        height: 17.0,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10.0),
-                          color: winColor,
-                        ),
-                        child: Text('WIN', style: resultResultStyle),
-                      ),
-                      SizedBox(
-                        width: 20.0,
-                      ),
-                      Container(
-                        margin: const EdgeInsets.only(left: 6),
-                        padding: const EdgeInsets.only(left: 10.0, right: 10.0,),
-                        height: 20.0,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10.0),
-                          color: loseColor,
-                        ),
-                        child: Text('LOSE', style: resultResultStyle),
-                      )
-                    ]
-                  ),
-                ),
-              ],
+      child: new Container(
+        foregroundDecoration: BoxDecoration(
+          border: Border(
+            bottom: BorderSide(
+              color: borderblueColor,
+              width: 1,
             ),
           ),
-          Image.asset('assets/images/arrowRight.png')
-        ],
+        ),
+        color: Colors.white,
+        padding: const EdgeInsets.only(left: 14.0, right: 14.0),
+        height: 82.0,
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
+          children: <Widget>[
+            Expanded(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Container(
+                    height: 14.0,
+                    child: Text(round.name + " " + room.name + " 第$order試合", style: resultTitleStyle),
+                    ),
+                  Container(
+                    height: 36.0,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        SizedBox(
+                          width: screenWidth * 0.35,
+                          child: Text(match.teamAlpha.name, style: resultNameStyle, maxLines: 1,),
+                        ),
+                        Text('vs', style: resultNameStyle),
+                        SizedBox(
+                          width: screenWidth * 0.35,
+                          child: Text(match.teamBravo.name, style: resultNameStyle, maxLines: 1,),
+                        ),                    
+                      ],
+                    ),
+                  ),
+                  winloseView(match.winner),
+                ],
+              ),
+            ),
+            Image.asset('assets/images/arrowRight.png')
+          ],
+        ),
       ),
-    ));
+    );
+  }
+
+  Widget winloseView(String winner) {
+    if (winner != 'alpha' && winner != 'bravo') {
+      return Container(
+        height: 18.0,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            Container(
+              margin: const EdgeInsets.only(left: 6),
+              padding: const EdgeInsets.only(left: 10.0, right: 10.0,),
+              height: 17.0,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10.0),
+                color: drawColor,
+              ),
+              child: Text('DRAW', style: resultResultStyle),
+            ),
+          ]
+        ),
+      );
+    }
+
+    bool isWinAlpha = winner == 'alpha';
+
+    return Container(
+      height: 18.0,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          Container(
+            margin: const EdgeInsets.only(left: 6),
+            padding: const EdgeInsets.only(left: 10.0, right: 10.0,),
+            height: 17.0,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10.0),
+              color: isWinAlpha ? winColor : loseColor,
+            ),
+            child: Text(isWinAlpha ? 'WIN' : 'LOSE', style: resultResultStyle),
+          ),
+          SizedBox(
+            width: 20.0,
+          ),
+          Container(
+            margin: const EdgeInsets.only(left: 6),
+            padding: const EdgeInsets.only(left: 10.0, right: 10.0,),
+            height: 20.0,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10.0),
+              color: isWinAlpha ? loseColor : winColor,
+            ),
+            child: Text(isWinAlpha ? 'LOSE' : 'WIN', style: resultResultStyle),
+          )
+        ]
+      ),
+    );
   }
 
   @override
