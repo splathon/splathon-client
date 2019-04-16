@@ -2,41 +2,48 @@ import 'package:flutter/material.dart';
 import 'package:splathon_app/styles/text.dart';
 import 'package:splathon_app/styles/color.dart';
 import 'package:english_words/english_words.dart';
+import 'dart:async';
+import 'package:openapi/api.dart';
 
-class Rankings extends StatelessWidget {
+class Rankings extends StatefulWidget {
+  Rankings({Key key}) : super(key: key);
+
+  @override
+  _RankingsState createState() => _RankingsState();
+}
+
+class _RankingsState extends State<Rankings> {
   @override
   Widget build(BuildContext context) {
+    fetchData();
     return buildRankings();
   }
 
+  Ranking _model;
+
+  Future fetchData() async {
+    var client = new RankingApi();
+    var result = client.getRanking(9);
+    result.then(
+      (rankingObj) => setState(() { this._model = rankingObj; } )
+    );
+  }
+
   Widget buildRankings() {
+    if (_model == null) {
+      // Loading
+      return new Center(
+        child: const CircularProgressIndicator(),
+      );
+    }
+
     return new ListView.builder(
-      itemCount: 20,
+      itemCount: _model.rankings.length * 2,
       itemBuilder: (BuildContext context, i) {
         if (!i.isOdd) {
-          final index = i ~/ 2 + 1; // Index: 1..N
-          final isTop3 = index <= 3;
-          return Container(
-            margin: const EdgeInsets.only(top: 12, left: 20, right: 20),
-            height: 36.0,
-            child: Row(
-              children: <Widget>[
-                isTop3 ? Image.asset('assets/images/crown$index.png') : SizedBox(),
-                Padding(padding: const EdgeInsets.only(left: 4.0, right: 4.0), child: Text('$index位', style: rankTextStyle(index),),),
-                Text(generateWordPairs().take(1).first.asPascalCase, style: rankTextStyle(index)),
-                Container(
-                  margin: const EdgeInsets.only(left: 6),
-                  padding: const EdgeInsets.only(left: 10.0, right: 10.0,),
-                  height: 20.0,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10.0),
-                    color: Color.fromRGBO(206, 211, 225, 1.0),
-                  ),
-                  child: Text((20 - index).toString() + 'pt', style: pointStyle),
-                ),
-              ],
-            ),
-          );
+          final index = i ~/ 2;
+          Rank rank = _model.rankings[index];
+          return headerView(index, rank);
         }
         return new Container(
           foregroundDecoration: BoxDecoration(
@@ -65,7 +72,7 @@ class Rankings extends StatelessWidget {
                           Icons.sentiment_very_satisfied,
                           color: Colors.red,
                         ),
-                        Text(generateWordPairs().take(1).first.asPascalCase, style: nameStyle),
+                        Text('Player A-A-A-A', style: nameStyle),
                       ],
                     ),
                     Row(
@@ -74,7 +81,7 @@ class Rankings extends StatelessWidget {
                           Icons.sentiment_very_dissatisfied,
                           color: Colors.blue,
                         ),
-                        Text(generateWordPairs().take(1).first.asPascalCase, style: nameStyle),
+                        Text('Player B-B-B-B', style: nameStyle),
                       ],
                     ),                  ],
                 ),
@@ -90,7 +97,7 @@ class Rankings extends StatelessWidget {
                           Icons.sentiment_neutral,
                           color: Colors.lightGreen,
                         ),
-                        Text(generateWordPairs().take(1).first.asPascalCase, style: nameStyle),
+                        Text('Player C-C-C-C', style: nameStyle),
                       ],
                     ),
                     Row(
@@ -99,7 +106,7 @@ class Rankings extends StatelessWidget {
                           Icons.sentiment_satisfied,
                           color: Colors.orange,
                         ),
-                        Text(generateWordPairs().take(1).first.asPascalCase, style: nameStyle),
+                        Text('Player D-D-D-D', style: nameStyle),
                       ],
                     ),
                   ],
@@ -110,6 +117,32 @@ class Rankings extends StatelessWidget {
         );
       }
     );
+  }
+
+  Widget headerView(int index, Rank rank) {
+    final rankIndex = index + 1; // rankIndex: 1..N
+    final isTop3 = rankIndex <= 3;
+    return Container(
+      margin: const EdgeInsets.only(top: 12, left: 20, right: 20),
+      height: 36.0,
+      child: Row(
+        children: <Widget>[
+          isTop3 ? Image.asset('assets/images/crown$rankIndex.png') : SizedBox(),
+          Padding(padding: const EdgeInsets.only(left: 4.0, right: 4.0), child: Text('$rankIndex位', style: rankTextStyle(rankIndex),),),
+          Text(rank.team.name, style: rankTextStyle(rankIndex)),
+          Container(
+            margin: const EdgeInsets.only(left: 6),
+            padding: const EdgeInsets.only(left: 10.0, right: 10.0,),
+            height: 20.0,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10.0),
+              color: Color.fromRGBO(206, 211, 225, 1.0),
+            ),
+            child: Text((rank.point).toString() + 'pt', style: pointStyle),
+          ),
+        ],
+      ),
+    ); 
   }
 
   static const TextStyle pointStyle = TextStyle(
