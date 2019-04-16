@@ -13,13 +13,19 @@ class Rankings extends StatefulWidget {
 }
 
 class _RankingsState extends State<Rankings> {
+  // ViewModel
+  Ranking _model;
+
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
     fetchData();
-    return buildRankings();
   }
 
-  Ranking _model;
+  @override
+  Widget build(BuildContext context) {
+    return buildRankings();
+  }
 
   Future fetchData() async {
     var client = new RankingApi();
