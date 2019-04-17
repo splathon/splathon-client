@@ -3,8 +3,13 @@ import 'package:splathon_app/styles/text.dart';
 import 'package:splathon_app/styles/color.dart';
 import 'package:splathon_app/views/myresult.dart';
 import 'package:english_words/english_words.dart';
+import 'package:openapi/api.dart';
 
 class ResultDetail extends StatelessWidget { 
+  final Match2 _match;
+
+  ResultDetail(this._match);
+
   @override
   Widget build(BuildContext context) {
     return buildResultDetail(context);
@@ -19,133 +24,25 @@ class ResultDetail extends StatelessWidget {
         backgroundColor: Color.fromRGBO(11, 49, 143, 1),
       ),
       body: new ListView.builder(
-        itemCount: 4,
+        itemCount: _match.battles.length + 1,
         itemBuilder: (BuildContext context, i) {
           if (i == 0) {
             return Container(
               color: backgroundLightBlueColor,
               child: new Stack(
                 children: <Widget>[
-                  Container(
-                    margin: const EdgeInsets.only(top: 40, left: 20, right: 20, bottom: 20),
-                    padding: const EdgeInsets.only(top: 20, bottom: 15),
-                    color: Colors.white,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        Container(
-                          width: screenWidth * 0.35,
-                          child: Column(
-                            children: <Widget>[
-                              Center(child: Text('AplatoonZZZからあげ定食', style: resultTopTeamNameStyle, maxLines: 2,),),
-                              Row(
-                                children: <Widget>[
-                                  Icon(
-                                    Icons.sentiment_neutral,
-                                    color: Colors.lightGreen,
-                                  ),
-                                  Text(generateWordPairs().take(1).first.asPascalCase, style: resultPlayerNameStyle),
-                                ],
-                              ),
-                              Row(
-                                children: <Widget>[
-                                  Icon(
-                                    Icons.sentiment_very_satisfied,
-                                    color: Colors.red
-                                  ),
-                                  Text(generateWordPairs().take(1).first.asPascalCase, style: resultPlayerNameStyle),
-                                ],
-                              ),
-                              Row(
-                                children: <Widget>[
-                                  Icon(
-                                    Icons.sentiment_very_dissatisfied,
-                                    color: Colors.blue,
-                                  ),
-                                  Text(generateWordPairs().take(1).first.asPascalCase, style: resultPlayerNameStyle),
-                                ],
-                              ),
-                              Row(
-                                children: <Widget>[
-                                  Icon(
-                                    Icons.sentiment_satisfied,
-                                    color: Colors.orange,
-                                  ),
-                                  Text(generateWordPairs().take(1).first.asPascalCase, style: resultPlayerNameStyle),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          color: borderColor,
-                          child: SizedBox(
-                            width: 1,
-                          ),
-                        ),
-                        Container(
-                          width: screenWidth * 0.35,
-                          child: Column(
-                            children: <Widget>[
-                              Text('AplatoonZZZからあげ定食dfdfadfdafsfasf', style: resultTopTeamNameStyle, maxLines: 2,),
-                              Row(
-                                children: <Widget>[
-                                  Icon(
-                                    Icons.sentiment_neutral,
-                                    color: Colors.lightGreen,
-                                  ),
-                                  Text(generateWordPairs().take(1).first.asPascalCase, style: resultPlayerNameStyle),
-                                ],
-                              ),
-                              Row(
-                                children: <Widget>[
-                                  Icon(
-                                    Icons.sentiment_very_satisfied,
-                                    color: Colors.red
-                                  ),
-                                  Text(generateWordPairs().take(1).first.asPascalCase, style: resultPlayerNameStyle),
-                                ],
-                              ),
-                              Row(
-                                children: <Widget>[
-                                  Icon(
-                                    Icons.sentiment_very_dissatisfied,
-                                    color: Colors.blue,
-                                  ),
-                                  Text(generateWordPairs().take(1).first.asPascalCase, style: resultPlayerNameStyle),
-                                ],
-                              ),
-                              Row(
-                                children: <Widget>[
-                                  Icon(
-                                    Icons.sentiment_satisfied,
-                                    color: Colors.orange,
-                                  ),
-                                  Text(generateWordPairs().take(1).first.asPascalCase, style: resultPlayerNameStyle),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                  teamMemberView(screenWidth),
                   Container(
                     margin: const EdgeInsets.only(top: 0, left: 20, right: 20),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        Text('WIN', style: resultWinStyle),
-                        SizedBox(),
-                        Text('LOSE', style: resultLoseStyle),
-                      ],
-                    )
+                    child: winLoseTopView(),
                   ),
                 ],
               ),
             );
           }
 
+          Battle battle = _match.battles[i - 1];
+          bool isWinAlpha = battle.winner == 'alpha';
           return Container(
             margin: const EdgeInsets.only(top: 10, left: 20, right: 20),
             foregroundDecoration: BoxDecoration(
@@ -174,7 +71,7 @@ class ResultDetail extends StatelessWidget {
                       ),
                     ),
                     SizedBox(width: 8,),
-                    Text('ガチホコ ザトウマーケット', style: ruleStageStyle,),
+                    Text(battle.stage.name, style: ruleStageStyle,),
                   ],
                 ),
                 Row(
@@ -185,14 +82,14 @@ class ResultDetail extends StatelessWidget {
                       height: 17.0,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10.0),
-                        color: winColor,
+                        color: isWinAlpha ? winColor : loseColor,
                       ),
                       child: Center(
-                        child: Text('WIN', style: resultResultStyle),
+                        child: Text(isWinAlpha ? 'WIN' : 'LOSE', style: resultResultStyle),
                       ),
                     ),
                     SizedBox(width: 8,),
-                    Text('AplatoonZZZからあげ定食', style: resultDetailTeamNameStyle,),
+                    Text(_match.teamAlpha.name, style: resultDetailTeamNameStyle,),
                   ],
                 ),
                 Row(
@@ -203,14 +100,14 @@ class ResultDetail extends StatelessWidget {
                       height: 17.0,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10.0),
-                        color: loseColor,
+                        color: isWinAlpha ? loseColor : winColor,
                       ),
                       child: Center(
-                        child: Text('LOSE', style: resultResultStyle),
+                        child: Text(isWinAlpha ? 'LOSE' : 'WIN', style: resultResultStyle),
                       ),
                     ),
                     SizedBox(width: 8,),
-                    Text('BplatoonXXXカレーライス', style: resultDetailTeamNameStyle,),
+                    Text(_match.teamBravo.name, style: resultDetailTeamNameStyle,),
                   ],
                 ),
               ],
@@ -219,6 +116,135 @@ class ResultDetail extends StatelessWidget {
         }
       ),
     );
+  }
+
+  Widget winLoseTopView() {
+    if (_match.winner != 'alpha' && _match.winner != 'bravo') {
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          Text('DRAW', style: resultDrawStyle),
+        ],
+      );
+    }
+    
+    bool isWinAlpha = _match.winner == 'alpha';
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: <Widget>[
+        isWinAlpha ? Text('WIN', style: resultWinStyle) : Text('LOSE', style: resultLoseStyle),
+        SizedBox(),
+        isWinAlpha ? Text('LOSE', style: resultLoseStyle) : Text('WIN', style: resultWinStyle),
+      ],
+    );
+  }
+
+  Widget teamMemberView(double screenWidth) {
+    return 
+          Container(
+            margin: const EdgeInsets.only(top: 40, left: 20, right: 20, bottom: 20),
+            padding: const EdgeInsets.only(top: 20, bottom: 15),
+            color: Colors.white,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                Container(
+                  width: screenWidth * 0.35,
+                  child: Column(
+                    children: <Widget>[
+                      Center(child: Text(_match.teamAlpha.name, style: resultTopTeamNameStyle, maxLines: 2,),),
+                      Row(
+                        children: <Widget>[
+                          Icon(
+                            Icons.sentiment_neutral,
+                            color: Colors.lightGreen,
+                          ),
+                          Text(generateWordPairs().take(1).first.asPascalCase, style: resultPlayerNameStyle),
+                        ],
+                      ),
+                      Row(
+                        children: <Widget>[
+                          Icon(
+                            Icons.sentiment_very_satisfied,
+                            color: Colors.red
+                          ),
+                          Text(generateWordPairs().take(1).first.asPascalCase, style: resultPlayerNameStyle),
+                        ],
+                      ),
+                      Row(
+                        children: <Widget>[
+                          Icon(
+                            Icons.sentiment_very_dissatisfied,
+                            color: Colors.blue,
+                          ),
+                          Text(generateWordPairs().take(1).first.asPascalCase, style: resultPlayerNameStyle),
+                        ],
+                      ),
+                      Row(
+                        children: <Widget>[
+                          Icon(
+                            Icons.sentiment_satisfied,
+                            color: Colors.orange,
+                          ),
+                          Text(generateWordPairs().take(1).first.asPascalCase, style: resultPlayerNameStyle),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  color: borderColor,
+                  child: SizedBox(
+                    width: 1,
+                  ),
+                ),
+                Container(
+                  width: screenWidth * 0.35,
+                  child: Column(
+                    children: <Widget>[
+                      Text(_match.teamBravo.name, style: resultTopTeamNameStyle, maxLines: 2,),
+                      Row(
+                        children: <Widget>[
+                          Icon(
+                            Icons.sentiment_neutral,
+                            color: Colors.lightGreen,
+                          ),
+                          Text(generateWordPairs().take(1).first.asPascalCase, style: resultPlayerNameStyle),
+                        ],
+                      ),
+                      Row(
+                        children: <Widget>[
+                          Icon(
+                            Icons.sentiment_very_satisfied,
+                            color: Colors.red
+                          ),
+                          Text(generateWordPairs().take(1).first.asPascalCase, style: resultPlayerNameStyle),
+                        ],
+                      ),
+                      Row(
+                        children: <Widget>[
+                          Icon(
+                            Icons.sentiment_very_dissatisfied,
+                            color: Colors.blue,
+                          ),
+                          Text(generateWordPairs().take(1).first.asPascalCase, style: resultPlayerNameStyle),
+                        ],
+                      ),
+                      Row(
+                        children: <Widget>[
+                          Icon(
+                            Icons.sentiment_satisfied,
+                            color: Colors.orange,
+                          ),
+                          Text(generateWordPairs().take(1).first.asPascalCase, style: resultPlayerNameStyle),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          );
   }
 
   static const TextStyle resultWinStyle = TextStyle(
@@ -230,6 +256,12 @@ class ResultDetail extends StatelessWidget {
   static const TextStyle resultLoseStyle = TextStyle(
     fontFamily: 'Splatfont',
     color: loseColor,
+    fontSize: 40.0,
+  );
+
+  static const TextStyle resultDrawStyle = TextStyle(
+    fontFamily: 'Splatfont',
+    color: drawColor,
     fontSize: 40.0,
   );
 

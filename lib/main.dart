@@ -11,7 +11,6 @@ void main() {
       '/': (_) => new Splash(),
       '/login': (_) => new Login(),
       '/home': (_) => new HomeTabbedBar(),
-      '/result': (_) => new ResultDetail(),
     },
   ));
 }

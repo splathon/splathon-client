@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:splathon_app/styles/text.dart';
 import 'package:splathon_app/styles/color.dart';
 import 'package:english_words/english_words.dart';
+import 'package:splathon_app/views/resultdetail.dart';
 import 'dart:async';
 import 'package:openapi/api.dart';
 
@@ -99,7 +100,10 @@ class MatchItem extends StatelessWidget {
     int order = match.order;
     return GestureDetector(
       onTap: () { 
-        Navigator.of(context).pushNamed("/result");
+        Navigator.push(context, new MaterialPageRoute<Null>(
+          settings: const RouteSettings(name: "/result"),
+          builder: (BuildContext context) => new ResultDetail(match),
+        ));
       },
       child: new Container(
         foregroundDecoration: BoxDecoration(
