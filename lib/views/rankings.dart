@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:splathon_app/styles/text.dart';
 import 'package:splathon_app/styles/color.dart';
+import 'package:splathon_app/views/Image.dart';
 import 'package:english_words/english_words.dart';
 import 'dart:async';
 import 'package:openapi/api.dart';
@@ -46,11 +47,12 @@ class _RankingsState extends State<Rankings> {
     return new ListView.builder(
       itemCount: _model.rankings.length * 2,
       itemBuilder: (BuildContext context, i) {
+        final index = i ~/ 2;
+        Rank rank = _model.rankings[index];
         if (!i.isOdd) {
-          final index = i ~/ 2;
-          Rank rank = _model.rankings[index];
           return headerView(index, rank);
         }
+
         return new Container(
           foregroundDecoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10.0),
@@ -74,20 +76,14 @@ class _RankingsState extends State<Rankings> {
                   children: <Widget>[
                     Row(
                       children: <Widget>[
-                        Icon(
-                          Icons.sentiment_very_satisfied,
-                          color: Colors.red,
-                        ),
-                        Text('Player A-A-A-A', style: nameStyle),
+                        CharactorImage(rank.team.members[0].icon),
+                        Text(rank.team.members[0].name, style: nameStyle),
                       ],
                     ),
                     Row(
                       children: <Widget>[
-                        Icon(
-                          Icons.sentiment_very_dissatisfied,
-                          color: Colors.blue,
-                        ),
-                        Text('Player B-B-B-B', style: nameStyle),
+                        CharactorImage(rank.team.members[1].icon),
+                        Text(rank.team.members[1].name, style: nameStyle),
                       ],
                     ),                  ],
                 ),
@@ -99,20 +95,14 @@ class _RankingsState extends State<Rankings> {
                   children: <Widget>[
                     Row(
                       children: <Widget>[
-                        Icon(
-                          Icons.sentiment_neutral,
-                          color: Colors.lightGreen,
-                        ),
-                        Text('Player C-C-C-C', style: nameStyle),
+                        CharactorImage(rank.team.members[2].icon),
+                        Text(rank.team.members[2].name, style: nameStyle),
                       ],
                     ),
                     Row(
                       children: <Widget>[
-                        Icon(
-                          Icons.sentiment_satisfied,
-                          color: Colors.orange,
-                        ),
-                        Text('Player D-D-D-D', style: nameStyle),
+                        CharactorImage(rank.team.members[3].icon),
+                        Text(rank.team.members[3].name, style: nameStyle),
                       ],
                     ),
                   ],

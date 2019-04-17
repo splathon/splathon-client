@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:splathon_app/styles/text.dart';
 import 'package:splathon_app/styles/color.dart';
 import 'package:splathon_app/views/myresult.dart';
+import 'package:splathon_app/views/Image.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:english_words/english_words.dart';
 import 'package:openapi/api.dart';
 
@@ -17,7 +19,7 @@ class ResultDetail extends StatelessWidget {
 
   Widget buildResultDetail(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
-    
+
     return new Scaffold(
       appBar: new AppBar(
         title: SplaText('リザルト'),
@@ -140,111 +142,86 @@ class ResultDetail extends StatelessWidget {
   }
 
   Widget teamMemberView(double screenWidth) {
-    return 
+    return Container(
+      margin: const EdgeInsets.only(top: 40, left: 20, right: 20, bottom: 20),
+      padding: const EdgeInsets.only(top: 20, bottom: 15),
+      color: Colors.white,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
           Container(
-            margin: const EdgeInsets.only(top: 40, left: 20, right: 20, bottom: 20),
-            padding: const EdgeInsets.only(top: 20, bottom: 15),
-            color: Colors.white,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            width: screenWidth * 0.35,
+            child: Column(
               children: <Widget>[
-                Container(
-                  width: screenWidth * 0.35,
-                  child: Column(
-                    children: <Widget>[
-                      Center(child: Text(_match.teamAlpha.name, style: resultTopTeamNameStyle, maxLines: 2,),),
-                      Row(
-                        children: <Widget>[
-                          Icon(
-                            Icons.sentiment_neutral,
-                            color: Colors.lightGreen,
-                          ),
-                          Text(generateWordPairs().take(1).first.asPascalCase, style: resultPlayerNameStyle),
-                        ],
-                      ),
-                      Row(
-                        children: <Widget>[
-                          Icon(
-                            Icons.sentiment_very_satisfied,
-                            color: Colors.red
-                          ),
-                          Text(generateWordPairs().take(1).first.asPascalCase, style: resultPlayerNameStyle),
-                        ],
-                      ),
-                      Row(
-                        children: <Widget>[
-                          Icon(
-                            Icons.sentiment_very_dissatisfied,
-                            color: Colors.blue,
-                          ),
-                          Text(generateWordPairs().take(1).first.asPascalCase, style: resultPlayerNameStyle),
-                        ],
-                      ),
-                      Row(
-                        children: <Widget>[
-                          Icon(
-                            Icons.sentiment_satisfied,
-                            color: Colors.orange,
-                          ),
-                          Text(generateWordPairs().take(1).first.asPascalCase, style: resultPlayerNameStyle),
-                        ],
-                      ),
-                    ],
-                  ),
+                Center(child: Text(_match.teamAlpha.name, style: resultTopTeamNameStyle, maxLines: 2,),),
+                Row(
+                  children: <Widget>[
+                    CharactorImage(_match.teamAlpha.members[0].icon),
+                    Text(_match.teamAlpha.members[0].name, style: resultPlayerNameStyle),
+                  ],
                 ),
-                Container(
-                  color: borderColor,
-                  child: SizedBox(
-                    width: 1,
-                  ),
+                Row(
+                  children: <Widget>[
+                    CharactorImage(_match.teamAlpha.members[1].icon),
+                    Text(_match.teamAlpha.members[1].name, style: resultPlayerNameStyle),
+                  ],
                 ),
-                Container(
-                  width: screenWidth * 0.35,
-                  child: Column(
-                    children: <Widget>[
-                      Text(_match.teamBravo.name, style: resultTopTeamNameStyle, maxLines: 2,),
-                      Row(
-                        children: <Widget>[
-                          Icon(
-                            Icons.sentiment_neutral,
-                            color: Colors.lightGreen,
-                          ),
-                          Text(generateWordPairs().take(1).first.asPascalCase, style: resultPlayerNameStyle),
-                        ],
-                      ),
-                      Row(
-                        children: <Widget>[
-                          Icon(
-                            Icons.sentiment_very_satisfied,
-                            color: Colors.red
-                          ),
-                          Text(generateWordPairs().take(1).first.asPascalCase, style: resultPlayerNameStyle),
-                        ],
-                      ),
-                      Row(
-                        children: <Widget>[
-                          Icon(
-                            Icons.sentiment_very_dissatisfied,
-                            color: Colors.blue,
-                          ),
-                          Text(generateWordPairs().take(1).first.asPascalCase, style: resultPlayerNameStyle),
-                        ],
-                      ),
-                      Row(
-                        children: <Widget>[
-                          Icon(
-                            Icons.sentiment_satisfied,
-                            color: Colors.orange,
-                          ),
-                          Text(generateWordPairs().take(1).first.asPascalCase, style: resultPlayerNameStyle),
-                        ],
-                      ),
-                    ],
-                  ),
+                Row(
+                  children: <Widget>[
+                    CharactorImage(_match.teamAlpha.members[2].icon),
+                    Text(_match.teamAlpha.members[2].name, style: resultPlayerNameStyle),
+                  ],
+                ),
+                Row(
+                  children: <Widget>[
+                    CharactorImage(_match.teamAlpha.members[3].icon),
+                    Text(_match.teamAlpha.members[3].name, style: resultPlayerNameStyle),
+                  ],
                 ),
               ],
             ),
-          );
+          ),
+          Container(
+            color: borderColor,
+            child: SizedBox(
+              width: 1,
+            ),
+          ),
+          Container(
+            width: screenWidth * 0.35,
+            child: Column(
+              children: <Widget>[
+                Text(_match.teamBravo.name, style: resultTopTeamNameStyle, maxLines: 2,),
+                Row(
+                  children: <Widget>[
+                    CharactorImage(_match.teamBravo.members[0].icon),
+                    Text(_match.teamBravo.members[0].name, style: resultPlayerNameStyle),
+                  ],
+                ),
+                Row(
+                  children: <Widget>[
+                    CharactorImage(_match.teamBravo.members[1].icon),
+                    Text(_match.teamBravo.members[1].name, style: resultPlayerNameStyle),
+                  ],
+                ),
+                Row(
+                  children: <Widget>[
+                    CharactorImage(_match.teamBravo.members[2].icon),
+                    Text(_match.teamBravo.members[2].name, style: resultPlayerNameStyle),
+                  ],
+                ),
+                Row(
+                  children: <Widget>[
+                    CharactorImage(_match.teamBravo.members[3].icon),
+                    Text(_match.teamBravo.members[3].name, style: resultPlayerNameStyle),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   static const TextStyle resultWinStyle = TextStyle(
