@@ -2,15 +2,15 @@ part of openapi.api;
 
 
 
-class ResultApi {
+class DefaultApi {
   final ApiClient apiClient;
 
-  ResultApi([ApiClient apiClient]) : apiClient = apiClient ?? defaultApiClient;
+  DefaultApi([ApiClient apiClient]) : apiClient = apiClient ?? defaultApiClient;
 
   /// 
   ///
-  /// リザルト一覧を返す。リザルトと言いつつ終了していない未来のマッチも返す。ゲスト・管理アプリ両方から使う。team_idを指定するとそのチームのみの結果が返ってくる。
-  Future<Results> getResult(int eventId, { int teamId }) async {
+  /// Return team list
+  Future<Teams> listTeams(int eventId) async {
     Object postBody;
 
     // verify required params are set
@@ -19,15 +19,12 @@ class ResultApi {
     }
 
     // create path and map variables
-    String path = "/v{eventId}/results".replaceAll("{format}","json").replaceAll("{" + "eventId" + "}", eventId.toString());
+    String path = "/v{eventId}/teams".replaceAll("{format}","json").replaceAll("{" + "eventId" + "}", eventId.toString());
 
     // query params
     List<QueryParam> queryParams = [];
     Map<String, String> headerParams = {};
     Map<String, String> formParams = {};
-    if(teamId != null) {
-      queryParams.addAll(_convertParametersForCollectionFormat("", "team_id", teamId));
-    }
 
     List<String> contentTypes = [];
 
@@ -55,7 +52,7 @@ class ResultApi {
     if(response.statusCode >= 400) {
       throw new ApiException(response.statusCode, response.body);
     } else if(response.body != null) {
-      return apiClient.deserialize(response.body, 'Results') as Results;
+      return apiClient.deserialize(response.body, 'Teams') as Teams;
     } else {
       return null;
     }

@@ -1,4 +1,4 @@
-# openapi.api.MatchApi
+# openapi.api.DefaultApi
 
 ## Load the API package
 ```dart
@@ -9,29 +9,28 @@ All URIs are relative to *https://localhost/splathon*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**getMatch**](MatchApi.md#getMatch) | **GET** /v{eventId}/matches/{matchId} | 
+[**listTeams**](DefaultApi.md#listTeams) | **GET** /v{eventId}/teams | 
 
 
-# **getMatch**
-> Match getMatch(eventId, matchId)
+# **listTeams**
+> Teams listTeams(eventId)
 
 
 
-マッチの詳細を返す。スコアボードとかで使える。
+Return team list
 
 ### Example 
 ```dart
 import 'package:openapi/api.dart';
 
-var api_instance = new MatchApi();
+var api_instance = new DefaultApi();
 var eventId = 789; // int | 
-var matchId = 789; // int | match id
 
 try { 
-    var result = api_instance.getMatch(eventId, matchId);
+    var result = api_instance.listTeams(eventId);
     print(result);
 } catch (e) {
-    print("Exception when calling MatchApi->getMatch: $e\n");
+    print("Exception when calling DefaultApi->listTeams: $e\n");
 }
 ```
 
@@ -40,11 +39,10 @@ try {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **eventId** | **int**|  | [default to null]
- **matchId** | **int**| match id | [default to null]
 
 ### Return type
 
-[**Match**](Match.md)
+[**Teams**](Teams.md)
 
 ### Authorization
 

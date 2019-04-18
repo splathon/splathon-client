@@ -52,7 +52,7 @@ class RankingApi {
     if(response.statusCode >= 400) {
       throw new ApiException(response.statusCode, response.body);
     } else if(response.body != null) {
-      return apiClient.deserialize(utf8.decode(response.bodyBytes), 'Ranking') as Ranking;
+      return apiClient.deserialize(response.body, 'Ranking') as Ranking;
     } else {
       return null;
     }

@@ -61,6 +61,8 @@ class ApiClient {
           return Round.fromJson(value);
         case 'Team':
           return Team.fromJson(value);
+        case 'Teams':
+          return Teams.fromJson(value);
         default:
           {
             Match match;

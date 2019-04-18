@@ -44,15 +44,14 @@ Please follow the [installation procedure](#installation--usage) and then run th
 import 'package:openapi/api.dart';
 
 
-var api_instance = new MatchApi();
+var api_instance = new DefaultApi();
 var eventId = 789; // int | 
-var matchId = 789; // int | match id
 
 try {
-    var result = api_instance.getMatch(eventId, matchId);
+    var result = api_instance.listTeams(eventId);
     print(result);
 } catch (e) {
-    print("Exception when calling MatchApi->getMatch: $e\n");
+    print("Exception when calling DefaultApi->listTeams: $e\n");
 }
 
 ```
@@ -63,6 +62,7 @@ All URIs are relative to *https://localhost/splathon*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
+*DefaultApi* | [**listTeams**](docs//DefaultApi.md#listteams) | **GET** /v{eventId}/teams | 
 *MatchApi* | [**getMatch**](docs//MatchApi.md#getmatch) | **GET** /v{eventId}/matches/{matchId} | 
 *RankingApi* | [**getRanking**](docs//RankingApi.md#getranking) | **GET** /v{eventId}/ranking | 
 *ResultApi* | [**getResult**](docs//ResultApi.md#getresult) | **GET** /v{eventId}/results | 
@@ -82,6 +82,7 @@ Class | Method | HTTP request | Description
  - [Room](docs//Room.md)
  - [Round](docs//Round.md)
  - [Team](docs//Team.md)
+ - [Teams](docs//Teams.md)
 
 
 ## Documentation For Authorization
