@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:splathon_app/styles/text.dart';
 import 'package:splathon_app/styles/color.dart';
+import 'package:splathon_app/views/roundedView.dart';
 import 'package:splathon_app/views/Image.dart';
 import 'package:english_words/english_words.dart';
 import 'dart:async';
@@ -130,14 +131,8 @@ class _RankingsState extends State<Rankings> {
           Padding(padding: const EdgeInsets.only(left: 4.0, right: 4.0), child: Text('$rankIndex位', style: rankTextStyle(rankIndex),),),
           Text(rank.team.name, style: rankTextStyle(rankIndex)),
           Container(
-            margin: const EdgeInsets.only(left: 6),
-            padding: const EdgeInsets.only(left: 10.0, right: 10.0,),
-            height: 20.0,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10.0),
-              color: Color.fromRGBO(206, 211, 225, 1.0),
-            ),
-            child: Text((rank.point).toString() + 'pt', style: pointStyle),
+            margin: const EdgeInsets.only(left: 6.0, bottom: 1),
+            child: pointLabelView(rank.point),
           ),
         ],
       ),

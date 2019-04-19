@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:splathon_app/styles/text.dart';
 import 'package:splathon_app/styles/color.dart';
+import 'package:splathon_app/views/roundedView.dart';
 import 'package:english_words/english_words.dart';
 import 'package:splathon_app/views/resultdetail.dart';
 import 'dart:async';
@@ -188,20 +189,10 @@ class MatchItem extends StatelessWidget {
   Widget winloseView(String winner) {
     if (winner != 'alpha' && winner != 'bravo') {
       return Container(
-        height: 18.0,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            Container(
-              margin: const EdgeInsets.only(left: 6),
-              padding: const EdgeInsets.only(left: 10.0, right: 10.0,),
-              height: 17.0,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10.0),
-                color: drawColor,
-              ),
-              child: Text('DRAW', style: resultResultStyle),
-            ),
+            accentDarwView(),
           ]
         ),
       );
@@ -210,33 +201,14 @@ class MatchItem extends StatelessWidget {
     bool isWinAlpha = winner == 'alpha';
 
     return Container(
-      height: 18.0,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
-          Container(
-            margin: const EdgeInsets.only(left: 6),
-            padding: const EdgeInsets.only(left: 10.0, right: 10.0,),
-            height: 17.0,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10.0),
-              color: isWinAlpha ? winColor : loseColor,
-            ),
-            child: Text(isWinAlpha ? 'WIN' : 'LOSE', style: resultResultStyle),
-          ),
+          isWinAlpha ? accentWinView() : accentLoseView(),
           SizedBox(
             width: 20.0,
           ),
-          Container(
-            margin: const EdgeInsets.only(left: 6),
-            padding: const EdgeInsets.only(left: 10.0, right: 10.0,),
-            height: 20.0,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10.0),
-              color: isWinAlpha ? loseColor : winColor,
-            ),
-            child: Text(isWinAlpha ? 'LOSE' : 'WIN', style: resultResultStyle),
-          )
+          isWinAlpha ? accentLoseView() : accentWinView(),
         ]
       ),
     );
