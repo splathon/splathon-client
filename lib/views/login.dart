@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:splathon_app/styles/text.dart';
+import 'package:splathon_app/styles/color.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -21,7 +22,7 @@ static const TextStyle _hintStyle = TextStyle(
     return new Scaffold(
       appBar: new AppBar(
         title: SplaText('Splathon #10'),
-        backgroundColor: Color.fromRGBO(11, 49, 143, 1),
+        backgroundColor: splaBlueColor,
       ),
       body: new Center(
         child: new Form(
@@ -30,16 +31,6 @@ static const TextStyle _hintStyle = TextStyle(
             child: new Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
-                Center(child:
-                  Text('ログイン',
-                    style: TextStyle(
-                      fontFamily: 'Splatfont',
-                      fontSize: 40,
-                      color: Color.fromRGBO(11, 49, 143, 1),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 40.0),
                 new TextFormField(
                   decoration: const InputDecoration(
                     border: const UnderlineInputBorder(),
@@ -64,7 +55,7 @@ static const TextStyle _hintStyle = TextStyle(
                 new Container(
                   height: 60,
                   child: new RaisedButton(
-                    color: Color.fromRGBO(247, 166, 0, 1),
+                    color: splaYellowColor,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(Radius.circular(30.0))
                     ),
