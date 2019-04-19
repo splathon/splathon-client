@@ -47,10 +47,13 @@ class _AllResultState extends State<AllResult> {
       );
     }
 
-    return ListView.builder(
-      itemBuilder: (BuildContext context, int index) =>
-        MatchItem(_model.qualifiers[index]),
-      itemCount: _model.qualifiers.length,
+    return Container(
+      color: backgroundColor,
+      child: ListView.builder(
+        itemBuilder: (BuildContext context, int index) =>
+          MatchItem(_model.qualifiers[index]),
+        itemCount: _model.qualifiers.length,
+      ),
     );
   }
 }
@@ -61,8 +64,10 @@ class MatchItem extends StatelessWidget {
   final Round match;
 
   Widget _buildMatch(Round round, BuildContext context) {
+    var roomIndexs = List.generate(round.rooms.length, (int index) => index);
+
     return new Container(
-      foregroundDecoration: BoxDecoration(
+      decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10.0),
         border: Border.all(
           color: borderblueColor,
@@ -71,33 +76,63 @@ class MatchItem extends StatelessWidget {
       ),
       margin: const EdgeInsets.only(top: 10, left: 20, right: 20),
       child: ExpansionTile(
-        backgroundColor: splaBlueColor,
+        //backgroundColor: splaBlueColor,
         key: PageStorageKey<Round>(round),
         title: Text(round.name, style: roundClosedTitleStyle,),
-        children: round.rooms.map((room) => _buildTable(round, room, context)).toList(),
+        children: roomIndexs.map((index) => _buildTable(round, round.rooms[index], context, index == round.rooms.length - 1)).toList(),
         trailing: Image.asset('assets/images/arrowUp.png'),
-        onExpansionChanged: (isExpanded) => {          
+        onExpansionChanged: (isExpanded) => {      
         },
       ),
     );
   }
 
-  Widget _buildTable(Round round, Room room, BuildContext context) {
+  Widget _buildTable(Round round, Room room, BuildContext context, bool isLast) {
+    var matchIndexs = List.generate(room.matches.length, (int index) => index);
+    var boxDecoration = isLast ? 
+      BoxDecoration(
+        color: backgroundBlueColor,
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(8.0),
+          bottomRight: Radius.circular(8.0)
+        ),
+      ) :
+      BoxDecoration(
+        color: backgroundBlueColor
+      );
+
     return new Container(
-      color: backgroundBlueColor,
+      decoration: boxDecoration,
       child: ExpansionTile(
         key: PageStorageKey<Room>(room),
         title: Text(room.name, style: roundClosedTitleStyle,),
-        children: room.matches.map((match) => _buildResult(round, room, match, context)).toList(),
+        children: matchIndexs.map((index) => _buildResult(round, room, room.matches[index], context, index == room.matches.length - 1)).toList(),
       ),
     );
   }
 
   // TODO: Rebase
-  Widget _buildResult(Round round, Room room, Match2 match, BuildContext context) {
+  Widget _buildResult(Round round, Room room, Match2 match, BuildContext context, bool isLast) {
     double screenWidth = MediaQuery.of(context).size.width;
-    
     int order = match.order;
+    var boxDecoration = isLast ?
+      BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(8.0),
+          bottomRight: Radius.circular(8.0)
+        ),
+      ) :
+      BoxDecoration(
+        color: Colors.white,
+        border: Border(
+          bottom: BorderSide(
+            color: borderblueColor,
+            width: 1,
+          ),
+        ),
+      );
+    
     return GestureDetector(
       onTap: () { 
         Navigator.push(context, new MaterialPageRoute<Null>(
@@ -106,15 +141,7 @@ class MatchItem extends StatelessWidget {
         ));
       },
       child: new Container(
-        foregroundDecoration: BoxDecoration(
-          border: Border(
-            bottom: BorderSide(
-              color: borderblueColor,
-              width: 1,
-            ),
-          ),
-        ),
-        color: Colors.white,
+        decoration: boxDecoration,
         padding: const EdgeInsets.only(left: 14.0, right: 14.0),
         height: 82.0,
         child: Row(
