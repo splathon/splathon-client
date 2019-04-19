@@ -1,10 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:splathon_app/styles/text.dart';
 import 'package:splathon_app/styles/color.dart';
+import 'package:splathon_app/views/roundedView.dart';
 import 'package:english_words/english_words.dart';
+import 'dart:async';
+import 'package:openapi/api.dart';
 
-class Notifications extends StatelessWidget {
+class Notifications extends StatefulWidget {
+  Notifications({Key key}) : super(key: key);
+
+  @override
+  _NotificationsState createState() => _NotificationsState();
+}
+
+class _NotificationsState extends State<Notifications> {
   int notificationCount = 10;
+  Team myTeam = Team();
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Debug code
+    myTeam.id = 73;
+    myTeam.name = '道玄坂高校イカ部（仮）';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +45,7 @@ class Notifications extends StatelessWidget {
                 children: <Widget>[
                   Text('ようこそ', style: topLabelMiniStyle),
                   SizedBox(width: 5),
-                  Text('AplatoonZZZからあげ定食', style: nextMatchNameStyle),
+                  Text(myTeam.name, style: nextMatchNameStyle),
                   SizedBox(width: 5),
                   Text('チーム', style: topLabelMiniStyle),
                 ],
@@ -41,7 +61,7 @@ class Notifications extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(left: 12),
                     child: Text('次の試合はここだ！', style: titleStyle),
-                  )            
+                  ),
                 ],
               ),
             );
@@ -117,15 +137,7 @@ class Notifications extends StatelessWidget {
                     child: Column(
                       children: <Widget>[
                         Text('9:00', style: nextMatchTitleStyle, maxLines: 1, ),
-                        Container(
-                          padding: const EdgeInsets.only(left: 10.0, right: 10.0,),
-                          height: 17.0,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10.0),
-                            color: winColor,
-                          ),
-                          child: Text('NEW', style: newStyle),
-                        ),
+                        accentNewView(),
                       ],
                     ),
                   ),
