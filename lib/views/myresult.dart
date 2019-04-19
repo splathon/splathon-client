@@ -65,114 +65,117 @@ class _EachResultState extends State<EachResult> {
     
     List<String> teamNames = _model.teams.map((team) => team.name).toList();
 
-    return new ListView.builder(
-      itemCount: _results.qualifiers.length + 1,
-      itemBuilder: (BuildContext context, i) {
-        if (i == 0) {
-          return Container(
-            foregroundDecoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10.0),
-              border: Border.all(
-                color: borderblueColor,
-                width: 1,
-              )
-            ),
-            color: Colors.white,
-            margin: const EdgeInsets.only(top: 10, left: 20, right: 20),
-            height: 72.0,
-            width: 300.0,
-            child: Padding(
-              padding: const EdgeInsets.only(left: 18, right: 14),
-              child: new DropdownButtonHideUnderline(
-                child: new DropdownButton(
-                  value: dropdownValue,
-                  onChanged: (String newValue) {
-                    setState(() {
-                      dropdownValue = newValue;
-                    });
-                    changedTeam(newValue);
-                  },
-                  items: teamNames.map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value, style: topNameStyle),
-                    );
-                  }).toList(),
+    return Container(
+      color: backgroundColor,
+      child: ListView.builder(
+        itemCount: _results.qualifiers.length + 1,
+        itemBuilder: (BuildContext context, i) {
+          if (i == 0) {
+            return Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10.0),
+                border: Border.all(
+                  color: borderblueColor,
+                  width: 1,
+                )
+              ),
+              margin: const EdgeInsets.only(top: 10, left: 20, right: 20),
+              height: 72.0,
+              width: 300.0,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 18, right: 14),
+                child: new DropdownButtonHideUnderline(
+                  child: new DropdownButton(
+                    value: dropdownValue,
+                    onChanged: (String newValue) {
+                      setState(() {
+                        dropdownValue = newValue;
+                      });
+                      changedTeam(newValue);
+                    },
+                    items: teamNames.map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value, style: topNameStyle),
+                      );
+                    }).toList(),
+                  ),
                 ),
+              ),
+            );
+          }
+
+          // SPEC: room, matchはRoundごとに各Team1つずつになる前提
+          Round round = _results.qualifiers[i - 1];
+          Room room = round.rooms.first;
+          Match2 match = room.matches.first;
+          int order = match.order;
+
+          return GestureDetector(
+            onTap: () { 
+              Navigator.push(context, new MaterialPageRoute<Null>(
+                settings: const RouteSettings(name: "/result"),
+                builder: (BuildContext context) => new ResultDetail(match),
+              ));
+            },
+            child: new Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10.0),
+                border: Border.all(
+                  color: borderblueColor,
+                  width: 1,
+                )
+              ),
+              margin: const EdgeInsets.only(top: 10, left: 20, right: 20),
+              padding: const EdgeInsets.only(left: 14.0, right: 14.0),
+              height: 82.0,
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                children: <Widget>[
+                  Expanded(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Container(
+                          height: 14.0,
+                          child: Text(round.name + " " + room.name + " 第$order試合", style: resultTitleStyle),
+                          ),
+                        Container(
+                          height: 36.0,
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: <Widget>[
+                              SizedBox(
+                                width: screenWidth * 0.35,
+                                child: Text(match.teamAlpha.name, style: resultNameStyle, maxLines: 1,),
+                              ),
+                              Text('vs', style: resultNameStyle),
+                              SizedBox(
+                                width: screenWidth * 0.35,
+                                child: Text(match.teamBravo.name, style: resultNameStyle, maxLines: 1,),
+                              ),                    
+                            ],
+                          ),
+                        ),
+                        winloseView(match.winner),
+                      ],
+                    ),
+                  ),
+                  Image.asset('assets/images/arrowRight.png')
+                ],
               ),
             ),
           );
         }
-
-        // SPEC: room, matchはRoundごとに各Team1つずつになる前提
-        Round round = _results.qualifiers[i - 1];
-        Room room = round.rooms.first;
-        Match2 match = room.matches.first;
-        int order = match.order;
-
-        return GestureDetector(
-          onTap: () { 
-            Navigator.push(context, new MaterialPageRoute<Null>(
-              settings: const RouteSettings(name: "/result"),
-              builder: (BuildContext context) => new ResultDetail(match),
-            ));
-          },
-          child: new Container(
-            foregroundDecoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10.0),
-              border: Border.all(
-                color: borderblueColor,
-                width: 1,
-              )
-            ),
-            color: Colors.white,
-            margin: const EdgeInsets.only(top: 10, left: 20, right: 20),
-            padding: const EdgeInsets.only(left: 14.0, right: 14.0),
-            height: 82.0,
-            child: Row(
-              mainAxisSize: MainAxisSize.max,
-              children: <Widget>[
-                Expanded(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Container(
-                        height: 14.0,
-                        child: Text(round.name + " " + room.name + " 第$order試合", style: resultTitleStyle),
-                        ),
-                      Container(
-                        height: 36.0,
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: <Widget>[
-                            SizedBox(
-                              width: screenWidth * 0.35,
-                              child: Text(match.teamAlpha.name, style: resultNameStyle, maxLines: 1,),
-                            ),
-                            Text('vs', style: resultNameStyle),
-                            SizedBox(
-                              width: screenWidth * 0.35,
-                              child: Text(match.teamBravo.name, style: resultNameStyle, maxLines: 1,),
-                            ),                    
-                          ],
-                        ),
-                      ),
-                      winloseView(match.winner),
-                    ],
-                  ),
-                ),
-                Image.asset('assets/images/arrowRight.png')
-              ],
-            ),
-          ),
-        );
-      }
+      ),
     );
   }
 
-    Widget winloseView(String winner) {
+  Widget winloseView(String winner) {
     if (winner != 'alpha' && winner != 'bravo') {
       return Container(
         height: 18.0,

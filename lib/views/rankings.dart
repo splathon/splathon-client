@@ -44,74 +44,77 @@ class _RankingsState extends State<Rankings> {
       );
     }
 
-    return new ListView.builder(
-      itemCount: _model.rankings.length * 2,
-      itemBuilder: (BuildContext context, i) {
-        final index = i ~/ 2;
-        Rank rank = _model.rankings[index];
-        if (!i.isOdd) {
-          return headerView(index, rank);
-        }
+    return Container(
+      color: backgroundColor,
+      child: ListView.builder(
+        itemCount: _model.rankings.length * 2,
+        itemBuilder: (BuildContext context, i) {
+          final index = i ~/ 2;
+          Rank rank = _model.rankings[index];
+          if (!i.isOdd) {
+            return headerView(index, rank);
+          }
 
-        return new Container(
-          foregroundDecoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10.0),
-            border: Border.all(
-              color: borderColor,
-              width: 1,
-            )
-          ),
-          color: Colors.white,
-          margin: const EdgeInsets.only(left: 20, right: 20),
-          height: 72.0,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Container(
-                height: 36.0,
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    Row(
-                      children: <Widget>[
-                        CharactorImage(rank.team.members[0].icon),
-                        Text(rank.team.members[0].name, style: nameStyle),
-                      ],
-                    ),
-                    Row(
-                      children: <Widget>[
-                        CharactorImage(rank.team.members[1].icon),
-                        Text(rank.team.members[1].name, style: nameStyle),
-                      ],
-                    ),                  ],
+          return new Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10.0),
+              border: Border.all(
+                color: borderColor,
+                width: 1,
+              )
+            ),
+            margin: const EdgeInsets.only(left: 20, right: 20),
+            height: 72.0,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Container(
+                  height: 36.0,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      Row(
+                        children: <Widget>[
+                          CharactorImage(rank.team.members[0].icon),
+                          Text(rank.team.members[0].name, style: nameStyle),
+                        ],
+                      ),
+                      Row(
+                        children: <Widget>[
+                          CharactorImage(rank.team.members[1].icon),
+                          Text(rank.team.members[1].name, style: nameStyle),
+                        ],
+                      ),                  ],
+                  ),
                 ),
-              ),
-              Container(
-                height: 36.0,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    Row(
-                      children: <Widget>[
-                        CharactorImage(rank.team.members[2].icon),
-                        Text(rank.team.members[2].name, style: nameStyle),
-                      ],
-                    ),
-                    Row(
-                      children: <Widget>[
-                        CharactorImage(rank.team.members[3].icon),
-                        Text(rank.team.members[3].name, style: nameStyle),
-                      ],
-                    ),
-                  ],
+                Container(
+                  height: 36.0,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      Row(
+                        children: <Widget>[
+                          CharactorImage(rank.team.members[2].icon),
+                          Text(rank.team.members[2].name, style: nameStyle),
+                        ],
+                      ),
+                      Row(
+                        children: <Widget>[
+                          CharactorImage(rank.team.members[3].icon),
+                          Text(rank.team.members[3].name, style: nameStyle),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
-          ),
-        );
-      }
+              ],
+            ),
+          );
+        },
+      ),
     );
   }
 

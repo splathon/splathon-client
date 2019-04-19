@@ -10,41 +10,44 @@ import 'package:splathon_app/views/enterbuilding.dart';
 class ReceptionTabbedBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: choices.length,
-      child: new Stack(
-        children: <Widget>[
-          TabBarView(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 60.0),
-                child: new EnterBuilding(),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 60.0),
-                child: new EnterBuilding(), // TODO: レイアウトは一緒だと思うのでLayout Fixするまで一旦コピー
-              ),
-            ],
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 20.0, left: 20.0, right: 20.0),
-            child: TabBar(
-              isScrollable: false,
-              indicatorColor: splaBlueColor,
-              labelColor: splaBlueColor,
-              labelStyle: tabStyle,
-              tabs: choices.map((TabView tabView) {
-                return new Container(
-                  height: 40.0,
-                  child: new Tab(
-                    text: tabView.title,
-                  ),
-                );
-              }).toList(),
+    return Container(
+      color: backgroundColor,
+      child: DefaultTabController(
+        length: choices.length,
+        child: new Stack(
+          children: <Widget>[
+            TabBarView(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 60.0),
+                  child: new EnterBuilding(),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 60.0),
+                  child: new EnterBuilding(), // TODO: レイアウトは一緒だと思うのでLayout Fixするまで一旦コピー
+                ),
+              ],
             ),
-          )
-        ],
-      )
+            Padding(
+              padding: const EdgeInsets.only(top: 20.0, left: 20.0, right: 20.0),
+              child: TabBar(
+                isScrollable: false,
+                indicatorColor: splaBlueColor,
+                labelColor: splaBlueColor,
+                labelStyle: tabStyle,
+                tabs: choices.map((TabView tabView) {
+                  return new Container(
+                    height: 40.0,
+                    child: new Tab(
+                      text: tabView.title,
+                    ),
+                  );
+                }).toList(),
+              ),
+            )
+          ],
+        ),
+      ),
     );
   }
 
