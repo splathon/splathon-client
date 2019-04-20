@@ -1,4 +1,4 @@
-# openapi.api.RankingApi
+# openapi.api.AdminApi
 
 ## Load the API package
 ```dart
@@ -9,28 +9,29 @@ All URIs are relative to *https://splathon-api.appspot.com/splathon*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**getRanking**](RankingApi.md#getRanking) | **GET** /v{eventId}/ranking | 
+[**updateBattle**](AdminApi.md#updateBattle) | **POST** /v{eventId}/matches/{matchId} | 
 
 
-# **getRanking**
-> Ranking getRanking(eventId)
+# **updateBattle**
+> updateBattle(eventId, matchId, battle)
 
 
 
-予選ランキングを返す。
+Update a battle data in the match.
 
 ### Example 
 ```dart
 import 'package:openapi/api.dart';
 
-var api_instance = new RankingApi();
+var api_instance = new AdminApi();
 var eventId = 789; // int | 
+var matchId = 789; // int | match id
+var battle = new Battle(); // Battle | 
 
 try { 
-    var result = api_instance.getRanking(eventId);
-    print(result);
+    api_instance.updateBattle(eventId, matchId, battle);
 } catch (e) {
-    print("Exception when calling RankingApi->getRanking: $e\n");
+    print("Exception when calling AdminApi->updateBattle: $e\n");
 }
 ```
 
@@ -39,10 +40,12 @@ try {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **eventId** | **int**|  | [default to null]
+ **matchId** | **int**| match id | [default to null]
+ **battle** | [**Battle**](Battle.md)|  | 
 
 ### Return type
 
-[**Ranking**](Ranking.md)
+void (empty response body)
 
 ### Authorization
 
@@ -50,7 +53,7 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: Not defined
+ - **Content-Type**: application/json
  - **Accept**: application/json; charset=utf-8
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)

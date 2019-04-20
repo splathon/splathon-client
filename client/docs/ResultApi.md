@@ -5,7 +5,7 @@
 import 'package:openapi/api.dart';
 ```
 
-All URIs are relative to *https://localhost/splathon*
+All URIs are relative to *https://splathon-api.appspot.com/splathon*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------

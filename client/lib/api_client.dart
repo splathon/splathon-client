@@ -39,12 +39,10 @@ class ApiClient {
           return value is double ? value : double.parse('$value');
         case 'Battle':
           return Battle.fromJson(value);
-        case 'BattleRule':
-          return BattleRule.fromJson(value);
-        case 'BattleStage':
-          return BattleStage.fromJson(value);
         case 'Error':
           return Error.fromJson(value);
+        case 'Event':
+          return Event.fromJson(value);
         case 'Match':
           return Match.fromJson(value);
         case 'Member':
@@ -59,6 +57,10 @@ class ApiClient {
           return Room.fromJson(value);
         case 'Round':
           return Round.fromJson(value);
+        case 'Rule':
+          return Rule.fromJson(value);
+        case 'Stage':
+          return Stage.fromJson(value);
         case 'Team':
           return Team.fromJson(value);
         case 'Teams':

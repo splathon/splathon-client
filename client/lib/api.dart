@@ -14,15 +14,15 @@ part 'auth/api_key_auth.dart';
 part 'auth/oauth.dart';
 part 'auth/http_basic_auth.dart';
 
+part 'api/admin_api.dart';
 part 'api/default_api.dart';
 part 'api/match_api.dart';
 part 'api/ranking_api.dart';
 part 'api/result_api.dart';
 
 part 'model/battle.dart';
-part 'model/battle_rule.dart';
-part 'model/battle_stage.dart';
 part 'model/error.dart';
+part 'model/event.dart';
 part 'model/match.dart';
 part 'model/member.dart';
 part 'model/rank.dart';
@@ -30,6 +30,8 @@ part 'model/ranking.dart';
 part 'model/results.dart';
 part 'model/room.dart';
 part 'model/round.dart';
+part 'model/rule.dart';
+part 'model/stage.dart';
 part 'model/team.dart';
 part 'model/teams.dart';
 

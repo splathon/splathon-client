@@ -44,26 +44,30 @@ Please follow the [installation procedure](#installation--usage) and then run th
 import 'package:openapi/api.dart';
 
 
-var api_instance = new DefaultApi();
+var api_instance = new AdminApi();
 var eventId = 789; // int | 
+var matchId = 789; // int | match id
+var battle = new Battle(); // Battle | 
 
 try {
-    var result = api_instance.listTeams(eventId);
-    print(result);
+    api_instance.updateBattle(eventId, matchId, battle);
 } catch (e) {
-    print("Exception when calling DefaultApi->listTeams: $e\n");
+    print("Exception when calling AdminApi->updateBattle: $e\n");
 }
 
 ```
 
 ## Documentation for API Endpoints
 
-All URIs are relative to *https://localhost/splathon*
+All URIs are relative to *https://splathon-api.appspot.com/splathon*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
+*AdminApi* | [**updateBattle**](docs//AdminApi.md#updatebattle) | **POST** /v{eventId}/matches/{matchId} | 
+*DefaultApi* | [**getEvent**](docs//DefaultApi.md#getevent) | **GET** /v{eventId}/event | 
 *DefaultApi* | [**listTeams**](docs//DefaultApi.md#listteams) | **GET** /v{eventId}/teams | 
 *MatchApi* | [**getMatch**](docs//MatchApi.md#getmatch) | **GET** /v{eventId}/matches/{matchId} | 
+*MatchApi* | [**updateBattle**](docs//MatchApi.md#updatebattle) | **POST** /v{eventId}/matches/{matchId} | 
 *RankingApi* | [**getRanking**](docs//RankingApi.md#getranking) | **GET** /v{eventId}/ranking | 
 *ResultApi* | [**getResult**](docs//ResultApi.md#getresult) | **GET** /v{eventId}/results | 
 
@@ -71,9 +75,8 @@ Class | Method | HTTP request | Description
 ## Documentation For Models
 
  - [Battle](docs//Battle.md)
- - [BattleRule](docs//BattleRule.md)
- - [BattleStage](docs//BattleStage.md)
  - [Error](docs//Error.md)
+ - [Event](docs//Event.md)
  - [Match](docs//Match.md)
  - [Member](docs//Member.md)
  - [Rank](docs//Rank.md)
@@ -81,6 +84,8 @@ Class | Method | HTTP request | Description
  - [Results](docs//Results.md)
  - [Room](docs//Room.md)
  - [Round](docs//Round.md)
+ - [Rule](docs//Rule.md)
+ - [Stage](docs//Stage.md)
  - [Team](docs//Team.md)
  - [Teams](docs//Teams.md)
 
