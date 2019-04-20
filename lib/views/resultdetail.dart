@@ -7,18 +7,54 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:english_words/english_words.dart';
 import 'package:openapi/api.dart' as API;
 
-class ResultDetail extends StatelessWidget { 
-  final API.Match _match;
+class ResultDetail extends StatefulWidget {
+  final int _matchId;
+  ResultDetail(this._matchId);
 
-  ResultDetail(this._match);
+  @override
+  _ResultDetailState createState() => _ResultDetailState(_matchId);
+}
+
+class _ResultDetailState extends State<ResultDetail> {
+  final int _matchId;
+  API.Match _match;
+
+  _ResultDetailState(this._matchId);
+
+  @override
+  void initState() {
+    super.initState();
+    fetchData();
+  }
 
   @override
   Widget build(BuildContext context) {
     return buildResultDetail(context);
   }
 
+  Future fetchData() async {
+    var client = new API.MatchApi();
+    var result = client.getMatch(9, _matchId);
+    result.then(
+      (resultsObj) => setState(() { this._match = resultsObj; } )
+    );
+  }
+
   Widget buildResultDetail(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
+
+    if (_match == null) {
+      // Loading
+      return Scaffold(
+        appBar: AppBar(
+          title: SplaText('リザルト'),
+          backgroundColor: Color.fromRGBO(11, 49, 143, 1),
+        ),
+        body: Center(
+          child: const CircularProgressIndicator(),
+        ),
+      );
+    }
 
     return new Scaffold(
       appBar: new AppBar(
@@ -44,6 +80,11 @@ class ResultDetail extends StatelessWidget {
           }
 
           API.Battle battle = _match.battles[i - 1];
+          // MEMO: 最終的にこのチェックは必要ないかも
+          if (battle.id == null) {
+            return Container();
+          }
+
           bool isWinAlpha = battle.winner == 'alpha';
           return Container(
             margin: const EdgeInsets.only(top: 10, left: 20, right: 20),
@@ -60,7 +101,6 @@ class ResultDetail extends StatelessWidget {
                 Row(
                   children: <Widget>[
                     new Container(
-                      // margin: const EdgeInsets.only(top: 20, left: 20, right: 20),
                       width: 50,
                       child: new Stack(
                         children: <Widget>[
@@ -142,6 +182,71 @@ class ResultDetail extends StatelessWidget {
   }
 
   Widget teamMemberView(double screenWidth) {
+    final bool isNoMember = _match.teamAlpha.members.length < 4 || _match.teamBravo.members.length < 4;
+
+    List<Widget> alphaMembers = isNoMember ?
+      <Widget>[
+        Center(child: Text(_match.teamAlpha.name, style: resultTopTeamNameStyle, maxLines: 2,),),
+      ] :
+      <Widget>[
+        Center(child: Text(_match.teamAlpha.name, style: resultTopTeamNameStyle, maxLines: 2,),),
+        Row(
+          children: <Widget>[
+            CharactorImage(_match.teamAlpha.members[0].icon),
+            Text(_match.teamAlpha.members[0].name, style: resultPlayerNameStyle),
+          ],
+        ),
+        Row(
+          children: <Widget>[
+            CharactorImage(_match.teamAlpha.members[1].icon),
+            Text(_match.teamAlpha.members[1].name, style: resultPlayerNameStyle),
+          ],
+        ),
+        Row(
+          children: <Widget>[
+            CharactorImage(_match.teamAlpha.members[2].icon),
+            Text(_match.teamAlpha.members[2].name, style: resultPlayerNameStyle),
+          ],
+        ),
+        Row(
+          children: <Widget>[
+            CharactorImage(_match.teamAlpha.members[3].icon),
+            Text(_match.teamAlpha.members[3].name, style: resultPlayerNameStyle),
+          ],
+        ),
+      ];
+    List<Widget> bravoMembers = isNoMember ?
+      <Widget>[
+        Center(child: Text(_match.teamBravo.name, style: resultTopTeamNameStyle, maxLines: 2,),),
+      ] :
+      <Widget>[
+        Center(child: Text(_match.teamBravo.name, style: resultTopTeamNameStyle, maxLines: 2,),),
+        Row(
+          children: <Widget>[
+            CharactorImage(_match.teamBravo.members[0].icon),
+            Text(_match.teamBravo.members[0].name, style: resultPlayerNameStyle),
+          ],
+        ),
+        Row(
+          children: <Widget>[
+            CharactorImage(_match.teamBravo.members[1].icon),
+            Text(_match.teamBravo.members[1].name, style: resultPlayerNameStyle),
+          ],
+        ),
+        Row(
+          children: <Widget>[
+            CharactorImage(_match.teamBravo.members[2].icon),
+            Text(_match.teamBravo.members[2].name, style: resultPlayerNameStyle),
+          ],
+        ),
+        Row(
+          children: <Widget>[
+            CharactorImage(_match.teamBravo.members[3].icon),
+            Text(_match.teamBravo.members[3].name, style: resultPlayerNameStyle),
+          ],
+        ),
+      ];
+
     return Container(
       margin: const EdgeInsets.only(top: 40, left: 20, right: 20, bottom: 20),
       padding: const EdgeInsets.only(top: 20, bottom: 15),
@@ -152,33 +257,7 @@ class ResultDetail extends StatelessWidget {
           Container(
             width: screenWidth * 0.35,
             child: Column(
-              children: <Widget>[
-                Center(child: Text(_match.teamAlpha.name, style: resultTopTeamNameStyle, maxLines: 2,),),
-                Row(
-                  children: <Widget>[
-                    CharactorImage(_match.teamAlpha.members[0].icon),
-                    Text(_match.teamAlpha.members[0].name, style: resultPlayerNameStyle),
-                  ],
-                ),
-                Row(
-                  children: <Widget>[
-                    CharactorImage(_match.teamAlpha.members[1].icon),
-                    Text(_match.teamAlpha.members[1].name, style: resultPlayerNameStyle),
-                  ],
-                ),
-                Row(
-                  children: <Widget>[
-                    CharactorImage(_match.teamAlpha.members[2].icon),
-                    Text(_match.teamAlpha.members[2].name, style: resultPlayerNameStyle),
-                  ],
-                ),
-                Row(
-                  children: <Widget>[
-                    CharactorImage(_match.teamAlpha.members[3].icon),
-                    Text(_match.teamAlpha.members[3].name, style: resultPlayerNameStyle),
-                  ],
-                ),
-              ],
+              children: alphaMembers,
             ),
           ),
           Container(
@@ -190,33 +269,7 @@ class ResultDetail extends StatelessWidget {
           Container(
             width: screenWidth * 0.35,
             child: Column(
-              children: <Widget>[
-                Text(_match.teamBravo.name, style: resultTopTeamNameStyle, maxLines: 2,),
-                Row(
-                  children: <Widget>[
-                    CharactorImage(_match.teamBravo.members[0].icon),
-                    Text(_match.teamBravo.members[0].name, style: resultPlayerNameStyle),
-                  ],
-                ),
-                Row(
-                  children: <Widget>[
-                    CharactorImage(_match.teamBravo.members[1].icon),
-                    Text(_match.teamBravo.members[1].name, style: resultPlayerNameStyle),
-                  ],
-                ),
-                Row(
-                  children: <Widget>[
-                    CharactorImage(_match.teamBravo.members[2].icon),
-                    Text(_match.teamBravo.members[2].name, style: resultPlayerNameStyle),
-                  ],
-                ),
-                Row(
-                  children: <Widget>[
-                    CharactorImage(_match.teamBravo.members[3].icon),
-                    Text(_match.teamBravo.members[3].name, style: resultPlayerNameStyle),
-                  ],
-                ),
-              ],
+              children: bravoMembers,
             ),
           ),
         ],

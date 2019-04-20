@@ -140,7 +140,7 @@ class MatchItem extends StatelessWidget {
       onTap: () { 
         Navigator.push(context, new MaterialPageRoute<Null>(
           settings: const RouteSettings(name: "/result"),
-          builder: (BuildContext context) => new ResultDetail(match),
+          builder: (BuildContext context) => new ResultDetail(match.id),
         ));
       },
       child: new Container(
