@@ -45,8 +45,8 @@ class ApiClient {
           return BattleStage.fromJson(value);
         case 'Error':
           return Error.fromJson(value);
-        case 'Match2':
-          return Match2.fromJson(value);
+        case 'Match':
+          return Match.fromJson(value);
         case 'Member':
           return Member.fromJson(value);
         case 'Rank':
@@ -65,7 +65,7 @@ class ApiClient {
           return Teams.fromJson(value);
         default:
           {
-            Match match;
+            Core.Match match;
             if (value is List &&
                 (match = _regList.firstMatch(targetType)) != null) {
               var newTargetType = match[1];

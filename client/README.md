@@ -74,7 +74,7 @@ Class | Method | HTTP request | Description
  - [BattleRule](docs//BattleRule.md)
  - [BattleStage](docs//BattleStage.md)
  - [Error](docs//Error.md)
- - [Match2](docs//Match2.md)
+ - [Match](docs//Match.md)
  - [Member](docs//Member.md)
  - [Rank](docs//Rank.md)
  - [Ranking](docs//Ranking.md)

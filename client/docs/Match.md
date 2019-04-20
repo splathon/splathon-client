@@ -1,4 +1,4 @@
-# openapi.model.Match2
+# openapi.model.Match
 
 ## Load the model package
 ```dart

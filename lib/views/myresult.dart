@@ -5,7 +5,7 @@ import 'package:splathon_app/views/roundedView.dart';
 import 'package:english_words/english_words.dart';
 import 'package:splathon_app/views/resultdetail.dart';
 import 'dart:async';
-import 'package:openapi/api.dart';
+import 'package:openapi/api.dart' as API;
 
 class EachResult extends StatefulWidget {
   EachResult({Key key}) : super(key: key);
@@ -15,8 +15,8 @@ class EachResult extends StatefulWidget {
 }
 
 class _EachResultState extends State<EachResult> {
-  Teams _model;
-  Results _results;
+  API.Teams _model;
+  API.Results _results;
   String dropdownValue = 'NuRItaclesカスタム'; // TODO: 暫定固定実装、ログイン処理実装して自身のTeamNameが取得できるようになったらここに入れる
 
   @override
@@ -27,7 +27,7 @@ class _EachResultState extends State<EachResult> {
   }
 
   Future fetchTeams() async {
-    var client = new DefaultApi();
+    var client = new API.DefaultApi();
     var result = client.listTeams(9);
     result.then(
       (resultsObj) => setState(() { this._model = resultsObj; } )
@@ -35,7 +35,7 @@ class _EachResultState extends State<EachResult> {
   }
 
   Future fetchResult(int teamId) async {
-    var client = new ResultApi();
+    var client = new API.ResultApi();
     var result = client.getResult(9, teamId: teamId);
     result.then(
       (resultsObj) => setState(() { this._results = resultsObj; } )
@@ -108,9 +108,9 @@ class _EachResultState extends State<EachResult> {
           }
 
           // SPEC: room, matchはRoundごとに各Team1つずつになる前提
-          Round round = _results.qualifiers[i - 1];
-          Room room = round.rooms.first;
-          Match2 match = room.matches.first;
+          API.Round round = _results.qualifiers[i - 1];
+          API.Room room = round.rooms.first;
+          API.Match match = room.matches.first;
           int order = match.order;
 
           return GestureDetector(

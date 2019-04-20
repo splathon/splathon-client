@@ -5,7 +5,7 @@ import 'package:splathon_app/views/roundedView.dart';
 import 'package:english_words/english_words.dart';
 import 'package:splathon_app/views/resultdetail.dart';
 import 'dart:async';
-import 'package:openapi/api.dart';
+import 'package:openapi/api.dart' as API;
 
 class AllResult extends StatefulWidget {
   AllResult({Key key}) : super(key: key);
@@ -18,7 +18,7 @@ BuildContext sharedContext;
 
 class _AllResultState extends State<AllResult> {
   // ViewModel
-  Results _model;
+  API.Results _model;
 
   @override
   void initState() {
@@ -33,7 +33,7 @@ class _AllResultState extends State<AllResult> {
   }
 
   Future fetchData() async {
-    var client = new ResultApi();
+    var client = new API.ResultApi();
     var result = client.getResult(9);
     result.then(
       (resultsObj) => setState(() { this._model = resultsObj; } )
@@ -62,9 +62,9 @@ class _AllResultState extends State<AllResult> {
 class MatchItem extends StatelessWidget {
   const MatchItem(this.match);
 
-  final Round match;
+  final API.Round match;
 
-  Widget _buildMatch(Round round, BuildContext context) {
+  Widget _buildMatch(API.Round round, BuildContext context) {
     var roomIndexs = List.generate(round.rooms.length, (int index) => index);
 
     return new Container(
@@ -78,7 +78,7 @@ class MatchItem extends StatelessWidget {
       margin: const EdgeInsets.only(top: 10, left: 20, right: 20),
       child: ExpansionTile(
         //backgroundColor: splaBlueColor,
-        key: PageStorageKey<Round>(round),
+        key: PageStorageKey<API.Round>(round),
         title: Text(round.name, style: roundClosedTitleStyle,),
         children: roomIndexs.map((index) => _buildTable(round, round.rooms[index], context, index == round.rooms.length - 1)).toList(),
         trailing: Image.asset('assets/images/arrowUp.png'),
@@ -88,7 +88,7 @@ class MatchItem extends StatelessWidget {
     );
   }
 
-  Widget _buildTable(Round round, Room room, BuildContext context, bool isLast) {
+  Widget _buildTable(API.Round round, API.Room room, BuildContext context, bool isLast) {
     var matchIndexs = List.generate(room.matches.length, (int index) => index);
     var boxDecoration = isLast ? 
       BoxDecoration(
@@ -105,7 +105,7 @@ class MatchItem extends StatelessWidget {
     return new Container(
       decoration: boxDecoration,
       child: ExpansionTile(
-        key: PageStorageKey<Room>(room),
+        key: PageStorageKey<API.Room>(room),
         title: Text(room.name, style: roundClosedTitleStyle,),
         children: matchIndexs.map((index) => _buildResult(round, room, room.matches[index], context, index == room.matches.length - 1)).toList(),
       ),
@@ -113,7 +113,7 @@ class MatchItem extends StatelessWidget {
   }
 
   // TODO: Rebase
-  Widget _buildResult(Round round, Room room, Match2 match, BuildContext context, bool isLast) {
+  Widget _buildResult(API.Round round, API.Room room, API.Match match, BuildContext context, bool isLast) {
     double screenWidth = MediaQuery.of(context).size.width;
     int order = match.order;
     var boxDecoration = isLast ?

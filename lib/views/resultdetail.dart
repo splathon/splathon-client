@@ -5,10 +5,10 @@ import 'package:splathon_app/views/myresult.dart';
 import 'package:splathon_app/views/Image.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:english_words/english_words.dart';
-import 'package:openapi/api.dart';
+import 'package:openapi/api.dart' as API;
 
 class ResultDetail extends StatelessWidget { 
-  final Match2 _match;
+  final API.Match _match;
 
   ResultDetail(this._match);
 
@@ -43,7 +43,7 @@ class ResultDetail extends StatelessWidget {
             );
           }
 
-          Battle battle = _match.battles[i - 1];
+          API.Battle battle = _match.battles[i - 1];
           bool isWinAlpha = battle.winner == 'alpha';
           return Container(
             margin: const EdgeInsets.only(top: 10, left: 20, right: 20),

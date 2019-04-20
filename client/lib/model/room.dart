@@ -6,7 +6,7 @@ class Room {
   
   String name = null;
   
-  List<Match2> matches = [];
+  List<Match> matches = [];
   Room();
 
   @override
@@ -18,7 +18,7 @@ class Room {
     if (json == null) return;
     id = json['id'];
     name = json['name'];
-    matches = Match2.listFromJson(json['matches']);
+    matches = Match.listFromJson(json['matches']);
   }
 
   Map<String, dynamic> toJson() {

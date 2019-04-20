@@ -5,7 +5,7 @@ import 'package:splathon_app/views/roundedView.dart';
 import 'package:splathon_app/views/Image.dart';
 import 'package:english_words/english_words.dart';
 import 'dart:async';
-import 'package:openapi/api.dart';
+import 'package:openapi/api.dart' as API;
 
 class Rankings extends StatefulWidget {
   Rankings({Key key}) : super(key: key);
@@ -16,7 +16,7 @@ class Rankings extends StatefulWidget {
 
 class _RankingsState extends State<Rankings> {
   // ViewModel
-  Ranking _model;
+  API.Ranking _model;
 
   @override
   void initState() {
@@ -30,7 +30,7 @@ class _RankingsState extends State<Rankings> {
   }
 
   Future fetchData() async {
-    var client = new RankingApi();
+    var client = new API.RankingApi();
     var result = client.getRanking(9);
     result.then(
       (rankingObj) => setState(() { this._model = rankingObj; } )
@@ -51,7 +51,7 @@ class _RankingsState extends State<Rankings> {
         itemCount: _model.rankings.length * 2,
         itemBuilder: (BuildContext context, i) {
           final index = i ~/ 2;
-          Rank rank = _model.rankings[index];
+          API.Rank rank = _model.rankings[index];
           if (!i.isOdd) {
             return headerView(index, rank);
           }
@@ -119,7 +119,7 @@ class _RankingsState extends State<Rankings> {
     );
   }
 
-  Widget headerView(int index, Rank rank) {
+  Widget headerView(int index, API.Rank rank) {
     final rankIndex = index + 1; // rankIndex: 1..N
     final isTop3 = rankIndex <= 3;
     return Container(

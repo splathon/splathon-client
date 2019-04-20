@@ -1,5 +1,7 @@
 library openapi.api;
 
+import 'dart:core' as Core show Match;
+import 'dart:core' hide Match;
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart';
@@ -21,7 +23,7 @@ part 'model/battle.dart';
 part 'model/battle_rule.dart';
 part 'model/battle_stage.dart';
 part 'model/error.dart';
-part 'model/match2.dart';
+part 'model/match.dart';
 part 'model/member.dart';
 part 'model/rank.dart';
 part 'model/ranking.dart';
