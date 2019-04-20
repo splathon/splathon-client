@@ -4,6 +4,7 @@ import 'package:splathon_app/styles/color.dart';
 import 'package:splathon_app/views/roundedView.dart';
 import 'package:english_words/english_words.dart';
 import 'package:splathon_app/views/resultdetail.dart';
+import 'package:splathon_app/views/customExpansionTile.dart' as CustomView;
 import 'dart:async';
 import 'package:openapi/api.dart' as API;
 
@@ -73,13 +74,14 @@ class MatchItem extends StatelessWidget {
         border: Border.all(
           color: borderblueColor,
           width: 1,
-        )
+        ),
+        color: splaBlueColor,
       ),
       margin: const EdgeInsets.only(top: 10, left: 20, right: 20),
-      child: ExpansionTile(
+      child: CustomView.ExpansionTile(
         //backgroundColor: splaBlueColor,
         key: PageStorageKey<API.Round>(round),
-        title: Text(round.name, style: roundClosedTitleStyle,),
+        title: Text(round.name, style: roundExpandedTitleStyle,),
         children: roomIndexs.map((index) => _buildTable(round, round.rooms[index], context, index == round.rooms.length - 1)).toList(),
         trailing: Image.asset('assets/images/arrowUp.png'),
         onExpansionChanged: (isExpanded) => {      
@@ -104,10 +106,10 @@ class MatchItem extends StatelessWidget {
 
     return new Container(
       decoration: boxDecoration,
-      child: ExpansionTile(
+      child: CustomView.ExpansionTile(
         key: PageStorageKey<API.Room>(room),
         title: Text(room.name, style: roundClosedTitleStyle,),
-        children: matchIndexs.map((index) => _buildResult(round, room, room.matches[index], context, index == room.matches.length - 1)).toList(),
+        children: matchIndexs.map((index) => _buildResult(round, room, room.matches[index], context, isLast && index == room.matches.length - 1)).toList(),
       ),
     );
   }
