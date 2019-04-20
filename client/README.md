@@ -59,7 +59,7 @@ try {
 
 ## Documentation for API Endpoints
 
-All URIs are relative to *https://splathon-api.appspot.com/splathon*
+All URIs are relative to *https://splathon-api-us.appspot.com/splathon*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
