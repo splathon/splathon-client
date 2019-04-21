@@ -87,6 +87,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.1.5"
+  fast_qr_reader_view:
+    dependency: "direct main"
+    description:
+      name: fast_qr_reader_view
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.5"
   firebase_messaging:
     dependency: "direct main"
     description:

@@ -1,4 +1,6 @@
 PODS:
+  - fast_qr_reader_view (0.0.1):
+    - Flutter
   - Firebase/Core (5.20.2):
     - Firebase/CoreOnly
     - FirebaseAnalytics (= 5.8.1)
@@ -77,6 +79,7 @@ PODS:
     - FMDB (~> 2.7.2)
 
 DEPENDENCIES:
+  - fast_qr_reader_view (from `.symlinks/plugins/fast_qr_reader_view/ios`)
   - firebase_messaging (from `.symlinks/plugins/firebase_messaging/ios`)
   - Flutter (from `.symlinks/flutter/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
@@ -97,6 +100,8 @@ SPEC REPOS:
     - Protobuf
 
 EXTERNAL SOURCES:
+  fast_qr_reader_view:
+    :path: ".symlinks/plugins/fast_qr_reader_view/ios"
   firebase_messaging:
     :path: ".symlinks/plugins/firebase_messaging/ios"
   Flutter:
@@ -107,6 +112,7 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/sqflite/ios"
 
 SPEC CHECKSUMS:
+  fast_qr_reader_view: 53b38a544886e650381ca579e0cdd5ae142fffa6
   Firebase: 0c8cf33f266410c61ab3e2265cfa412200351d9c
   firebase_messaging: b25b2fa94e685146bcf9d706ed87b4e95cd2a17d
   FirebaseAnalytics: ece1aa57a4f43c64d53a648b5a5e05151aae947b

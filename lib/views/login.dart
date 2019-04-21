@@ -97,7 +97,7 @@ class _LoginState extends State<Login> {
   void successLogin() {
     if (_model.isAdmin) {
       // TODO: Repalce admin view
-      Navigator.of(context).pushReplacementNamed("/home");
+      Navigator.of(context).pushReplacementNamed("/admin");
     } else {
       Navigator.of(context).pushReplacementNamed("/home");
     }
