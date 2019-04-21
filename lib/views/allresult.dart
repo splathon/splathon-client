@@ -54,19 +54,20 @@ class _AllResultState extends State<AllResult> {
       color: backgroundColor,
       child: ListView.builder(
         itemBuilder: (BuildContext context, int index) =>
-          MatchItem(_model.qualifiers[index]),
+          RoundItem(_model.qualifiers[index], fetchData),
         itemCount: _model.qualifiers.length,
       ),
     );
   }
 }
 
-class MatchItem extends StatelessWidget {
-  const MatchItem(this.match);
+class RoundItem extends StatelessWidget {
+  const RoundItem(this.round, this.popCallback);
 
-  final API.Round match;
+  final API.Round round;
+  final VoidCallback popCallback;
 
-  Widget _buildMatch(API.Round round, BuildContext context) {
+  Widget _buildRound(API.Round round, BuildContext context) {
     var roomIndexs = List.generate(round.rooms.length, (int index) => index);
 
     return new Container(
@@ -110,12 +111,48 @@ class MatchItem extends StatelessWidget {
       child: CustomView.ExpansionTile(
         key: PageStorageKey<API.Room>(room),
         title: Text(room.name, style: roundClosedTitleStyle,),
-        children: matchIndexs.map((index) => _buildResult(round, room, room.matches[index], context, isLast && index == room.matches.length - 1)).toList(),
+        children: matchIndexs.map((index) => MatchItem(round, room, room.matches[index], isLast && index == room.matches.length - 1)).toList(),
       ),
     );
   }
+  
+  @override
+  Widget build(BuildContext context) {
+    return _buildRound(round, context);
+  }
+}
 
-  // TODO: Rebase
+class MatchItem extends StatefulWidget {
+  API.Round round;
+  API.Room room;
+  API.Match match;
+  bool isLast;
+  MatchItem(this.round, this.room, this.match, this.isLast);
+
+  @override
+  _MatchItemState createState() => _MatchItemState(round, room, match, isLast);
+}
+
+class _MatchItemState extends State<MatchItem> {
+  API.Round round;
+  API.Room room;
+  API.Match match;
+  bool isLast;
+  _MatchItemState(this.round, this.room, this.match, this.isLast);
+
+  @override
+  Widget build(BuildContext context) {
+    return _buildResult(round, room, match, context, isLast);
+  }
+
+  void refetch(int matchId, API.Match match) {
+    var client = new API.MatchApi();
+    var result = client.getMatch(9, matchId);
+    result.then(
+      (resultsObj) => setState(() { this.match = resultsObj; } )
+    );
+  }
+
   Widget _buildResult(API.Round round, API.Room room, API.Match match, BuildContext context, bool isLast) {
     double screenWidth = MediaQuery.of(context).size.width;
     int order = match.order;
@@ -140,7 +177,7 @@ class MatchItem extends StatelessWidget {
     final bool isAdmin = Preference().isAdmin();
 
     return GestureDetector(
-      onTap: () { 
+      onTap: () async { 
         if (match.winner == null && !isAdmin) {
           // Normal user can't show upcoming detail result
           return;
@@ -149,6 +186,7 @@ class MatchItem extends StatelessWidget {
           settings: const RouteSettings(name: "/result"),
           builder: (BuildContext context) => new ResultDetail(match.id),
         ));
+        refetch(match.id, match);
       },
       child: new Container(
         decoration: boxDecoration,
@@ -234,47 +272,41 @@ class MatchItem extends StatelessWidget {
       ),
     );
   }
-
-  @override
-  Widget build(BuildContext context) {
-    return _buildMatch(match, context);
-  }
-
-  static const TextStyle roundClosedTitleStyle = TextStyle(
-    fontFamily: 'Splatfont',
-    color: Colors.black,
-    fontSize: 26.0,
-  );
-
-  static const TextStyle roundExpandedTitleStyle = TextStyle(
-    fontFamily: 'Splatfont',
-    color: Colors.white,
-    fontSize: 26.0,
-  );
-
-  static const TextStyle tableTitleStyle = TextStyle(
-    fontFamily: 'Splatfont',
-    color: Colors.black,
-    fontSize: 26.0,
-  );
-
-  // Copy
-  static const TextStyle resultTitleStyle = TextStyle(
-    fontFamily: 'Splatfont',
-    color: grayColor,
-    fontSize: 14.0,
-  );
-
-  static const TextStyle resultNameStyle = TextStyle(
-    fontFamily: 'Splatfont',
-    color: blackColor,
-    fontSize: 20.0,
-  );
-
-  static const TextStyle resultResultStyle = TextStyle(
-    fontFamily: 'Splatfont',
-    color: Colors.white,
-    fontSize: 11.0,
-  );
 }
 
+const TextStyle roundClosedTitleStyle = TextStyle(
+  fontFamily: 'Splatfont',
+  color: Colors.black,
+  fontSize: 26.0,
+);
+
+const TextStyle roundExpandedTitleStyle = TextStyle(
+  fontFamily: 'Splatfont',
+  color: Colors.white,
+  fontSize: 26.0,
+);
+
+const TextStyle tableTitleStyle = TextStyle(
+  fontFamily: 'Splatfont',
+  color: Colors.black,
+  fontSize: 26.0,
+);
+
+// Copy
+const TextStyle resultTitleStyle = TextStyle(
+  fontFamily: 'Splatfont',
+  color: grayColor,
+  fontSize: 14.0,
+);
+
+const TextStyle resultNameStyle = TextStyle(
+  fontFamily: 'Splatfont',
+  color: blackColor,
+  fontSize: 20.0,
+);
+
+const TextStyle resultResultStyle = TextStyle(
+  fontFamily: 'Splatfont',
+  color: Colors.white,
+  fontSize: 11.0,
+);
