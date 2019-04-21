@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:splathon_app/styles/text.dart';
 import 'package:splathon_app/styles/color.dart';
-import 'package:splathon_app/views/result.dart';
+import 'package:splathon_app/views/allresult.dart';
 import 'package:splathon_app/views/accept.dart';
 
 class AdminTabbedBar extends StatefulWidget {
@@ -35,8 +35,8 @@ class AdminTabbedBarState extends State<AdminTabbedBar> with SingleTickerProvide
       body: new TabBarView(
         physics: NeverScrollableScrollPhysics(),
         children: <Widget>[
-            Text('poyo'),
-            new Accept(),
+            AllResult(),
+            Accept(),
           ],
         controller: controller,
       ),
@@ -47,7 +47,7 @@ class AdminTabbedBarState extends State<AdminTabbedBar> with SingleTickerProvide
             isScrollable: false,
             tabs: <Tab>[
               new Tab(
-                text: 'リザルト',
+                text: 'レポート',
                 icon: Image.asset('assets/images/icon_result.png'),
               ),
               new Tab(

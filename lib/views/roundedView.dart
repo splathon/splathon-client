@@ -59,6 +59,48 @@ Widget pointLabelView(int point) {
   );
 }
 
+Widget reportedLabelView() {
+  return SizedBox(
+    width: 54,
+    height: 23,
+    child: Stack(
+      children: [
+        Container(
+          margin: const EdgeInsets.only(top: 2),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(22.0),
+            color: drawColor,
+          ),
+        ),
+        Center(
+          child: Text('報告済み', style: textStyle),
+        ),
+      ]
+    ),
+  );
+}
+
+Widget unreportedLabelView() {
+  return SizedBox(
+    width: 65,
+    height: 23,
+    child: Stack(
+      children: [
+        Container(
+          margin: const EdgeInsets.only(top: 2),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(22.0),
+            color: splaYellowColor,
+          ),
+        ),
+        Center(
+          child: Text('UPCOMING', style: textStyle),
+        ),
+      ]
+    ),
+  );
+}
+
 enum AccentLabelType {
   New,
   Win,
@@ -99,7 +141,7 @@ const TextStyle textStyle = TextStyle(
 );
 
 const TextStyle pointStyle = TextStyle(
-    fontFamily: 'Splatfont',
-    color: splaBlueColor,
-    fontSize: 13.0,
-  );
+  fontFamily: 'Splatfont',
+  color: splaBlueColor,
+  fontSize: 13.0,
+);

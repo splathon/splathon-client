@@ -4,6 +4,7 @@ import 'package:splathon_app/styles/color.dart';
 import 'package:splathon_app/views/roundedView.dart';
 import 'package:english_words/english_words.dart';
 import 'package:splathon_app/views/resultdetail.dart';
+import 'package:splathon_app/utils/preference.dart';
 import 'package:splathon_app/views/customExpansionTile.dart' as CustomView;
 import 'dart:async';
 import 'package:openapi/api.dart' as API;
@@ -136,8 +137,14 @@ class MatchItem extends StatelessWidget {
         ),
       );
     
+    final bool isAdmin = Preference().isAdmin();
+
     return GestureDetector(
       onTap: () { 
+        if (match.winner == null && !isAdmin) {
+          // Normal user can't show upcoming detail result
+          return;
+        }
         Navigator.push(context, new MaterialPageRoute<Null>(
           settings: const RouteSettings(name: "/result"),
           builder: (BuildContext context) => new ResultDetail(match.id),
@@ -177,7 +184,7 @@ class MatchItem extends StatelessWidget {
                       ],
                     ),
                   ),
-                  winloseView(match.winner),
+                  winloseView(match),
                 ],
               ),
             ),
@@ -188,7 +195,19 @@ class MatchItem extends StatelessWidget {
     );
   }
 
-  Widget winloseView(String winner) {
+  Widget winloseView(API.Match match) {
+    if (match.winner == null) {
+      return Container(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            unreportedLabelView(),
+          ]
+        ),
+      );
+    }
+
+    String winner = match.winner;
     if (winner != 'alpha' && winner != 'bravo') {
       return Container(
         child: Row(

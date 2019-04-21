@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:splathon_app/styles/text.dart';
 import 'package:splathon_app/styles/color.dart';
-import 'package:splathon_app/views/myresult.dart';
+import 'package:splathon_app/views/report.dart';
 import 'package:splathon_app/views/Image.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:splathon_app/utils/preference.dart';
 import 'package:english_words/english_words.dart';
 import 'package:openapi/api.dart' as API;
 
@@ -42,6 +43,7 @@ class _ResultDetailState extends State<ResultDetail> {
 
   Widget buildResultDetail(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
+    final bool isAdmin = Preference().isAdmin();
 
     if (_match == null) {
       // Loading
@@ -80,79 +82,155 @@ class _ResultDetailState extends State<ResultDetail> {
           }
 
           API.Battle battle = _match.battles[i - 1];
-          // MEMO: 最終的にこのチェックは必要ないかも
-          if (battle.id == null) {
-            return Container();
+          final bool isNoId = battle.id == null;
+          final bool isNoWinner = battle.winner == null;
+          if (isNoId || isNoWinner) {
+            if (!isAdmin) {
+              return Container();
+            }
+            return Container(
+              margin: const EdgeInsets.only(top: 10, left: 20, right: 20),
+              foregroundDecoration: BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(
+                    color: borderColor,
+                    width: 1,
+                  ),
+                ),
+              ),
+              child: Column(
+                children: <Widget>[
+                  Row(
+                    children: <Widget>[
+                      new Container(
+                        width: 50,
+                        child: new Stack(
+                          children: <Widget>[
+                            Image.asset('assets/images/silverInc.png'),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 12),
+                              child: Text('$i戦目', style: roundStyle),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(width: 8,),
+                      isNoId ? SizedBox() : Text(battle.rule.name, style: ruleStageStyle,),
+                      SizedBox(width: 8,),
+                      isNoId ? SizedBox() : Text(battle.stage.name, style: ruleStageStyle,),
+                    ],
+                  ),
+                  Container(
+                    padding: const EdgeInsets.only(bottom: 10),
+                    child: RaisedButton(
+                      color: splaYellowColor,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(30.0))
+                      ),
+                      child: Text('結果を報告する',
+                        style: TextStyle(
+                          fontFamily: 'Splatfont',
+                          fontSize: 26,
+                          color: Colors.white,
+                        ),
+                      ),
+                      onPressed: () async {
+                        await Navigator.push(context, new MaterialPageRoute<Null>(
+                          settings: const RouteSettings(name: "/report"),
+                          builder: (BuildContext context) => new Report(_match, battle),
+                        ));
+                        fetchData();
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            );
           }
 
           bool isWinAlpha = battle.winner == 'alpha';
-          return Container(
-            margin: const EdgeInsets.only(top: 10, left: 20, right: 20),
-            foregroundDecoration: BoxDecoration(
-              border: Border(
-                bottom: BorderSide(
-                  color: borderColor,
-                  width: 1,
+          return GestureDetector(
+            onTap: () async { 
+              if (!isAdmin) {
+                // Normal user can't show upcoming detail result
+                return;
+              }
+              await Navigator.push(context, new MaterialPageRoute<Null>(
+                settings: const RouteSettings(name: "/report"),
+                builder: (BuildContext context) => new Report(_match, battle),
+              ));
+              fetchData();
+            },
+            child: Container(
+              margin: const EdgeInsets.only(top: 10, left: 20, right: 20),
+              foregroundDecoration: BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(
+                    color: borderColor,
+                    width: 1,
+                  ),
                 ),
               ),
-            ),
-            child: Column(
-              children: <Widget>[
-                Row(
-                  children: <Widget>[
-                    new Container(
-                      width: 50,
-                      child: new Stack(
-                        children: <Widget>[
-                          Image.asset('assets/images/silverInc.png'),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 12),
-                            child: Text('$i戦目', style: roundStyle),
-                          ),
-                        ],
+              child: Column(
+                children: <Widget>[
+                  Row(
+                    children: <Widget>[
+                      new Container(
+                        width: 50,
+                        child: new Stack(
+                          children: <Widget>[
+                            Image.asset('assets/images/silverInc.png'),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 12),
+                              child: Text('$i戦目', style: roundStyle),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                    SizedBox(width: 8,),
-                    Text(battle.stage.name, style: ruleStageStyle,),
-                  ],
-                ),
-                Row(
-                  children: <Widget>[
-                    Container(
-                      padding: const EdgeInsets.only(left: 10.0, right: 10.0,),
-                      width: 50,
-                      height: 17.0,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10.0),
-                        color: isWinAlpha ? winColor : loseColor,
+                      SizedBox(width: 8,),
+                      Text(battle.rule.name, style: ruleStageStyle,),
+                      SizedBox(width: 8,),
+                      Text(battle.stage.name, style: ruleStageStyle,),
+                    ],
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Container(
+                        padding: const EdgeInsets.only(left: 10.0, right: 10.0,),
+                        width: 50,
+                        height: 17.0,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10.0),
+                          color: isWinAlpha ? winColor : loseColor,
+                        ),
+                        child: Center(
+                          child: Text(isWinAlpha ? 'WIN' : 'LOSE', style: resultResultStyle),
+                        ),
                       ),
-                      child: Center(
-                        child: Text(isWinAlpha ? 'WIN' : 'LOSE', style: resultResultStyle),
+                      SizedBox(width: 8,),
+                      Text(_match.teamAlpha.name, style: resultDetailTeamNameStyle,),
+                    ],
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Container(
+                        padding: const EdgeInsets.only(left: 10.0, right: 10.0,),
+                        width: 50,
+                        height: 17.0,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10.0),
+                          color: isWinAlpha ? loseColor : winColor,
+                        ),
+                        child: Center(
+                          child: Text(isWinAlpha ? 'LOSE' : 'WIN', style: resultResultStyle),
+                        ),
                       ),
-                    ),
-                    SizedBox(width: 8,),
-                    Text(_match.teamAlpha.name, style: resultDetailTeamNameStyle,),
-                  ],
-                ),
-                Row(
-                  children: <Widget>[
-                    Container(
-                      padding: const EdgeInsets.only(left: 10.0, right: 10.0,),
-                      width: 50,
-                      height: 17.0,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10.0),
-                        color: isWinAlpha ? loseColor : winColor,
-                      ),
-                      child: Center(
-                        child: Text(isWinAlpha ? 'LOSE' : 'WIN', style: resultResultStyle),
-                      ),
-                    ),
-                    SizedBox(width: 8,),
-                    Text(_match.teamBravo.name, style: resultDetailTeamNameStyle,),
-                  ],
-                ),
-              ],
+                      SizedBox(width: 8,),
+                      Text(_match.teamBravo.name, style: resultDetailTeamNameStyle,),
+                    ],
+                  ),
+                ],
+              ),
             ),
           );
         }
@@ -161,6 +239,14 @@ class _ResultDetailState extends State<ResultDetail> {
   }
 
   Widget winLoseTopView() {
+    if (_match.winner == null) {
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          Text('UPCOMING', style: resultUpcomingStyle),
+        ],
+      );
+    }
     if (_match.winner != 'alpha' && _match.winner != 'bravo') {
       return Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -292,6 +378,12 @@ class _ResultDetailState extends State<ResultDetail> {
   static const TextStyle resultDrawStyle = TextStyle(
     fontFamily: 'Splatfont',
     color: drawColor,
+    fontSize: 40.0,
+  );
+
+  static const TextStyle resultUpcomingStyle = TextStyle(
+    fontFamily: 'Splatfont',
+    color: splaYellowColor,
     fontSize: 40.0,
   );
 
