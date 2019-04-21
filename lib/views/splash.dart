@@ -29,6 +29,8 @@ class _SplashState extends State<Splash> {
     String token = Preference().getToken();
     bool isAdmin = Preference().isAdmin();
 
+    Navigator.of(context).pushReplacementNamed("/home");
+    return;
     if (token == null) {
       Navigator.of(context).pushReplacementNamed("/login");
     } else if (isAdmin) {
