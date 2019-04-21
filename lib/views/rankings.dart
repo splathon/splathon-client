@@ -69,7 +69,7 @@ class _RankingsState extends State<Rankings> with AutomaticKeepAliveClientMixin 
               )
             ),
             margin: const EdgeInsets.only(left: 20, right: 20),
-            height: 72.0,
+            height: 75.0,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.center,
