@@ -43,6 +43,10 @@ class ApiClient {
           return Error.fromJson(value);
         case 'Event':
           return Event.fromJson(value);
+        case 'LoginRequest':
+          return LoginRequest.fromJson(value);
+        case 'LoginResponse':
+          return LoginResponse.fromJson(value);
         case 'Match':
           return Match.fromJson(value);
         case 'Member':

@@ -13,7 +13,7 @@ Method | HTTP request | Description
 
 
 # **updateBattle**
-> updateBattle(eventId, matchId, battle)
+> updateBattle(eventId, matchId, X_SPLATHON_API_TOKEN, battle)
 
 
 
@@ -26,10 +26,11 @@ import 'package:openapi/api.dart';
 var api_instance = new AdminApi();
 var eventId = 789; // int | 
 var matchId = 789; // int | match id
+var X_SPLATHON_API_TOKEN = X_SPLATHON_API_TOKEN_example; // String | 
 var battle = new Battle(); // Battle | 
 
 try { 
-    api_instance.updateBattle(eventId, matchId, battle);
+    api_instance.updateBattle(eventId, matchId, X_SPLATHON_API_TOKEN, battle);
 } catch (e) {
     print("Exception when calling AdminApi->updateBattle: $e\n");
 }
@@ -41,6 +42,7 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **eventId** | **int**|  | [default to null]
  **matchId** | **int**| match id | [default to null]
+ **X_SPLATHON_API_TOKEN** | **String**|  | [default to null]
  **battle** | [**Battle**](Battle.md)|  | 
 
 ### Return type

@@ -10,7 +10,7 @@ class AdminApi {
   /// 
   ///
   /// Update a battle data in the match.
-  Future updateBattle(int eventId, int matchId, Battle battle) async {
+  Future updateBattle(int eventId, int matchId, String X_SPLATHON_API_TOKEN, Battle battle) async {
     Object postBody = battle;
 
     // verify required params are set
@@ -19,6 +19,9 @@ class AdminApi {
     }
     if(matchId == null) {
      throw new ApiException(400, "Missing required param: matchId");
+    }
+    if(X_SPLATHON_API_TOKEN == null) {
+     throw new ApiException(400, "Missing required param: X_SPLATHON_API_TOKEN");
     }
     if(battle == null) {
      throw new ApiException(400, "Missing required param: battle");
@@ -31,6 +34,7 @@ class AdminApi {
     List<QueryParam> queryParams = [];
     Map<String, String> headerParams = {};
     Map<String, String> formParams = {};
+    headerParams["X-SPLATHON-API-TOKEN"] = X_SPLATHON_API_TOKEN;
 
     List<String> contentTypes = ["application/json"];
 

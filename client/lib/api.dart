@@ -23,6 +23,8 @@ part 'api/result_api.dart';
 part 'model/battle.dart';
 part 'model/error.dart';
 part 'model/event.dart';
+part 'model/login_request.dart';
+part 'model/login_response.dart';
 part 'model/match.dart';
 part 'model/member.dart';
 part 'model/rank.dart';

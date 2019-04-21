@@ -47,10 +47,11 @@ import 'package:openapi/api.dart';
 var api_instance = new AdminApi();
 var eventId = 789; // int | 
 var matchId = 789; // int | match id
+var X_SPLATHON_API_TOKEN = X_SPLATHON_API_TOKEN_example; // String | 
 var battle = new Battle(); // Battle | 
 
 try {
-    api_instance.updateBattle(eventId, matchId, battle);
+    api_instance.updateBattle(eventId, matchId, X_SPLATHON_API_TOKEN, battle);
 } catch (e) {
     print("Exception when calling AdminApi->updateBattle: $e\n");
 }
@@ -66,6 +67,7 @@ Class | Method | HTTP request | Description
 *AdminApi* | [**updateBattle**](docs//AdminApi.md#updatebattle) | **POST** /v{eventId}/matches/{matchId} | 
 *DefaultApi* | [**getEvent**](docs//DefaultApi.md#getevent) | **GET** /v{eventId}/event | 
 *DefaultApi* | [**listTeams**](docs//DefaultApi.md#listteams) | **GET** /v{eventId}/teams | 
+*DefaultApi* | [**login**](docs//DefaultApi.md#login) | **POST** /v{eventId}/login | 
 *MatchApi* | [**getMatch**](docs//MatchApi.md#getmatch) | **GET** /v{eventId}/matches/{matchId} | 
 *MatchApi* | [**updateBattle**](docs//MatchApi.md#updatebattle) | **POST** /v{eventId}/matches/{matchId} | 
 *RankingApi* | [**getRanking**](docs//RankingApi.md#getranking) | **GET** /v{eventId}/ranking | 
@@ -77,6 +79,8 @@ Class | Method | HTTP request | Description
  - [Battle](docs//Battle.md)
  - [Error](docs//Error.md)
  - [Event](docs//Event.md)
+ - [LoginRequest](docs//LoginRequest.md)
+ - [LoginResponse](docs//LoginResponse.md)
  - [Match](docs//Match.md)
  - [Member](docs//Member.md)
  - [Rank](docs//Rank.md)
