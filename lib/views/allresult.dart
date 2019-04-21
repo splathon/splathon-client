@@ -18,7 +18,7 @@ class AllResult extends StatefulWidget {
 
 BuildContext sharedContext;
 
-class _AllResultState extends State<AllResult> {
+class _AllResultState extends State<AllResult> with AutomaticKeepAliveClientMixin {
   // ViewModel
   API.Results _model;
 
@@ -27,6 +27,9 @@ class _AllResultState extends State<AllResult> {
     super.initState();
     fetchData();
   }
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   Widget build(BuildContext context) {

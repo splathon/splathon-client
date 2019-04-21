@@ -10,10 +10,13 @@ class Notifications extends StatefulWidget {
   Notifications({Key key}) : super(key: key);
 
   @override
-  _NotificationsState createState() => _NotificationsState();
+  State<StatefulWidget> createState() {
+    return _NotificationsState();
+  }
+  //_NotificationsState createState() => _NotificationsState();
 }
 
-class _NotificationsState extends State<Notifications> {
+class _NotificationsState extends State<Notifications> with AutomaticKeepAliveClientMixin {
   int notificationCount = 10;
   API.Team myTeam = API.Team();
 
@@ -25,6 +28,9 @@ class _NotificationsState extends State<Notifications> {
     myTeam.id = 73;
     myTeam.name = '道玄坂高校イカ部（仮）';
   }
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   Widget build(BuildContext context) {

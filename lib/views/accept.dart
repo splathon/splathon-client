@@ -10,7 +10,7 @@ class Accept extends StatefulWidget {
   _AcceptState createState() => new _AcceptState();
 }
 
-class _AcceptState extends State<Accept> {
+class _AcceptState extends State<Accept> with AutomaticKeepAliveClientMixin {
   QRReaderController controller;
   List<CameraDescription> cameras;
 
@@ -20,6 +20,9 @@ class _AcceptState extends State<Accept> {
 
     setupCameras();
   }
+
+  @override
+  bool get wantKeepAlive => true;
 
   Future<Null> setupCameras() async {
     cameras = await availableCameras();

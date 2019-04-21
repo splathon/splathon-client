@@ -14,7 +14,7 @@ class EachResult extends StatefulWidget {
   _EachResultState createState() => _EachResultState();
 }
 
-class _EachResultState extends State<EachResult> {
+class _EachResultState extends State<EachResult> with AutomaticKeepAliveClientMixin {
   API.Teams _model;
   API.Results _results;
   String dropdownValue = 'NuRItaclesカスタム'; // TODO: 暫定固定実装、ログイン処理実装して自身のTeamNameが取得できるようになったらここに入れる
@@ -25,6 +25,9 @@ class _EachResultState extends State<EachResult> {
     fetchTeams();
     fetchResult(84); // TODO: 暫定固定実装、ログイン処理実装して自身のTeamIDが取得できるようになったらここに入れる
   }
+
+  @override
+  bool get wantKeepAlive => true;
 
   Future fetchTeams() async {
     var client = new API.DefaultApi();

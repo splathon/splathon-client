@@ -14,7 +14,7 @@ class Rankings extends StatefulWidget {
   _RankingsState createState() => _RankingsState();
 }
 
-class _RankingsState extends State<Rankings> {
+class _RankingsState extends State<Rankings> with AutomaticKeepAliveClientMixin {
   // ViewModel
   API.Ranking _model;
 
@@ -23,6 +23,9 @@ class _RankingsState extends State<Rankings> {
     super.initState();
     fetchData();
   }
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   Widget build(BuildContext context) {
