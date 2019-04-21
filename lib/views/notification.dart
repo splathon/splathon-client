@@ -4,7 +4,7 @@ import 'package:splathon_app/styles/color.dart';
 import 'package:splathon_app/views/roundedView.dart';
 import 'package:english_words/english_words.dart';
 import 'dart:async';
-import 'package:openapi/api.dart';
+import 'package:openapi/api.dart' as API;
 
 class Notifications extends StatefulWidget {
   Notifications({Key key}) : super(key: key);
@@ -15,7 +15,7 @@ class Notifications extends StatefulWidget {
 
 class _NotificationsState extends State<Notifications> {
   int notificationCount = 10;
-  Team myTeam = Team();
+  API.Team myTeam = API.Team();
 
   @override
   void initState() {
