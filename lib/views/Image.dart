@@ -8,7 +8,7 @@ Widget CharactorImage(String url) {
     child: CachedNetworkImage(
       placeholder: (contect, url) => CircularProgressIndicator(),
       errorWidget: (contect, url, error) => Icon(Icons.error),
-      imageUrl: 'https://i.dlpng.com/static/png/1186574_thumb.png',
+      imageUrl: url,
     ),
   );
 }
