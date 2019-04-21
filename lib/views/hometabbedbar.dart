@@ -107,7 +107,6 @@ class HomeTabbedBarState extends State<HomeTabbedBar> with SingleTickerProviderS
       assert(token != null);
       print('Push Teken: $token');
     });
-    _firebaseMessaging.subscribeToTopic('/topic/all');
   }
 
   buildDialog(BuildContext context, Map<String, dynamic> message) {
