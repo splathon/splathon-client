@@ -3,6 +3,7 @@ import 'package:splathon_app/styles/text.dart';
 import 'package:splathon_app/styles/color.dart';
 import 'dart:async';
 import 'package:openapi/api.dart' as API;
+import 'package:splathon_app/utils/preference.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -94,9 +95,11 @@ class _LoginState extends State<Login> {
     });
   }
 
-  void successLogin() {
+  void successLogin() async {
+    Preference().setToken(_model.token);
+    Preference().setIsAdmin(_model.isAdmin);
+
     if (_model.isAdmin) {
-      // TODO: Repalce admin view
       Navigator.of(context).pushReplacementNamed("/admin");
     } else {
       Navigator.of(context).pushReplacementNamed("/home");
