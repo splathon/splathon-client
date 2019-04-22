@@ -14,11 +14,13 @@ class Match {
   Team teamBravo = null;
   
   List<Battle> battles = [];
+  /* ラウンド名。e.g. 予選第1ラウンド, 決勝T1回戦, 決勝戦. Match APIから読んだときに埋まっている */
+  String roundName = null;
   Match();
 
   @override
   String toString() {
-    return 'Match[id=$id, winner=$winner, order=$order, teamAlpha=$teamAlpha, teamBravo=$teamBravo, battles=$battles, ]';
+    return 'Match[id=$id, winner=$winner, order=$order, teamAlpha=$teamAlpha, teamBravo=$teamBravo, battles=$battles, roundName=$roundName, ]';
   }
 
   Match.fromJson(Map<String, dynamic> json) {
@@ -29,6 +31,7 @@ class Match {
     teamAlpha = new Team.fromJson(json['teamAlpha']);
     teamBravo = new Team.fromJson(json['teamBravo']);
     battles = Battle.listFromJson(json['battles']);
+    roundName = json['round_name'];
   }
 
   Map<String, dynamic> toJson() {
@@ -38,7 +41,8 @@ class Match {
       'order': order,
       'teamAlpha': teamAlpha,
       'teamBravo': teamBravo,
-      'battles': battles
+      'battles': battles,
+      'round_name': roundName
     };
   }
 

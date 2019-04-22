@@ -10,6 +10,7 @@ All URIs are relative to *https://splathon-api-us.appspot.com/splathon*
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**getEvent**](DefaultApi.md#getEvent) | **GET** /v{eventId}/event | 
+[**getTeamDetail**](DefaultApi.md#getTeamDetail) | **GET** /v{eventId}/teams/{team_id} | 
 [**listTeams**](DefaultApi.md#listTeams) | **GET** /v{eventId}/teams | 
 [**login**](DefaultApi.md#login) | **POST** /v{eventId}/login | 
 
@@ -45,6 +46,51 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**Event**](Event.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json; charset=utf-8
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **getTeamDetail**
+> Team getTeamDetail(eventId, teamId)
+
+
+
+Return detail team data
+
+### Example 
+```dart
+import 'package:openapi/api.dart';
+
+var api_instance = new DefaultApi();
+var eventId = 789; // int | 
+var teamId = 789; // int | team id
+
+try { 
+    var result = api_instance.getTeamDetail(eventId, teamId);
+    print(result);
+} catch (e) {
+    print("Exception when calling DefaultApi->getTeamDetail: $e\n");
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **eventId** | **int**|  | [default to null]
+ **teamId** | **int**| team id | [default to null]
+
+### Return type
+
+[**Team**](Team.md)
 
 ### Authorization
 

@@ -7,11 +7,13 @@ class Member {
   String name = null;
   /* Slack icon URL */
   String icon = null;
+  
+  MemberDetail detail = null;
   Member();
 
   @override
   String toString() {
-    return 'Member[id=$id, name=$name, icon=$icon, ]';
+    return 'Member[id=$id, name=$name, icon=$icon, detail=$detail, ]';
   }
 
   Member.fromJson(Map<String, dynamic> json) {
@@ -19,13 +21,15 @@ class Member {
     id = json['id'];
     name = json['name'];
     icon = json['icon'];
+    detail = new MemberDetail.fromJson(json['detail']);
   }
 
   Map<String, dynamic> toJson() {
     return {
       'id': id,
       'name': name,
-      'icon': icon
+      'icon': icon,
+      'detail': detail
     };
   }
 

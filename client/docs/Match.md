@@ -14,6 +14,7 @@ Name | Type | Description | Notes
 **teamAlpha** | [**Team**](Team.md) |  | [default to null]
 **teamBravo** | [**Team**](Team.md) |  | [default to null]
 **battles** | [**List&lt;Battle&gt;**](Battle.md) |  | [optional] [default to []]
+**roundName** | **String** | ラウンド名。e.g. 予選第1ラウンド, 決勝T1回戦, 決勝戦. Match APIから読んだときに埋まっている | [optional] [default to null]
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

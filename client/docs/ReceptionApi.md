@@ -1,4 +1,4 @@
-# openapi.api.AdminApi
+# openapi.api.ReceptionApi
 
 ## Load the API package
 ```dart
@@ -9,9 +9,9 @@ All URIs are relative to *https://splathon-api-us.appspot.com/splathon*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**getParticipantsDataForReception**](AdminApi.md#getParticipantsDataForReception) | **GET** /v{eventId}/reception/{splathonReceptionCode} | 
-[**registerParticipants**](AdminApi.md#registerParticipants) | **POST** /v{eventId}/reception/{splathonReceptionCode}/register | 
-[**updateBattle**](AdminApi.md#updateBattle) | **POST** /v{eventId}/matches/{matchId} | 
+[**getParticipantsDataForReception**](ReceptionApi.md#getParticipantsDataForReception) | **GET** /v{eventId}/reception/{splathonReceptionCode} | 
+[**getReception**](ReceptionApi.md#getReception) | **GET** /v{eventId}/reception | 
+[**registerParticipants**](ReceptionApi.md#registerParticipants) | **POST** /v{eventId}/reception/{splathonReceptionCode}/register | 
 
 
 # **getParticipantsDataForReception**
@@ -25,7 +25,7 @@ Method | HTTP request | Description
 ```dart
 import 'package:openapi/api.dart';
 
-var api_instance = new AdminApi();
+var api_instance = new ReceptionApi();
 var eventId = 789; // int | 
 var splathonReceptionCode = splathonReceptionCode_example; // String | ReceptionResponse.splathon.code と同じもの(たぶん内部SlackID).
 var X_SPLATHON_API_TOKEN = X_SPLATHON_API_TOKEN_example; // String | 
@@ -34,7 +34,7 @@ try {
     var result = api_instance.getParticipantsDataForReception(eventId, splathonReceptionCode, X_SPLATHON_API_TOKEN);
     print(result);
 } catch (e) {
-    print("Exception when calling AdminApi->getParticipantsDataForReception: $e\n");
+    print("Exception when calling ReceptionApi->getParticipantsDataForReception: $e\n");
 }
 ```
 
@@ -61,6 +61,49 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **getReception**
+> ReceptionResponse getReception(eventId, X_SPLATHON_API_TOKEN)
+
+
+
+### Example 
+```dart
+import 'package:openapi/api.dart';
+
+var api_instance = new ReceptionApi();
+var eventId = 789; // int | 
+var X_SPLATHON_API_TOKEN = X_SPLATHON_API_TOKEN_example; // String | 
+
+try { 
+    var result = api_instance.getReception(eventId, X_SPLATHON_API_TOKEN);
+    print(result);
+} catch (e) {
+    print("Exception when calling ReceptionApi->getReception: $e\n");
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **eventId** | **int**|  | [default to null]
+ **X_SPLATHON_API_TOKEN** | **String**|  | [default to null]
+
+### Return type
+
+[**ReceptionResponse**](ReceptionResponse.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json; charset=utf-8
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **registerParticipants**
 > registerParticipants(eventId, splathonReceptionCode, X_SPLATHON_API_TOKEN)
 
@@ -72,7 +115,7 @@ No authorization required
 ```dart
 import 'package:openapi/api.dart';
 
-var api_instance = new AdminApi();
+var api_instance = new ReceptionApi();
 var eventId = 789; // int | 
 var splathonReceptionCode = splathonReceptionCode_example; // String | ReceptionResponse.splathon.code と同じもの(たぶん内部SlackID).
 var X_SPLATHON_API_TOKEN = X_SPLATHON_API_TOKEN_example; // String | 
@@ -80,7 +123,7 @@ var X_SPLATHON_API_TOKEN = X_SPLATHON_API_TOKEN_example; // String |
 try { 
     api_instance.registerParticipants(eventId, splathonReceptionCode, X_SPLATHON_API_TOKEN);
 } catch (e) {
-    print("Exception when calling AdminApi->registerParticipants: $e\n");
+    print("Exception when calling ReceptionApi->registerParticipants: $e\n");
 }
 ```
 
@@ -103,54 +146,6 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/json; charset=utf-8
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
-# **updateBattle**
-> updateBattle(eventId, matchId, X_SPLATHON_API_TOKEN, battle)
-
-
-
-Update a battle data in the match.
-
-### Example 
-```dart
-import 'package:openapi/api.dart';
-
-var api_instance = new AdminApi();
-var eventId = 789; // int | 
-var matchId = 789; // int | match id
-var X_SPLATHON_API_TOKEN = X_SPLATHON_API_TOKEN_example; // String | 
-var battle = new Battle(); // Battle | 
-
-try { 
-    api_instance.updateBattle(eventId, matchId, X_SPLATHON_API_TOKEN, battle);
-} catch (e) {
-    print("Exception when calling AdminApi->updateBattle: $e\n");
-}
-```
-
-### Parameters
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **eventId** | **int**|  | [default to null]
- **matchId** | **int**| match id | [default to null]
- **X_SPLATHON_API_TOKEN** | **String**|  | [default to null]
- **battle** | [**Battle**](Battle.md)|  | 
-
-### Return type
-
-void (empty response body)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
- - **Content-Type**: application/json
  - **Accept**: application/json; charset=utf-8
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)

@@ -51,10 +51,20 @@ class ApiClient {
           return Match.fromJson(value);
         case 'Member':
           return Member.fromJson(value);
+        case 'MemberDetail':
+          return MemberDetail.fromJson(value);
+        case 'ParticipantReception':
+          return ParticipantReception.fromJson(value);
         case 'Rank':
           return Rank.fromJson(value);
         case 'Ranking':
           return Ranking.fromJson(value);
+        case 'ReceptionCode':
+          return ReceptionCode.fromJson(value);
+        case 'ReceptionPartcipantsDataResponse':
+          return ReceptionPartcipantsDataResponse.fromJson(value);
+        case 'ReceptionResponse':
+          return ReceptionResponse.fromJson(value);
         case 'Results':
           return Results.fromJson(value);
         case 'Room':
