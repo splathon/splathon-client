@@ -68,11 +68,12 @@ class _EachResultState extends State<EachResult> with AutomaticKeepAliveClientMi
     double screenWidth = MediaQuery.of(context).size.width;
     
     List<String> teamNames = _model.teams.map((team) => team.name).toList();
+    final rounds = _results.qualifiers + _results.tournament;
 
     return Container(
       color: backgroundColor,
       child: ListView.builder(
-        itemCount: _results.qualifiers.length + 1,
+        itemCount: rounds.length + 1,
         itemBuilder: (BuildContext context, i) {
           if (i == 0) {
             return Container(
@@ -111,7 +112,7 @@ class _EachResultState extends State<EachResult> with AutomaticKeepAliveClientMi
           }
 
           // SPEC: room, matchはRoundごとに各Team1つずつになる前提
-          API.Round round = _results.qualifiers[i - 1];
+          API.Round round = rounds[i - 1];
           API.Room room = round.rooms.first;
           API.Match match = room.matches.first;
           int order = match.order;

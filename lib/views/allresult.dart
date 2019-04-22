@@ -53,12 +53,14 @@ class _AllResultState extends State<AllResult> with AutomaticKeepAliveClientMixi
       );
     }
 
+    final rounds = _model.qualifiers + _model.tournament;
+
     return Container(
       color: backgroundColor,
       child: ListView.builder(
         itemBuilder: (BuildContext context, int index) =>
-          RoundItem(_model.qualifiers[index], fetchData),
-        itemCount: _model.qualifiers.length,
+          RoundItem(rounds[index], fetchData),
+        itemCount: rounds.length,
       ),
     );
   }
