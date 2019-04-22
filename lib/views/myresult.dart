@@ -116,6 +116,7 @@ class _EachResultState extends State<EachResult> with AutomaticKeepAliveClientMi
           API.Room room = round.rooms.first;
           API.Match match = room.matches.first;
           int order = match.order;
+          bool isLast = i == rounds.length;
 
           return GestureDetector(
             onTap: () { 
@@ -133,7 +134,7 @@ class _EachResultState extends State<EachResult> with AutomaticKeepAliveClientMi
                   width: 1,
                 )
               ),
-              margin: const EdgeInsets.only(top: 10, left: 20, right: 20),
+              margin: isLast ? const EdgeInsets.only(top: 10, left: 20, right: 20, bottom: 20) : const EdgeInsets.only(top: 10, left: 20, right: 20),
               padding: const EdgeInsets.only(left: 14.0, right: 14.0),
               height: 82.0,
               child: Row(
