@@ -90,7 +90,7 @@ class RoundItem extends StatelessWidget {
         key: PageStorageKey<API.Round>(round),
         title: Text(round.name, style: roundExpandedTitleStyle,),
         children: roomIndexs.map((index) => _buildTable(round, round.rooms[index], context, index == round.rooms.length - 1)).toList(),
-        trailing: Image.asset('assets/images/arrowUp.png'),
+        trailing: Image.asset('assets/images/arrowDownW.png'),
         onExpansionChanged: (isExpanded) => {      
         },
       ),

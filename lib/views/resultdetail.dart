@@ -4,6 +4,7 @@ import 'package:splathon_app/styles/color.dart';
 import 'package:splathon_app/views/report.dart';
 import 'package:splathon_app/views/Image.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:splathon_app/utils/preference.dart';
 import 'package:english_words/english_words.dart';
 import 'package:openapi/api.dart' as API;
@@ -272,10 +273,16 @@ class _ResultDetailState extends State<ResultDetail> {
 
     List<Widget> alphaMembers = isNoMember ?
       <Widget>[
-        Center(child: Text(_match.teamAlpha.name, style: resultTopTeamNameStyle, maxLines: 2,),),
+        SizedBox(
+          height: 50,
+          child: Center(child: AutoSizeText(_match.teamAlpha.name, style: resultTopTeamNameStyle, maxLines: 1,),)
+        ),
       ] :
       <Widget>[
-        Center(child: Text(_match.teamAlpha.name, style: resultTopTeamNameStyle, maxLines: 2,),),
+        SizedBox(
+          height: 50,
+          child: Center(child: AutoSizeText(_match.teamAlpha.name, style: resultTopTeamNameStyle, maxLines: 1,),),
+        ),
         Row(
           children: <Widget>[
             CharactorImage(_match.teamAlpha.members[0].icon),
@@ -303,10 +310,16 @@ class _ResultDetailState extends State<ResultDetail> {
       ];
     List<Widget> bravoMembers = isNoMember ?
       <Widget>[
-        Center(child: Text(_match.teamBravo.name, style: resultTopTeamNameStyle, maxLines: 2,),),
+        SizedBox(
+          height: 50,
+          child: Center(child: AutoSizeText(_match.teamBravo.name, style: resultTopTeamNameStyle, maxLines: 1,),),
+        ),
       ] :
       <Widget>[
-        Center(child: Text(_match.teamBravo.name, style: resultTopTeamNameStyle, maxLines: 2,),),
+        SizedBox(
+          height: 50,
+          child: Center(child: AutoSizeText(_match.teamBravo.name, style: resultTopTeamNameStyle, maxLines: 1,),),
+        ),
         Row(
           children: <Widget>[
             CharactorImage(_match.teamBravo.members[0].icon),
