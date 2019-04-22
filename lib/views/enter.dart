@@ -9,9 +9,18 @@ import 'package:openapi/api.dart' as API;
 class Enter extends StatefulWidget {
   bool _isBuilding;
   Enter(this._isBuilding);
-  
+
+  _EnterState enterState;
+
+  relaod() {
+    enterState.reload();
+  }
+
   @override
-  _EnterState createState() => _EnterState(_isBuilding);
+  _EnterState createState() {
+    enterState = _EnterState(_isBuilding);
+    return enterState;
+  }
 }
 
 class _EnterState extends State<Enter> with AutomaticKeepAliveClientMixin {
@@ -28,6 +37,13 @@ class _EnterState extends State<Enter> with AutomaticKeepAliveClientMixin {
 
   @override
   bool get wantKeepAlive => true;
+
+  reload() {
+    setState(() {
+      _model = null;
+    });
+    fetchData();
+  }
 
   Future fetchData() async {
     var client = new API.ReceptionApi();

@@ -4,6 +4,21 @@ import 'package:splathon_app/styles/color.dart';
 import 'package:splathon_app/views/enter.dart';
 
 class ReceptionTabbedBar extends StatelessWidget {
+  BuildContext sharedContext;
+  Enter building = Enter(true);
+  Enter splathon = Enter(false);
+
+  reload() {
+    switch (DefaultTabController.of(sharedContext).index) {
+      case 0:
+        building.relaod();
+        break;
+      case 1:
+        splathon.relaod();
+        break;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -16,11 +31,11 @@ class ReceptionTabbedBar extends StatelessWidget {
               children: [
                 Padding(
                   padding: const EdgeInsets.only(top: 60.0),
-                  child: new Enter(true),
+                  child: building,
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 60.0),
-                  child: new Enter(false),
+                  child: splathon,
                 ),
               ],
             ),

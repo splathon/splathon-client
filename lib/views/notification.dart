@@ -9,11 +9,16 @@ import 'package:openapi/api.dart' as API;
 class Notifications extends StatefulWidget {
   Notifications({Key key}) : super(key: key);
 
+  reload() {
+    _notificationsState.reload();
+  }
+
+  final _NotificationsState _notificationsState = _NotificationsState();
+
   @override
   State<StatefulWidget> createState() {
-    return _NotificationsState();
+    return _notificationsState;
   }
-  //_NotificationsState createState() => _NotificationsState();
 }
 
 class _NotificationsState extends State<Notifications> with AutomaticKeepAliveClientMixin {
@@ -27,6 +32,10 @@ class _NotificationsState extends State<Notifications> with AutomaticKeepAliveCl
     // Debug code
     myTeam.id = 73;
     myTeam.name = '道玄坂高校イカ部（仮）';
+  }
+
+  reload() {
+    
   }
 
   @override

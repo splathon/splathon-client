@@ -11,8 +11,14 @@ import 'package:openapi/api.dart' as API;
 class Rankings extends StatefulWidget {
   Rankings({Key key}) : super(key: key);
 
+  reload() {
+    _rankingState.reload();
+  }
+
+  final _RankingsState _rankingState = _RankingsState();
+
   @override
-  _RankingsState createState() => _RankingsState();
+  _RankingsState createState() => _rankingState;
 }
 
 class _RankingsState extends State<Rankings> with AutomaticKeepAliveClientMixin {
@@ -31,6 +37,11 @@ class _RankingsState extends State<Rankings> with AutomaticKeepAliveClientMixin 
   @override
   Widget build(BuildContext context) {
     return buildRankings();
+  }
+
+  reload() {
+    setState(() { this._model = null; } );
+    fetchData();
   }
 
   Future fetchData() async {

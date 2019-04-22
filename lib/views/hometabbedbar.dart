@@ -19,6 +19,10 @@ class HomeTabbedBar extends StatefulWidget {
 // SingleTickerProviderStateMixin is used for animation
 class HomeTabbedBarState extends State<HomeTabbedBar> with SingleTickerProviderStateMixin {
   TabController controller;
+  Notifications notifications = new Notifications();
+  ResultTabbedBar resultTabbedBar = new ResultTabbedBar();
+  Rankings rankings = new Rankings();
+  ReceptionTabbedBar receptionTabbedBar = new ReceptionTabbedBar();
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
 
   @override
@@ -35,21 +39,46 @@ class HomeTabbedBarState extends State<HomeTabbedBar> with SingleTickerProviderS
     super.dispose();
   }
 
+  void reload() {
+    switch (controller.index) {
+      case 0:
+        notifications.reload();
+        break;
+      case 1:
+        //resultTabbedBar.reload();
+        break;
+      case 2:
+        rankings.reload();
+        break;
+      case 3:
+        receptionTabbedBar.reload();
+        break;
+      default:
+        return;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
         title: SplaText('Splathon #10'),
         backgroundColor: Color.fromRGBO(11, 49, 143, 1),
+        actions: <Widget>[
+          IconButton(
+            icon: Image.asset('assets/images/reloadIcon.png'),
+            onPressed: reload,
+          ),
+        ],
       ),
       body: new TabBarView(
         physics: NeverScrollableScrollPhysics(),
         // TODO: Set each Views
         children: <Widget>[
-            new Notifications(),
-            new ResultTabbedBar(),
-            new Rankings(),
-            new ReceptionTabbedBar(),
+            notifications,
+            rankings,
+            Text('a'),
+            receptionTabbedBar,
           ],
         controller: controller,
       ),

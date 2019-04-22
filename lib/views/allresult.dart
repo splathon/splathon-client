@@ -12,8 +12,13 @@ import 'package:openapi/api.dart' as API;
 class AllResult extends StatefulWidget {
   AllResult({Key key}) : super(key: key);
 
+  reload() {
+    _allResultState.reload();
+  }
+  final _AllResultState _allResultState = _AllResultState();
+
   @override
-  _AllResultState createState() => _AllResultState();
+  _AllResultState createState() => _allResultState;
 }
 
 BuildContext sharedContext;
@@ -35,6 +40,13 @@ class _AllResultState extends State<AllResult> with AutomaticKeepAliveClientMixi
   Widget build(BuildContext context) {
     sharedContext = context;
     return buildAllResult();
+  }
+
+  reload() {
+    setState(() {
+      _model = null;
+    });
+    fetchData();
   }
 
   Future fetchData() async {

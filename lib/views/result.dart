@@ -9,16 +9,68 @@ import 'package:splathon_app/views/resultdetail.dart';
  * Reference Google Sample Code
  * https://flutter.dev/docs/catalog/samples/tabbed-app-bar
  */
-class ResultTabbedBar extends StatelessWidget {
+class ResultTabbedBar extends StatefulWidget {
+
+  reload() {
+    _resultTabbedBarState.reload();
+  }
+  ResultTabbedBarState _resultTabbedBarState;
+
+  @override
+  ResultTabbedBarState createState() {
+    _resultTabbedBarState = new ResultTabbedBarState();
+    return _resultTabbedBarState;
+  }
+}
+
+// SingleTickerProviderStateMixin is used for animation
+class ResultTabbedBarState extends State<ResultTabbedBar> with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
+//class ResultTabbedBar extends StatelessWidget {
+  BuildContext sharedContext;
+  final EachResult eachResult = EachResult();
+  final AllResult allResult = AllResult();
+
+  TabController controller;
+
+  @override
+  void initState() {
+    super.initState();
+
+    controller = TabController(length: 2, vsync: this);
+  }
+
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  reload() {
+    switch (controller.index) {
+      case 0:
+        eachResult.reload();
+        break;
+      case 1:
+        allResult.reload();
+        break;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    sharedContext = context;
     return Container(
       color: backgroundColor,
-      child: DefaultTabController(
-        length: choices.length,
-        child: new Stack(
+      child: Stack(
+      // child: DefaultTabController(
+      //   length: choices.length,
+      //   child: new Stack(
           children: <Widget>[
             TabBarView(
+              controller: controller,
               children: [
                 Padding(
                   padding: const EdgeInsets.only(top: 60.0),
@@ -26,7 +78,7 @@ class ResultTabbedBar extends StatelessWidget {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 60.0),
-                  child: AllResult(),//ResultDetail(),
+                  child: AllResult(),
                 ),
               ],
             ),
@@ -45,11 +97,12 @@ class ResultTabbedBar extends StatelessWidget {
                     ),
                   );
                 }).toList(),
+                controller: controller,
               ),
             ),
           ],
         ),
-      ),
+      //),
     );
   }
 

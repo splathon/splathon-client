@@ -10,8 +10,13 @@ import 'package:openapi/api.dart' as API;
 class EachResult extends StatefulWidget {
   EachResult({Key key}) : super(key: key);
 
+  reload() {
+    _eachResultState.reload();
+  }
+  final _EachResultState _eachResultState = _EachResultState();
+
   @override
-  _EachResultState createState() => _EachResultState();
+  _EachResultState createState() => _eachResultState;
 }
 
 class _EachResultState extends State<EachResult> with AutomaticKeepAliveClientMixin {
@@ -28,6 +33,15 @@ class _EachResultState extends State<EachResult> with AutomaticKeepAliveClientMi
 
   @override
   bool get wantKeepAlive => true;
+
+  reload() {
+    setState(() {
+      _model = null;
+      _results = null;
+    });
+    fetchTeams();
+    fetchResult(84);
+  }
 
   Future fetchTeams() async {
     var client = new API.DefaultApi();
