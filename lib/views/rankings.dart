@@ -4,6 +4,7 @@ import 'package:splathon_app/styles/color.dart';
 import 'package:splathon_app/views/roundedView.dart';
 import 'package:splathon_app/views/Image.dart';
 import 'package:english_words/english_words.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'dart:async';
 import 'package:openapi/api.dart' as API;
 
@@ -48,6 +49,8 @@ class _RankingsState extends State<Rankings> with AutomaticKeepAliveClientMixin 
       );
     }
 
+    double screenWidth = MediaQuery.of(context).size.width;
+
     return Container(
       color: backgroundColor,
       child: ListView.builder(
@@ -72,26 +75,15 @@ class _RankingsState extends State<Rankings> with AutomaticKeepAliveClientMixin 
             height: 75.0,
             child: Column(
               mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 Container(
                   height: 36.0,
                   child: Row(
                     mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
-                      Row(
-                        children: <Widget>[
-                          CharactorImage(rank.team.members[0].icon),
-                          Text(rank.team.members[0].name, style: nameStyle),
-                        ],
-                      ),
-                      Row(
-                        children: <Widget>[
-                          CharactorImage(rank.team.members[1].icon),
-                          Text(rank.team.members[1].name, style: nameStyle),
-                        ],
-                      ),                  ],
+                      memberView(rank.team.members[0], screenWidth * 0.35),
+                      memberView(rank.team.members[1], screenWidth * 0.35),
+                    ],
                   ),
                 ),
                 Container(
@@ -99,18 +91,8 @@ class _RankingsState extends State<Rankings> with AutomaticKeepAliveClientMixin 
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
-                      Row(
-                        children: <Widget>[
-                          CharactorImage(rank.team.members[2].icon),
-                          Text(rank.team.members[2].name, style: nameStyle),
-                        ],
-                      ),
-                      Row(
-                        children: <Widget>[
-                          CharactorImage(rank.team.members[3].icon),
-                          Text(rank.team.members[3].name, style: nameStyle),
-                        ],
-                      ),
+                      memberView(rank.team.members[2], screenWidth * 0.35),
+                      memberView(rank.team.members[3], screenWidth * 0.35),
                     ],
                   ),
                 ),
@@ -133,6 +115,9 @@ class _RankingsState extends State<Rankings> with AutomaticKeepAliveClientMixin 
           isTop3 ? Image.asset('assets/images/crown$rankIndex.png') : SizedBox(),
           Padding(padding: const EdgeInsets.only(left: 4.0, right: 4.0), child: Text('$rankIndex位', style: rankTextStyle(rankIndex),),),
           Text(rank.team.name, style: rankTextStyle(rankIndex)),
+          Expanded(
+            child: Container(),
+          ),
           Container(
             margin: const EdgeInsets.only(left: 6.0, bottom: 1),
             child: pointLabelView(rank.point),
@@ -140,6 +125,27 @@ class _RankingsState extends State<Rankings> with AutomaticKeepAliveClientMixin 
         ],
       ),
     ); 
+  }
+
+  Widget memberView(API.Member member, double textWidth) {
+    return Expanded(
+      flex: 1,
+      child: Container(
+        padding: const EdgeInsets.only(left: 8, right: 8),
+        child :Row(
+          children: <Widget>[
+            CharactorImage(member.icon),
+            SizedBox(
+              width: 2,
+            ),
+            SizedBox(
+              width: textWidth,
+              child: AutoSizeText(member.name, style: nameStyle, maxLines: 1,),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   static const TextStyle pointStyle = TextStyle(
@@ -172,19 +178,5 @@ class _RankingsState extends State<Rankings> with AutomaticKeepAliveClientMixin 
       default:
         return blackColor;
     }
-  }
-}
-
-// TODO: ユーザアイコンと名前のView部分はここで定義して突っ込むようにしたい
-class RankingCard extends Card {
-  String name;
-  String imageUrl;
-  RankingCard(this.name, this.imageUrl);
-
-  @override 
-  Widget build(BuildContext context) {
-    return Card(
-
-    );
   }
 }
