@@ -236,32 +236,57 @@ class _AcceptState extends State<Accept> with AutomaticKeepAliveClientMixin {
   Widget completeButtonView() {
     return Container(
       margin: const EdgeInsets.only(top: 40, left: 20, right: 20, bottom: 30),
-      child: RaisedButton(
-        color: splaYellowColor,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(30.0))
-        ),
-        child: Text('受付する',
-          style: TextStyle(
-            fontFamily: 'Splatfont',
-            fontSize: 26,
-            color: Colors.white,
+      child: Row(
+        children: <Widget>[
+          RaisedButton(
+            color: drawColor,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(30.0))
+            ),
+            child: Text('キャンセル',
+              style: TextStyle(
+                fontFamily: 'Splatfont',
+                fontSize: 26,
+                color: Colors.white,
+              ),
+            ),
+            onPressed: () {
+              isCompleting = false;
+              Navigator.pop(context, false);
+            },
           ),
-        ),
-        onPressed: () {
-          var client = new API.ReceptionApi();
-          String token = Preference().getToken();
-          var result = client.completeReception(Config().eventNumber, scannedCode, token);
-          result.then((resultObjet) {
-            isCompleting = false;
-            Navigator.pop(context, false);
-            buildDialog(context, '受付','受付を完了しました！');
-          }).catchError((onError) {
-            isCompleting = false;
-            buildDialog(context, 'エラー', '受付に失敗しました');
-          });
-        },
-      ),
+          SizedBox(
+            width: 16,
+          ),
+          RaisedButton(
+            color: splaYellowColor,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(30.0))
+            ),
+            child: Text('受付する',
+              style: TextStyle(
+                fontFamily: 'Splatfont',
+                fontSize: 26,
+                color: Colors.white,
+              ),
+            ),
+            onPressed: () {
+              var client = new API.ReceptionApi();
+              String token = Preference().getToken();
+              var result = client.completeReception(Config().eventNumber, scannedCode, token);
+              result.then((resultObjet) {
+                isCompleting = false;
+                Navigator.pop(context, false);
+                buildDialog(context, '受付','受付を完了しました！');
+              }).catchError((onError) {
+                isCompleting = false;
+                buildDialog(context, 'エラー', '受付に失敗しました');
+              });
+            },
+          ),
+        ],
+      )
+      
     );
   }
 
