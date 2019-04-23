@@ -4,6 +4,7 @@ import 'package:splathon_app/styles/color.dart';
 import 'package:splathon_app/views/roundedView.dart';
 import 'package:splathon_app/views/Image.dart';
 import 'package:english_words/english_words.dart';
+import 'package:splathon_app/utils/config.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'dart:async';
 import 'package:openapi/api.dart' as API;
@@ -35,7 +36,7 @@ class _RankingsState extends State<Rankings> with AutomaticKeepAliveClientMixin 
 
   Future fetchData() async {
     var client = new API.RankingApi();
-    var result = client.getRanking(9);
+    var result = client.getRanking(Config().eventNumber);
     result.then(
       (rankingObj) => setState(() { this._model = rankingObj; } )
     );

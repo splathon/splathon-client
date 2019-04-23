@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:splathon_app/styles/text.dart';
 import 'package:splathon_app/styles/color.dart';
 import 'package:splathon_app/utils/preference.dart';
+import 'package:splathon_app/utils/config.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'dart:async';
 import 'package:openapi/api.dart' as API;
@@ -32,7 +33,7 @@ class _EnterState extends State<Enter> with AutomaticKeepAliveClientMixin {
   Future fetchData() async {
     var client = new API.ReceptionApi();
     String token = Preference().getToken();
-    var result = client.getReception(9, token);
+    var result = client.getReception(Config().eventNumber, token);
     result.then(
       (resultsObj) => setState(() { this._model = resultsObj; } )
     );

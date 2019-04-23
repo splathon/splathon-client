@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:splathon_app/styles/text.dart';
 import 'package:splathon_app/styles/color.dart';
 import 'package:splathon_app/utils/preference.dart';
+import 'package:splathon_app/utils/config.dart';
 import 'dart:async';
 import 'package:openapi/api.dart' as API;
 
@@ -41,7 +42,7 @@ class _ReportState extends State<Report> {
 
   Future fetchData() async {
     var client = new API.DefaultApi();
-    var result = client.getEvent(9);
+    var result = client.getEvent(Config().eventNumber);
     result.then(
       (resultsObj) => setState(() { this._model = resultsObj; } )
     );
@@ -318,7 +319,7 @@ class _ReportState extends State<Report> {
     var client = new API.AdminApi();
     String token = Preference().getToken();
     print(_battle);
-    var result = client.updateBattle(9, _match.id, token, _battle);
+    var result = client.updateBattle(Config().eventNumber, _match.id, token, _battle);
     result.then(
       (body) => setState(() { 
         pop();

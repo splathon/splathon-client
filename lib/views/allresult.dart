@@ -5,6 +5,7 @@ import 'package:splathon_app/views/roundedView.dart';
 import 'package:english_words/english_words.dart';
 import 'package:splathon_app/views/resultdetail.dart';
 import 'package:splathon_app/utils/preference.dart';
+import 'package:splathon_app/utils/config.dart';
 import 'package:splathon_app/views/customExpansionTile.dart' as CustomView;
 import 'dart:async';
 import 'package:openapi/api.dart' as API;
@@ -39,7 +40,7 @@ class _AllResultState extends State<AllResult> with AutomaticKeepAliveClientMixi
 
   Future fetchData() async {
     var client = new API.ResultApi();
-    var result = client.getResult(9);
+    var result = client.getResult(Config().eventNumber);
     result.then(
       (resultsObj) => setState(() { this._model = resultsObj; } )
     );
@@ -152,7 +153,7 @@ class _MatchItemState extends State<MatchItem> {
 
   void refetch(int matchId, API.Match match) {
     var client = new API.MatchApi();
-    var result = client.getMatch(9, matchId);
+    var result = client.getMatch(Config().eventNumber, matchId);
     result.then(
       (resultsObj) => setState(() { this.match = resultsObj; } )
     );

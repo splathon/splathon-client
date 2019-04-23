@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:splathon_app/styles/text.dart';
 import 'package:splathon_app/styles/color.dart';
+import 'package:splathon_app/utils/config.dart';
 import 'package:splathon_app/utils/preference.dart';
 import 'package:fast_qr_reader_view/fast_qr_reader_view.dart';
 import 'dart:async';
@@ -33,7 +34,7 @@ class _AcceptState extends State<Accept> with AutomaticKeepAliveClientMixin {
   Future fetchReceptionData(String receptionCode) async {
     var client = new API.ReceptionApi();
     String token = Preference().getToken();
-    var result = client.getParticipantsDataForReception(9, receptionCode, token);
+    var result = client.getParticipantsDataForReception(Config().eventNumber, receptionCode, token);
     result.then(
       (resultsObj) => setState(() { this._receptionModel = resultsObj; } )
     );
@@ -65,7 +66,7 @@ class _AcceptState extends State<Accept> with AutomaticKeepAliveClientMixin {
 
     var client = new API.ReceptionApi();
     String token = Preference().getToken();
-    var result = client.getParticipantsDataForReception(9, value, token);
+    var result = client.getParticipantsDataForReception(Config().eventNumber, value, token);
     result.then(
       (resultsObj) { 
         buildConfirmDialog(context, resultsObj);
@@ -250,7 +251,7 @@ class _AcceptState extends State<Accept> with AutomaticKeepAliveClientMixin {
         onPressed: () {
           var client = new API.ReceptionApi();
           String token = Preference().getToken();
-          var result = client.completeReception(9, scannedCode, token);
+          var result = client.completeReception(Config().eventNumber, scannedCode, token);
           result.then((resultObjet) {
             isCompleting = false;
             Navigator.pop(context, false);

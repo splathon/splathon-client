@@ -6,6 +6,7 @@ import 'package:splathon_app/views/Image.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:splathon_app/utils/preference.dart';
+import 'package:splathon_app/utils/config.dart';
 import 'package:english_words/english_words.dart';
 import 'package:openapi/api.dart' as API;
 
@@ -36,7 +37,7 @@ class _ResultDetailState extends State<ResultDetail> {
 
   Future fetchData() async {
     var client = new API.MatchApi();
-    var result = client.getMatch(9, _matchId);
+    var result = client.getMatch(Config().eventNumber, _matchId);
     result.then(
       (resultsObj) => setState(() { this._match = resultsObj; } )
     );

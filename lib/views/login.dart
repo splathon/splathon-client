@@ -4,6 +4,7 @@ import 'package:splathon_app/styles/color.dart';
 import 'dart:async';
 import 'package:openapi/api.dart' as API;
 import 'package:splathon_app/utils/preference.dart';
+import 'package:splathon_app/utils/config.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -84,7 +85,7 @@ class _LoginState extends State<Login> {
     var client = new API.DefaultApi();
     loginRequest.userId = _userIdController.text;
     loginRequest.password = _passwordController.text;
-    var result = client.login(9, loginRequest);
+    var result = client.login(Config().eventNumber, loginRequest);
     result.then(
       (rankingObj) => setState(() {
           this._model = rankingObj; 
@@ -96,12 +97,10 @@ class _LoginState extends State<Login> {
   }
 
   void successLogin() async {
-    final bool isAdmin = _model.isAdmin != null;
-
     Preference().setToken(_model.token);
-    Preference().setIsAdmin(isAdmin);
+    Preference().setIsAdmin(_model.isAdmin);
 
-    if (isAdmin) {
+    if (_model.isAdmin) {
       Navigator.of(context).pushReplacementNamed("/admin");
     } else {
       Navigator.of(context).pushReplacementNamed("/home");

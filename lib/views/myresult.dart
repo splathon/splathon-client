@@ -4,6 +4,7 @@ import 'package:splathon_app/styles/color.dart';
 import 'package:splathon_app/views/roundedView.dart';
 import 'package:english_words/english_words.dart';
 import 'package:splathon_app/views/resultdetail.dart';
+import 'package:splathon_app/utils/config.dart';
 import 'dart:async';
 import 'package:openapi/api.dart' as API;
 
@@ -31,7 +32,7 @@ class _EachResultState extends State<EachResult> with AutomaticKeepAliveClientMi
 
   Future fetchTeams() async {
     var client = new API.DefaultApi();
-    var result = client.listTeams(9);
+    var result = client.listTeams(Config().eventNumber);
     result.then(
       (resultsObj) => setState(() { this._model = resultsObj; } )
     );
@@ -39,7 +40,7 @@ class _EachResultState extends State<EachResult> with AutomaticKeepAliveClientMi
 
   Future fetchResult(int teamId) async {
     var client = new API.ResultApi();
-    var result = client.getResult(9, teamId: teamId);
+    var result = client.getResult(Config().eventNumber, teamId: teamId);
     result.then(
       (resultsObj) => setState(() { this._results = resultsObj; } )
     );
