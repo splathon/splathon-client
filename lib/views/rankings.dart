@@ -81,8 +81,8 @@ class _RankingsState extends State<Rankings> with AutomaticKeepAliveClientMixin 
                   child: Row(
                     mainAxisSize: MainAxisSize.max,
                     children: <Widget>[
-                      memberView(rank.team.members[0], screenWidth * 0.35),
-                      memberView(rank.team.members[1], screenWidth * 0.35),
+                      memberView(getMember(rank.team.members, 0), screenWidth * 0.35),
+                      memberView(getMember(rank.team.members, 1), screenWidth * 0.35),
                     ],
                   ),
                 ),
@@ -91,8 +91,8 @@ class _RankingsState extends State<Rankings> with AutomaticKeepAliveClientMixin 
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
-                      memberView(rank.team.members[2], screenWidth * 0.35),
-                      memberView(rank.team.members[3], screenWidth * 0.35),
+                      memberView(getMember(rank.team.members, 2), screenWidth * 0.35),
+                      memberView(getMember(rank.team.members, 3), screenWidth * 0.35),
                     ],
                   ),
                 ),
@@ -102,6 +102,13 @@ class _RankingsState extends State<Rankings> with AutomaticKeepAliveClientMixin 
         },
       ),
     );
+  }
+
+  getMember(List<API.Member> members, int index) {
+    if (members.length > index) {
+      return members[index];
+    }
+    return null;
   }
 
   Widget headerView(int index, API.Rank rank) {
@@ -128,6 +135,13 @@ class _RankingsState extends State<Rankings> with AutomaticKeepAliveClientMixin 
   }
 
   Widget memberView(API.Member member, double textWidth) {
+    if (member == null) {
+      return Expanded(
+        flex: 1,
+        child: Container()
+      );
+    }
+
     return Expanded(
       flex: 1,
       child: Container(
