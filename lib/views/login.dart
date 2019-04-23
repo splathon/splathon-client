@@ -96,10 +96,12 @@ class _LoginState extends State<Login> {
   }
 
   void successLogin() async {
-    Preference().setToken(_model.token);
-    Preference().setIsAdmin(_model.isAdmin);
+    final bool isAdmin = _model.isAdmin != null;
 
-    if (_model.isAdmin != null) {
+    Preference().setToken(_model.token);
+    Preference().setIsAdmin(isAdmin);
+
+    if (isAdmin) {
       Navigator.of(context).pushReplacementNamed("/admin");
     } else {
       Navigator.of(context).pushReplacementNamed("/home");
