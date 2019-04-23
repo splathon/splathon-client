@@ -5,10 +5,13 @@ Widget CharactorImage(String url) {
   return Container(
     width: 22,
     height: 22,
-    child: CachedNetworkImage(
-      placeholder: (contect, url) => CircularProgressIndicator(),
-      errorWidget: (contect, url, error) => Icon(Icons.error),
-      imageUrl: url,
+    child: ClipRRect(
+      borderRadius: BorderRadius.circular(11.0),
+      child:CachedNetworkImage(
+        placeholder: (contect, url) => CircularProgressIndicator(),
+        errorWidget: (contect, url, error) => Icon(Icons.error),
+        imageUrl: url,
+      ),
     ),
   );
 }
