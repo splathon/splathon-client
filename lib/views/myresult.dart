@@ -25,16 +25,10 @@ class _EachResultState extends State<EachResult> with AutomaticKeepAliveClientMi
   void initState() {
     super.initState();
 
-    int teamId = Preference().getTeamId();
-    String teamName = Preference().getTeamName();
+    
 
     fetchTeams().then((_) {
-      if (teamId == null || teamName == null) {
-        teamId = _model.teams.first.id;
-        teamName = _model.teams.first.name;
-      }
-      dropdownValue = teamName;
-      fetchResult(teamId);
+      
     });
   }
 
@@ -45,7 +39,19 @@ class _EachResultState extends State<EachResult> with AutomaticKeepAliveClientMi
     var client = new API.DefaultApi();
     var result = client.listTeams(Config().eventNumber);
     result.then(
-      (resultsObj) => setState(() { this._model = resultsObj; } )
+      (resultsObj) => setState(() { 
+        this._model = resultsObj;
+
+        // Fetch Result
+        int teamId = Preference().getTeamId();
+        String teamName = Preference().getTeamName();
+        if (teamId == null || teamName == null) {
+          teamId = _model.teams.first.id;
+          teamName = _model.teams.first.name;
+        }
+        dropdownValue = teamName;
+        fetchResult(teamId);
+      })
     );
   }
 
@@ -132,6 +138,9 @@ class _EachResultState extends State<EachResult> with AutomaticKeepAliveClientMi
 
           return GestureDetector(
             onTap: () { 
+              if (match.winner == null) {
+                return;
+              }
               Navigator.push(context, new MaterialPageRoute<Null>(
                 settings: const RouteSettings(name: "/result"),
                 builder: (BuildContext context) => new ResultDetail(match.id),
@@ -194,6 +203,17 @@ class _EachResultState extends State<EachResult> with AutomaticKeepAliveClientMi
   }
 
   Widget winloseView(String winner) {
+    if (winner == null) {
+      return Container(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            unreportedLabelView(),
+          ]
+        ),
+      );
+    }
+
     if (winner != 'alpha' && winner != 'bravo') {
       return Container(
         child: Row(
