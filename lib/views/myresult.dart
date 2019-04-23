@@ -4,6 +4,7 @@ import 'package:splathon_app/styles/color.dart';
 import 'package:splathon_app/views/roundedView.dart';
 import 'package:english_words/english_words.dart';
 import 'package:splathon_app/views/resultdetail.dart';
+import 'package:splathon_app/utils/preference.dart';
 import 'package:splathon_app/utils/config.dart';
 import 'dart:async';
 import 'package:openapi/api.dart' as API;
@@ -18,13 +19,23 @@ class EachResult extends StatefulWidget {
 class _EachResultState extends State<EachResult> with AutomaticKeepAliveClientMixin {
   API.Teams _model;
   API.Results _results;
-  String dropdownValue = 'NuRItaclesカスタム'; // TODO: 暫定固定実装、ログイン処理実装して自身のTeamNameが取得できるようになったらここに入れる
+  String dropdownValue;
 
   @override
   void initState() {
     super.initState();
-    fetchTeams();
-    fetchResult(84); // TODO: 暫定固定実装、ログイン処理実装して自身のTeamIDが取得できるようになったらここに入れる
+
+    int teamId = Preference().getTeamId();
+    String teamName = Preference().getTeamName();
+
+    fetchTeams().then((_) {
+      if (teamId == null || teamName == null) {
+        teamId = _model.teams.first.id;
+        teamName = _model.teams.first.name;
+      }
+      dropdownValue = teamName;
+      fetchResult(teamId);
+    });
   }
 
   @override

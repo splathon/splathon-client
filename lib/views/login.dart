@@ -99,6 +99,10 @@ class _LoginState extends State<Login> {
   void successLogin() async {
     Preference().setToken(_model.token);
     Preference().setIsAdmin(_model.isAdmin);
+    if (_model.team != null) {
+      Preference().setTeamId(_model.team.id);
+      Preference().setTeamName(_model.team.name);
+    }
 
     if (_model.isAdmin) {
       Navigator.of(context).pushReplacementNamed("/admin");
