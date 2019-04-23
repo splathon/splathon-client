@@ -8,6 +8,8 @@ class MemberDetail {
   /* A+, X (2401~2500) */
   String rankTowerControl = null;
   /* A+, X (2401~2500) */
+  String rankRainmaker = null;
+  /* A+, X (2401~2500) */
   String rankClamBlitz = null;
   /* メインウェポン/好きなブキ */
   String mainWeapon = null;
@@ -15,7 +17,7 @@ class MemberDetail {
 
   @override
   String toString() {
-    return 'MemberDetail[shortComment=$shortComment, rankSplatZones=$rankSplatZones, rankTowerControl=$rankTowerControl, rankClamBlitz=$rankClamBlitz, mainWeapon=$mainWeapon, ]';
+    return 'MemberDetail[shortComment=$shortComment, rankSplatZones=$rankSplatZones, rankTowerControl=$rankTowerControl, rankRainmaker=$rankRainmaker, rankClamBlitz=$rankClamBlitz, mainWeapon=$mainWeapon, ]';
   }
 
   MemberDetail.fromJson(Map<String, dynamic> json) {
@@ -23,6 +25,7 @@ class MemberDetail {
     shortComment = json['short_comment'];
     rankSplatZones = json['rank_splat_zones'];
     rankTowerControl = json['rank_tower_control'];
+    rankRainmaker = json['rank_rainmaker'];
     rankClamBlitz = json['rank_clam_blitz'];
     mainWeapon = json['main_weapon'];
   }
@@ -32,6 +35,7 @@ class MemberDetail {
       'short_comment': shortComment,
       'rank_splat_zones': rankSplatZones,
       'rank_tower_control': rankTowerControl,
+      'rank_rainmaker': rankRainmaker,
       'rank_clam_blitz': rankClamBlitz,
       'main_weapon': mainWeapon
     };

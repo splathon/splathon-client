@@ -50,10 +50,9 @@ var splathonReceptionCode = splathonReceptionCode_example; // String | Reception
 var X_SPLATHON_API_TOKEN = X_SPLATHON_API_TOKEN_example; // String | 
 
 try {
-    var result = api_instance.getParticipantsDataForReception(eventId, splathonReceptionCode, X_SPLATHON_API_TOKEN);
-    print(result);
+    api_instance.completeReception(eventId, splathonReceptionCode, X_SPLATHON_API_TOKEN);
 } catch (e) {
-    print("Exception when calling AdminApi->getParticipantsDataForReception: $e\n");
+    print("Exception when calling AdminApi->completeReception: $e\n");
 }
 
 ```
@@ -64,8 +63,8 @@ All URIs are relative to *https://splathon-api-us.appspot.com/splathon*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
+*AdminApi* | [**completeReception**](docs//AdminApi.md#completereception) | **POST** /v{eventId}/reception/{splathonReceptionCode}/complete | 
 *AdminApi* | [**getParticipantsDataForReception**](docs//AdminApi.md#getparticipantsdataforreception) | **GET** /v{eventId}/reception/{splathonReceptionCode} | 
-*AdminApi* | [**registerParticipants**](docs//AdminApi.md#registerparticipants) | **POST** /v{eventId}/reception/{splathonReceptionCode}/register | 
 *AdminApi* | [**updateBattle**](docs//AdminApi.md#updatebattle) | **POST** /v{eventId}/matches/{matchId} | 
 *DefaultApi* | [**getEvent**](docs//DefaultApi.md#getevent) | **GET** /v{eventId}/event | 
 *DefaultApi* | [**getTeamDetail**](docs//DefaultApi.md#getteamdetail) | **GET** /v{eventId}/teams/{team_id} | 
@@ -74,9 +73,9 @@ Class | Method | HTTP request | Description
 *MatchApi* | [**getMatch**](docs//MatchApi.md#getmatch) | **GET** /v{eventId}/matches/{matchId} | 
 *MatchApi* | [**updateBattle**](docs//MatchApi.md#updatebattle) | **POST** /v{eventId}/matches/{matchId} | 
 *RankingApi* | [**getRanking**](docs//RankingApi.md#getranking) | **GET** /v{eventId}/ranking | 
+*ReceptionApi* | [**completeReception**](docs//ReceptionApi.md#completereception) | **POST** /v{eventId}/reception/{splathonReceptionCode}/complete | 
 *ReceptionApi* | [**getParticipantsDataForReception**](docs//ReceptionApi.md#getparticipantsdataforreception) | **GET** /v{eventId}/reception/{splathonReceptionCode} | 
 *ReceptionApi* | [**getReception**](docs//ReceptionApi.md#getreception) | **GET** /v{eventId}/reception | 
-*ReceptionApi* | [**registerParticipants**](docs//ReceptionApi.md#registerparticipants) | **POST** /v{eventId}/reception/{splathonReceptionCode}/register | 
 *ResultApi* | [**getResult**](docs//ResultApi.md#getresult) | **GET** /v{eventId}/results | 
 
 
