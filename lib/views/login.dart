@@ -99,7 +99,7 @@ class _LoginState extends State<Login> {
     Preference().setToken(_model.token);
     Preference().setIsAdmin(_model.isAdmin);
 
-    if (_model.isAdmin) {
+    if (_model.isAdmin != null) {
       Navigator.of(context).pushReplacementNamed("/admin");
     } else {
       Navigator.of(context).pushReplacementNamed("/home");
