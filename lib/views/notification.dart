@@ -21,7 +21,6 @@ class Notifications extends StatefulWidget {
 
 class _NotificationsState extends State<Notifications> with AutomaticKeepAliveClientMixin {
   API.ListNoticesResponse _model;
-  int notificationCount = 10;
   API.Team myTeam;
   int alreadyReadTime;
 
@@ -269,7 +268,7 @@ class _NotificationsState extends State<Notifications> with AutomaticKeepAliveCl
         ),
       );
     }
-    if (index == notificationCount - 1) {
+    if (index == _model.notices.length - 1) {
       return BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.only(
