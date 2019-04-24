@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:splathon_app/styles/text.dart';
 import 'package:splathon_app/styles/color.dart';
-import 'package:splathon_app/views/enterbuilding.dart';
+import 'package:splathon_app/views/enter.dart';
 
-/**
- * Reference Google Sample Code
- * https://flutter.dev/docs/catalog/samples/tabbed-app-bar
- */
 class ReceptionTabbedBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -20,11 +16,11 @@ class ReceptionTabbedBar extends StatelessWidget {
               children: [
                 Padding(
                   padding: const EdgeInsets.only(top: 60.0),
-                  child: new EnterBuilding(),
+                  child: new Enter(true),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 60.0),
-                  child: new EnterBuilding(), // TODO: レイアウトは一緒だと思うのでLayout Fixするまで一旦コピー
+                  child: new Enter(false),
                 ),
               ],
             ),

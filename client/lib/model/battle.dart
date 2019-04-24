@@ -9,9 +9,9 @@ class Battle {
   /* 何戦目か */
   int order = null;
   
-  BattleRule rule = null;
+  Rule rule = null;
   
-  BattleStage stage = null;
+  Stage stage = null;
   Battle();
 
   @override
@@ -24,8 +24,8 @@ class Battle {
     id = json['id'];
     winner = json['winner'];
     order = json['order'];
-    rule = new BattleRule.fromJson(json['rule']);
-    stage = new BattleStage.fromJson(json['stage']);
+    rule = new Rule.fromJson(json['rule']);
+    stage = new Stage.fromJson(json['stage']);
   }
 
   Map<String, dynamic> toJson() {

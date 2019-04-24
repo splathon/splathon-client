@@ -3,28 +3,38 @@ import 'package:splathon_app/styles/text.dart';
 import 'package:splathon_app/styles/color.dart';
 import 'package:splathon_app/views/roundedView.dart';
 import 'package:english_words/english_words.dart';
+import 'package:splathon_app/utils/preference.dart';
 import 'dart:async';
-import 'package:openapi/api.dart';
+import 'package:openapi/api.dart' as API;
 
 class Notifications extends StatefulWidget {
   Notifications({Key key}) : super(key: key);
 
   @override
-  _NotificationsState createState() => _NotificationsState();
+  State<StatefulWidget> createState() {
+    return _NotificationsState();
+  }
 }
 
-class _NotificationsState extends State<Notifications> {
+class _NotificationsState extends State<Notifications> with AutomaticKeepAliveClientMixin {
   int notificationCount = 10;
-  Team myTeam = Team();
+  API.Team myTeam;
 
   @override
   void initState() {
     super.initState();
 
-    // Debug code
-    myTeam.id = 73;
-    myTeam.name = '道玄坂高校イカ部（仮）';
+    int teamId = Preference().getTeamId();
+    String teamName = Preference().getTeamName();
+    if (teamId != null && teamName != null) {
+      myTeam = API.Team();
+      myTeam.id = teamId;
+      myTeam.name = teamName;
+    }
   }
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   Widget build(BuildContext context) {
@@ -38,6 +48,9 @@ class _NotificationsState extends State<Notifications> {
         itemCount: 10 + 4,
         itemBuilder: (BuildContext context, i) {
           if (i == 0) {
+            if (myTeam == null) {
+              return Container();
+            }
             return Container(
               margin: const EdgeInsets.only(top: 15, left: 20, right: 20),
               child: Row(
@@ -53,6 +66,9 @@ class _NotificationsState extends State<Notifications> {
             );
           }
           if (i == 1) {
+            if (myTeam == null) {
+              return Container();
+            }
             return new Container(
               margin: const EdgeInsets.only(top: 20, left: 20, right: 20),
               child: new Stack(
@@ -67,6 +83,9 @@ class _NotificationsState extends State<Notifications> {
             );
           }
           if (i == 2) {
+            if (myTeam == null) {
+              return Container();
+            }
             return new Container(
               decoration: BoxDecoration(
                 color: Colors.white,

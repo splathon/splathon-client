@@ -44,43 +44,62 @@ Please follow the [installation procedure](#installation--usage) and then run th
 import 'package:openapi/api.dart';
 
 
-var api_instance = new DefaultApi();
+var api_instance = new AdminApi();
 var eventId = 789; // int | 
+var splathonReceptionCode = splathonReceptionCode_example; // String | ReceptionResponse.splathon.code と同じもの(たぶん内部SlackID).
+var X_SPLATHON_API_TOKEN = X_SPLATHON_API_TOKEN_example; // String | 
 
 try {
-    var result = api_instance.listTeams(eventId);
-    print(result);
+    api_instance.completeReception(eventId, splathonReceptionCode, X_SPLATHON_API_TOKEN);
 } catch (e) {
-    print("Exception when calling DefaultApi->listTeams: $e\n");
+    print("Exception when calling AdminApi->completeReception: $e\n");
 }
 
 ```
 
 ## Documentation for API Endpoints
 
-All URIs are relative to *https://localhost/splathon*
+All URIs are relative to *https://splathon-api-us.appspot.com/splathon*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
+*AdminApi* | [**completeReception**](docs//AdminApi.md#completereception) | **POST** /v{eventId}/reception/{splathonReceptionCode}/complete | 
+*AdminApi* | [**getParticipantsDataForReception**](docs//AdminApi.md#getparticipantsdataforreception) | **GET** /v{eventId}/reception/{splathonReceptionCode} | 
+*AdminApi* | [**updateBattle**](docs//AdminApi.md#updatebattle) | **POST** /v{eventId}/matches/{matchId} | 
+*DefaultApi* | [**getEvent**](docs//DefaultApi.md#getevent) | **GET** /v{eventId}/event | 
+*DefaultApi* | [**getTeamDetail**](docs//DefaultApi.md#getteamdetail) | **GET** /v{eventId}/teams/{team_id} | 
 *DefaultApi* | [**listTeams**](docs//DefaultApi.md#listteams) | **GET** /v{eventId}/teams | 
+*DefaultApi* | [**login**](docs//DefaultApi.md#login) | **POST** /v{eventId}/login | 
 *MatchApi* | [**getMatch**](docs//MatchApi.md#getmatch) | **GET** /v{eventId}/matches/{matchId} | 
+*MatchApi* | [**updateBattle**](docs//MatchApi.md#updatebattle) | **POST** /v{eventId}/matches/{matchId} | 
 *RankingApi* | [**getRanking**](docs//RankingApi.md#getranking) | **GET** /v{eventId}/ranking | 
+*ReceptionApi* | [**completeReception**](docs//ReceptionApi.md#completereception) | **POST** /v{eventId}/reception/{splathonReceptionCode}/complete | 
+*ReceptionApi* | [**getParticipantsDataForReception**](docs//ReceptionApi.md#getparticipantsdataforreception) | **GET** /v{eventId}/reception/{splathonReceptionCode} | 
+*ReceptionApi* | [**getReception**](docs//ReceptionApi.md#getreception) | **GET** /v{eventId}/reception | 
 *ResultApi* | [**getResult**](docs//ResultApi.md#getresult) | **GET** /v{eventId}/results | 
 
 
 ## Documentation For Models
 
  - [Battle](docs//Battle.md)
- - [BattleRule](docs//BattleRule.md)
- - [BattleStage](docs//BattleStage.md)
  - [Error](docs//Error.md)
- - [Match2](docs//Match2.md)
+ - [Event](docs//Event.md)
+ - [LoginRequest](docs//LoginRequest.md)
+ - [LoginResponse](docs//LoginResponse.md)
+ - [Match](docs//Match.md)
  - [Member](docs//Member.md)
+ - [MemberDetail](docs//MemberDetail.md)
+ - [ParticipantReception](docs//ParticipantReception.md)
  - [Rank](docs//Rank.md)
  - [Ranking](docs//Ranking.md)
+ - [ReceptionCode](docs//ReceptionCode.md)
+ - [ReceptionPartcipantsDataResponse](docs//ReceptionPartcipantsDataResponse.md)
+ - [ReceptionResponse](docs//ReceptionResponse.md)
  - [Results](docs//Results.md)
  - [Room](docs//Room.md)
  - [Round](docs//Round.md)
+ - [Rule](docs//Rule.md)
+ - [Stage](docs//Stage.md)
  - [Team](docs//Team.md)
  - [Teams](docs//Teams.md)
 

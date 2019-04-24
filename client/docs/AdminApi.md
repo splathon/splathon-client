@@ -1,0 +1,157 @@
+# openapi.api.AdminApi
+
+## Load the API package
+```dart
+import 'package:openapi/api.dart';
+```
+
+All URIs are relative to *https://splathon-api-us.appspot.com/splathon*
+
+Method | HTTP request | Description
+------------- | ------------- | -------------
+[**completeReception**](AdminApi.md#completeReception) | **POST** /v{eventId}/reception/{splathonReceptionCode}/complete | 
+[**getParticipantsDataForReception**](AdminApi.md#getParticipantsDataForReception) | **GET** /v{eventId}/reception/{splathonReceptionCode} | 
+[**updateBattle**](AdminApi.md#updateBattle) | **POST** /v{eventId}/matches/{matchId} | 
+
+
+# **completeReception**
+> completeReception(eventId, splathonReceptionCode, X_SPLATHON_API_TOKEN)
+
+
+
+参加登録API
+
+### Example 
+```dart
+import 'package:openapi/api.dart';
+
+var api_instance = new AdminApi();
+var eventId = 789; // int | 
+var splathonReceptionCode = splathonReceptionCode_example; // String | ReceptionResponse.splathon.code と同じもの(たぶん内部SlackID).
+var X_SPLATHON_API_TOKEN = X_SPLATHON_API_TOKEN_example; // String | 
+
+try { 
+    api_instance.completeReception(eventId, splathonReceptionCode, X_SPLATHON_API_TOKEN);
+} catch (e) {
+    print("Exception when calling AdminApi->completeReception: $e\n");
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **eventId** | **int**|  | [default to null]
+ **splathonReceptionCode** | **String**| ReceptionResponse.splathon.code と同じもの(たぶん内部SlackID). | [default to null]
+ **X_SPLATHON_API_TOKEN** | **String**|  | [default to null]
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json; charset=utf-8
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **getParticipantsDataForReception**
+> ReceptionPartcipantsDataResponse getParticipantsDataForReception(eventId, splathonReceptionCode, X_SPLATHON_API_TOKEN)
+
+
+
+参加者情報取得API
+
+### Example 
+```dart
+import 'package:openapi/api.dart';
+
+var api_instance = new AdminApi();
+var eventId = 789; // int | 
+var splathonReceptionCode = splathonReceptionCode_example; // String | ReceptionResponse.splathon.code と同じもの(たぶん内部SlackID).
+var X_SPLATHON_API_TOKEN = X_SPLATHON_API_TOKEN_example; // String | 
+
+try { 
+    var result = api_instance.getParticipantsDataForReception(eventId, splathonReceptionCode, X_SPLATHON_API_TOKEN);
+    print(result);
+} catch (e) {
+    print("Exception when calling AdminApi->getParticipantsDataForReception: $e\n");
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **eventId** | **int**|  | [default to null]
+ **splathonReceptionCode** | **String**| ReceptionResponse.splathon.code と同じもの(たぶん内部SlackID). | [default to null]
+ **X_SPLATHON_API_TOKEN** | **String**|  | [default to null]
+
+### Return type
+
+[**ReceptionPartcipantsDataResponse**](ReceptionPartcipantsDataResponse.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json; charset=utf-8
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **updateBattle**
+> updateBattle(eventId, matchId, X_SPLATHON_API_TOKEN, battle)
+
+
+
+Update a battle data in the match.
+
+### Example 
+```dart
+import 'package:openapi/api.dart';
+
+var api_instance = new AdminApi();
+var eventId = 789; // int | 
+var matchId = 789; // int | match id
+var X_SPLATHON_API_TOKEN = X_SPLATHON_API_TOKEN_example; // String | 
+var battle = new Battle(); // Battle | 
+
+try { 
+    api_instance.updateBattle(eventId, matchId, X_SPLATHON_API_TOKEN, battle);
+} catch (e) {
+    print("Exception when calling AdminApi->updateBattle: $e\n");
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **eventId** | **int**|  | [default to null]
+ **matchId** | **int**| match id | [default to null]
+ **X_SPLATHON_API_TOKEN** | **String**|  | [default to null]
+ **battle** | [**Battle**](Battle.md)|  | 
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json; charset=utf-8
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+

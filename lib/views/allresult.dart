@@ -4,8 +4,11 @@ import 'package:splathon_app/styles/color.dart';
 import 'package:splathon_app/views/roundedView.dart';
 import 'package:english_words/english_words.dart';
 import 'package:splathon_app/views/resultdetail.dart';
+import 'package:splathon_app/utils/preference.dart';
+import 'package:splathon_app/utils/config.dart';
+import 'package:splathon_app/views/customExpansionTile.dart' as CustomView;
 import 'dart:async';
-import 'package:openapi/api.dart';
+import 'package:openapi/api.dart' as API;
 
 class AllResult extends StatefulWidget {
   AllResult({Key key}) : super(key: key);
@@ -16,9 +19,9 @@ class AllResult extends StatefulWidget {
 
 BuildContext sharedContext;
 
-class _AllResultState extends State<AllResult> {
+class _AllResultState extends State<AllResult> with AutomaticKeepAliveClientMixin {
   // ViewModel
-  Results _model;
+  API.Results _model;
 
   @override
   void initState() {
@@ -27,14 +30,17 @@ class _AllResultState extends State<AllResult> {
   }
 
   @override
+  bool get wantKeepAlive => true;
+
+  @override
   Widget build(BuildContext context) {
     sharedContext = context;
     return buildAllResult();
   }
 
   Future fetchData() async {
-    var client = new ResultApi();
-    var result = client.getResult(9);
+    var client = new API.ResultApi();
+    var result = client.getResult(Config().eventNumber);
     result.then(
       (resultsObj) => setState(() { this._model = resultsObj; } )
     );
@@ -48,23 +54,26 @@ class _AllResultState extends State<AllResult> {
       );
     }
 
+    final rounds = _model.qualifiers + _model.tournament;
+
     return Container(
       color: backgroundColor,
       child: ListView.builder(
         itemBuilder: (BuildContext context, int index) =>
-          MatchItem(_model.qualifiers[index]),
-        itemCount: _model.qualifiers.length,
+          RoundItem(rounds[index], fetchData),
+        itemCount: rounds.length,
       ),
     );
   }
 }
 
-class MatchItem extends StatelessWidget {
-  const MatchItem(this.match);
+class RoundItem extends StatelessWidget {
+  const RoundItem(this.round, this.popCallback);
 
-  final Round match;
+  final API.Round round;
+  final VoidCallback popCallback;
 
-  Widget _buildMatch(Round round, BuildContext context) {
+  Widget _buildRound(API.Round round, BuildContext context) {
     var roomIndexs = List.generate(round.rooms.length, (int index) => index);
 
     return new Container(
@@ -73,22 +82,23 @@ class MatchItem extends StatelessWidget {
         border: Border.all(
           color: borderblueColor,
           width: 1,
-        )
+        ),
+        color: splaBlueColor,
       ),
       margin: const EdgeInsets.only(top: 10, left: 20, right: 20),
-      child: ExpansionTile(
+      child: CustomView.ExpansionTile(
         //backgroundColor: splaBlueColor,
-        key: PageStorageKey<Round>(round),
-        title: Text(round.name, style: roundClosedTitleStyle,),
+        key: PageStorageKey<API.Round>(round),
+        title: Text(round.name, style: roundExpandedTitleStyle,),
         children: roomIndexs.map((index) => _buildTable(round, round.rooms[index], context, index == round.rooms.length - 1)).toList(),
-        trailing: Image.asset('assets/images/arrowUp.png'),
+        trailing: Image.asset('assets/images/arrowDownW.png'),
         onExpansionChanged: (isExpanded) => {      
         },
       ),
     );
   }
 
-  Widget _buildTable(Round round, Room room, BuildContext context, bool isLast) {
+  Widget _buildTable(API.Round round, API.Room room, BuildContext context, bool isLast) {
     var matchIndexs = List.generate(room.matches.length, (int index) => index);
     var boxDecoration = isLast ? 
       BoxDecoration(
@@ -104,16 +114,52 @@ class MatchItem extends StatelessWidget {
 
     return new Container(
       decoration: boxDecoration,
-      child: ExpansionTile(
-        key: PageStorageKey<Room>(room),
+      child: CustomView.ExpansionTile(
+        key: PageStorageKey<API.Room>(room),
         title: Text(room.name, style: roundClosedTitleStyle,),
-        children: matchIndexs.map((index) => _buildResult(round, room, room.matches[index], context, index == room.matches.length - 1)).toList(),
+        children: matchIndexs.map((index) => MatchItem(round, room, room.matches[index], isLast && index == room.matches.length - 1)).toList(),
       ),
     );
   }
+  
+  @override
+  Widget build(BuildContext context) {
+    return _buildRound(round, context);
+  }
+}
 
-  // TODO: Rebase
-  Widget _buildResult(Round round, Room room, Match2 match, BuildContext context, bool isLast) {
+class MatchItem extends StatefulWidget {
+  API.Round round;
+  API.Room room;
+  API.Match match;
+  bool isLast;
+  MatchItem(this.round, this.room, this.match, this.isLast);
+
+  @override
+  _MatchItemState createState() => _MatchItemState(round, room, match, isLast);
+}
+
+class _MatchItemState extends State<MatchItem> {
+  API.Round round;
+  API.Room room;
+  API.Match match;
+  bool isLast;
+  _MatchItemState(this.round, this.room, this.match, this.isLast);
+
+  @override
+  Widget build(BuildContext context) {
+    return _buildResult(round, room, match, context, isLast);
+  }
+
+  void refetch(int matchId, API.Match match) {
+    var client = new API.MatchApi();
+    var result = client.getMatch(Config().eventNumber, matchId);
+    result.then(
+      (resultsObj) => setState(() { this.match = resultsObj; } )
+    );
+  }
+
+  Widget _buildResult(API.Round round, API.Room room, API.Match match, BuildContext context, bool isLast) {
     double screenWidth = MediaQuery.of(context).size.width;
     int order = match.order;
     var boxDecoration = isLast ?
@@ -134,12 +180,19 @@ class MatchItem extends StatelessWidget {
         ),
       );
     
+    final bool isAdmin = Preference().isAdmin();
+
     return GestureDetector(
-      onTap: () { 
+      onTap: () async { 
+        if (match.winner == null && !isAdmin) {
+          // Normal user can't show upcoming detail result
+          return;
+        }
         Navigator.push(context, new MaterialPageRoute<Null>(
           settings: const RouteSettings(name: "/result"),
-          builder: (BuildContext context) => new ResultDetail(match),
+          builder: (BuildContext context) => new ResultDetail(match.id),
         ));
+        refetch(match.id, match);
       },
       child: new Container(
         decoration: boxDecoration,
@@ -175,7 +228,7 @@ class MatchItem extends StatelessWidget {
                       ],
                     ),
                   ),
-                  winloseView(match.winner),
+                  winloseView(match),
                 ],
               ),
             ),
@@ -186,7 +239,19 @@ class MatchItem extends StatelessWidget {
     );
   }
 
-  Widget winloseView(String winner) {
+  Widget winloseView(API.Match match) {
+    if (match.winner == null) {
+      return Container(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            unreportedLabelView(),
+          ]
+        ),
+      );
+    }
+
+    String winner = match.winner;
     if (winner != 'alpha' && winner != 'bravo') {
       return Container(
         child: Row(
@@ -213,47 +278,41 @@ class MatchItem extends StatelessWidget {
       ),
     );
   }
-
-  @override
-  Widget build(BuildContext context) {
-    return _buildMatch(match, context);
-  }
-
-  static const TextStyle roundClosedTitleStyle = TextStyle(
-    fontFamily: 'Splatfont',
-    color: Colors.black,
-    fontSize: 26.0,
-  );
-
-  static const TextStyle roundExpandedTitleStyle = TextStyle(
-    fontFamily: 'Splatfont',
-    color: Colors.white,
-    fontSize: 26.0,
-  );
-
-  static const TextStyle tableTitleStyle = TextStyle(
-    fontFamily: 'Splatfont',
-    color: Colors.black,
-    fontSize: 26.0,
-  );
-
-  // Copy
-  static const TextStyle resultTitleStyle = TextStyle(
-    fontFamily: 'Splatfont',
-    color: grayColor,
-    fontSize: 14.0,
-  );
-
-  static const TextStyle resultNameStyle = TextStyle(
-    fontFamily: 'Splatfont',
-    color: blackColor,
-    fontSize: 20.0,
-  );
-
-  static const TextStyle resultResultStyle = TextStyle(
-    fontFamily: 'Splatfont',
-    color: Colors.white,
-    fontSize: 11.0,
-  );
 }
 
+const TextStyle roundClosedTitleStyle = TextStyle(
+  fontFamily: 'Splatfont',
+  color: Colors.black,
+  fontSize: 26.0,
+);
+
+const TextStyle roundExpandedTitleStyle = TextStyle(
+  fontFamily: 'Splatfont',
+  color: Colors.white,
+  fontSize: 26.0,
+);
+
+const TextStyle tableTitleStyle = TextStyle(
+  fontFamily: 'Splatfont',
+  color: Colors.black,
+  fontSize: 26.0,
+);
+
+// Copy
+const TextStyle resultTitleStyle = TextStyle(
+  fontFamily: 'Splatfont',
+  color: grayColor,
+  fontSize: 14.0,
+);
+
+const TextStyle resultNameStyle = TextStyle(
+  fontFamily: 'Splatfont',
+  color: blackColor,
+  fontSize: 20.0,
+);
+
+const TextStyle resultResultStyle = TextStyle(
+  fontFamily: 'Splatfont',
+  color: Colors.white,
+  fontSize: 11.0,
+);

@@ -26,6 +26,10 @@ dependencies:
   english_words: ^3.1.0
   qr_flutter: ^2.0.0+51
   cached_network_image: ^0.7.0
+  firebase_messaging: ^4.0.0+3
+  fast_qr_reader_view: ^0.1.5
+  shared_preferences: ^0.5.2
+  auto_size_text: ^1.1.2
   openapi:
     path: client/
 
@@ -95,6 +99,7 @@ flutter:
    - assets/images/goldInc.png
    - assets/images/silverInc.png
    - assets/images/arrowUp.png
+   - assets/images/arrowDownW.png
 
   fonts:
     - family: Splatfont

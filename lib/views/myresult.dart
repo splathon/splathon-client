@@ -4,8 +4,10 @@ import 'package:splathon_app/styles/color.dart';
 import 'package:splathon_app/views/roundedView.dart';
 import 'package:english_words/english_words.dart';
 import 'package:splathon_app/views/resultdetail.dart';
+import 'package:splathon_app/utils/preference.dart';
+import 'package:splathon_app/utils/config.dart';
 import 'dart:async';
-import 'package:openapi/api.dart';
+import 'package:openapi/api.dart' as API;
 
 class EachResult extends StatefulWidget {
   EachResult({Key key}) : super(key: key);
@@ -14,29 +16,42 @@ class EachResult extends StatefulWidget {
   _EachResultState createState() => _EachResultState();
 }
 
-class _EachResultState extends State<EachResult> {
-  Teams _model;
-  Results _results;
-  String dropdownValue = 'NuRItaclesカスタム'; // TODO: 暫定固定実装、ログイン処理実装して自身のTeamNameが取得できるようになったらここに入れる
+class _EachResultState extends State<EachResult> with AutomaticKeepAliveClientMixin {
+  API.Teams _model;
+  API.Results _results;
+  String dropdownValue;
 
   @override
   void initState() {
     super.initState();
-    fetchTeams();
-    fetchResult(84); // TODO: 暫定固定実装、ログイン処理実装して自身のTeamIDが取得できるようになったらここに入れる
+
+    int teamId = Preference().getTeamId();
+    String teamName = Preference().getTeamName();
+
+    fetchTeams().then((_) {
+      if (teamId == null || teamName == null) {
+        teamId = _model.teams.first.id;
+        teamName = _model.teams.first.name;
+      }
+      dropdownValue = teamName;
+      fetchResult(teamId);
+    });
   }
 
+  @override
+  bool get wantKeepAlive => true;
+
   Future fetchTeams() async {
-    var client = new DefaultApi();
-    var result = client.listTeams(9);
+    var client = new API.DefaultApi();
+    var result = client.listTeams(Config().eventNumber);
     result.then(
       (resultsObj) => setState(() { this._model = resultsObj; } )
     );
   }
 
   Future fetchResult(int teamId) async {
-    var client = new ResultApi();
-    var result = client.getResult(9, teamId: teamId);
+    var client = new API.ResultApi();
+    var result = client.getResult(Config().eventNumber, teamId: teamId);
     result.then(
       (resultsObj) => setState(() { this._results = resultsObj; } )
     );
@@ -65,11 +80,12 @@ class _EachResultState extends State<EachResult> {
     double screenWidth = MediaQuery.of(context).size.width;
     
     List<String> teamNames = _model.teams.map((team) => team.name).toList();
+    final rounds = _results.qualifiers + _results.tournament;
 
     return Container(
       color: backgroundColor,
       child: ListView.builder(
-        itemCount: _results.qualifiers.length + 1,
+        itemCount: rounds.length + 1,
         itemBuilder: (BuildContext context, i) {
           if (i == 0) {
             return Container(
@@ -108,16 +124,17 @@ class _EachResultState extends State<EachResult> {
           }
 
           // SPEC: room, matchはRoundごとに各Team1つずつになる前提
-          Round round = _results.qualifiers[i - 1];
-          Room room = round.rooms.first;
-          Match2 match = room.matches.first;
+          API.Round round = rounds[i - 1];
+          API.Room room = round.rooms.first;
+          API.Match match = room.matches.first;
           int order = match.order;
+          bool isLast = i == rounds.length;
 
           return GestureDetector(
             onTap: () { 
               Navigator.push(context, new MaterialPageRoute<Null>(
                 settings: const RouteSettings(name: "/result"),
-                builder: (BuildContext context) => new ResultDetail(match),
+                builder: (BuildContext context) => new ResultDetail(match.id),
               ));
             },
             child: new Container(
@@ -129,7 +146,7 @@ class _EachResultState extends State<EachResult> {
                   width: 1,
                 )
               ),
-              margin: const EdgeInsets.only(top: 10, left: 20, right: 20),
+              margin: isLast ? const EdgeInsets.only(top: 10, left: 20, right: 20, bottom: 20) : const EdgeInsets.only(top: 10, left: 20, right: 20),
               padding: const EdgeInsets.only(left: 14.0, right: 14.0),
               height: 82.0,
               child: Row(

@@ -18,7 +18,7 @@ class ApiClient {
   final _regList = RegExp(r'^List<(.*)>$');
   final _regMap = RegExp(r'^Map<String,(.*)>$');
 
-  ApiClient({this.basePath: "https://splathon-api.appspot.com/splathon"}) {
+  ApiClient({this.basePath: "https://splathon-api-us.appspot.com/splathon"}) {
     // Setup authentications (key: authentication name, value: authentication).
   }
 
@@ -39,33 +39,49 @@ class ApiClient {
           return value is double ? value : double.parse('$value');
         case 'Battle':
           return Battle.fromJson(value);
-        case 'BattleRule':
-          return BattleRule.fromJson(value);
-        case 'BattleStage':
-          return BattleStage.fromJson(value);
         case 'Error':
           return Error.fromJson(value);
-        case 'Match2':
-          return Match2.fromJson(value);
+        case 'Event':
+          return Event.fromJson(value);
+        case 'LoginRequest':
+          return LoginRequest.fromJson(value);
+        case 'LoginResponse':
+          return LoginResponse.fromJson(value);
+        case 'Match':
+          return Match.fromJson(value);
         case 'Member':
           return Member.fromJson(value);
+        case 'MemberDetail':
+          return MemberDetail.fromJson(value);
+        case 'ParticipantReception':
+          return ParticipantReception.fromJson(value);
         case 'Rank':
           return Rank.fromJson(value);
         case 'Ranking':
           return Ranking.fromJson(value);
+        case 'ReceptionCode':
+          return ReceptionCode.fromJson(value);
+        case 'ReceptionPartcipantsDataResponse':
+          return ReceptionPartcipantsDataResponse.fromJson(value);
+        case 'ReceptionResponse':
+          return ReceptionResponse.fromJson(value);
         case 'Results':
           return Results.fromJson(value);
         case 'Room':
           return Room.fromJson(value);
         case 'Round':
           return Round.fromJson(value);
+        case 'Rule':
+          return Rule.fromJson(value);
+        case 'Stage':
+          return Stage.fromJson(value);
         case 'Team':
           return Team.fromJson(value);
         case 'Teams':
           return Teams.fromJson(value);
         default:
           {
-            Match match;
+            Core.Match match;
             if (value is List &&
                 (match = _regList.firstMatch(targetType)) != null) {
               var newTargetType = match[1];

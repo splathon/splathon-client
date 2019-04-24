@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:splathon_app/utils/preference.dart';
 
 class Splash extends StatefulWidget {
   @override
@@ -10,22 +11,30 @@ class _SplashState extends State<Splash> {
   void initState() {
     super.initState();
 
-    // 通信処理未実装なのでとりあえず1秒のSplash
-    new Future.delayed(const Duration(seconds: 1))
-        .then((value) => handleTimeout());
+    // MEMO: Wait Preference initialized
+    new Future.delayed(const Duration(milliseconds: 500))
+      .then((value) => handleRouting());
   }
 
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
       body: new Center(
-        // TODO: Implement splash animation
         child: const CircularProgressIndicator(),
       ),
     );
   }
 
-  void handleTimeout() {
-    Navigator.of(context).pushReplacementNamed("/login");
+  void handleRouting() {
+    String token = Preference().getToken();
+    bool isAdmin = Preference().isAdmin();
+
+    if (token == null) {
+      Navigator.of(context).pushReplacementNamed("/login");
+    } else if (isAdmin) {
+      Navigator.of(context).pushReplacementNamed("/admin");
+    } else {
+      Navigator.of(context).pushReplacementNamed("/home");
+    }    
   }
 }

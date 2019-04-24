@@ -5,19 +5,22 @@ class Team {
   int id = null;
   
   String name = null;
+  /* Team の大会にむけての意気込みコメント */
+  String shortComment = null;
   
   List<Member> members = [];
   Team();
 
   @override
   String toString() {
-    return 'Team[id=$id, name=$name, members=$members, ]';
+    return 'Team[id=$id, name=$name, shortComment=$shortComment, members=$members, ]';
   }
 
   Team.fromJson(Map<String, dynamic> json) {
     if (json == null) return;
     id = json['id'];
     name = json['name'];
+    shortComment = json['short_comment'];
     members = Member.listFromJson(json['members']);
   }
 
@@ -25,6 +28,7 @@ class Team {
     return {
       'id': id,
       'name': name,
+      'short_comment': shortComment,
       'members': members
     };
   }

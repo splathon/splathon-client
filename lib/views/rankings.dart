@@ -4,8 +4,10 @@ import 'package:splathon_app/styles/color.dart';
 import 'package:splathon_app/views/roundedView.dart';
 import 'package:splathon_app/views/Image.dart';
 import 'package:english_words/english_words.dart';
+import 'package:splathon_app/utils/config.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'dart:async';
-import 'package:openapi/api.dart';
+import 'package:openapi/api.dart' as API;
 
 class Rankings extends StatefulWidget {
   Rankings({Key key}) : super(key: key);
@@ -14,9 +16,9 @@ class Rankings extends StatefulWidget {
   _RankingsState createState() => _RankingsState();
 }
 
-class _RankingsState extends State<Rankings> {
+class _RankingsState extends State<Rankings> with AutomaticKeepAliveClientMixin {
   // ViewModel
-  Ranking _model;
+  API.Ranking _model;
 
   @override
   void initState() {
@@ -25,13 +27,16 @@ class _RankingsState extends State<Rankings> {
   }
 
   @override
+  bool get wantKeepAlive => true;
+
+  @override
   Widget build(BuildContext context) {
     return buildRankings();
   }
 
   Future fetchData() async {
-    var client = new RankingApi();
-    var result = client.getRanking(9);
+    var client = new API.RankingApi();
+    var result = client.getRanking(Config().eventNumber);
     result.then(
       (rankingObj) => setState(() { this._model = rankingObj; } )
     );
@@ -45,13 +50,15 @@ class _RankingsState extends State<Rankings> {
       );
     }
 
+    double screenWidth = MediaQuery.of(context).size.width;
+
     return Container(
       color: backgroundColor,
       child: ListView.builder(
         itemCount: _model.rankings.length * 2,
         itemBuilder: (BuildContext context, i) {
           final index = i ~/ 2;
-          Rank rank = _model.rankings[index];
+          API.Rank rank = _model.rankings[index];
           if (!i.isOdd) {
             return headerView(index, rank);
           }
@@ -66,29 +73,18 @@ class _RankingsState extends State<Rankings> {
               )
             ),
             margin: const EdgeInsets.only(left: 20, right: 20),
-            height: 72.0,
+            height: 75.0,
             child: Column(
               mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 Container(
                   height: 36.0,
                   child: Row(
                     mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
-                      Row(
-                        children: <Widget>[
-                          CharactorImage(rank.team.members[0].icon),
-                          Text(rank.team.members[0].name, style: nameStyle),
-                        ],
-                      ),
-                      Row(
-                        children: <Widget>[
-                          CharactorImage(rank.team.members[1].icon),
-                          Text(rank.team.members[1].name, style: nameStyle),
-                        ],
-                      ),                  ],
+                      memberView(getMember(rank.team.members, 0), screenWidth * 0.35),
+                      memberView(getMember(rank.team.members, 1), screenWidth * 0.35),
+                    ],
                   ),
                 ),
                 Container(
@@ -96,18 +92,8 @@ class _RankingsState extends State<Rankings> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
-                      Row(
-                        children: <Widget>[
-                          CharactorImage(rank.team.members[2].icon),
-                          Text(rank.team.members[2].name, style: nameStyle),
-                        ],
-                      ),
-                      Row(
-                        children: <Widget>[
-                          CharactorImage(rank.team.members[3].icon),
-                          Text(rank.team.members[3].name, style: nameStyle),
-                        ],
-                      ),
+                      memberView(getMember(rank.team.members, 2), screenWidth * 0.35),
+                      memberView(getMember(rank.team.members, 3), screenWidth * 0.35),
                     ],
                   ),
                 ),
@@ -119,7 +105,14 @@ class _RankingsState extends State<Rankings> {
     );
   }
 
-  Widget headerView(int index, Rank rank) {
+  getMember(List<API.Member> members, int index) {
+    if (members.length > index) {
+      return members[index];
+    }
+    return null;
+  }
+
+  Widget headerView(int index, API.Rank rank) {
     final rankIndex = index + 1; // rankIndex: 1..N
     final isTop3 = rankIndex <= 3;
     return Container(
@@ -130,6 +123,9 @@ class _RankingsState extends State<Rankings> {
           isTop3 ? Image.asset('assets/images/crown$rankIndex.png') : SizedBox(),
           Padding(padding: const EdgeInsets.only(left: 4.0, right: 4.0), child: Text('$rankIndex位', style: rankTextStyle(rankIndex),),),
           Text(rank.team.name, style: rankTextStyle(rankIndex)),
+          Expanded(
+            child: Container(),
+          ),
           Container(
             margin: const EdgeInsets.only(left: 6.0, bottom: 1),
             child: pointLabelView(rank.point),
@@ -137,6 +133,34 @@ class _RankingsState extends State<Rankings> {
         ],
       ),
     ); 
+  }
+
+  Widget memberView(API.Member member, double textWidth) {
+    if (member == null) {
+      return Expanded(
+        flex: 1,
+        child: Container()
+      );
+    }
+
+    return Expanded(
+      flex: 1,
+      child: Container(
+        padding: const EdgeInsets.only(left: 8, right: 8),
+        child :Row(
+          children: <Widget>[
+            CharactorImage(member.icon),
+            SizedBox(
+              width: 2,
+            ),
+            SizedBox(
+              width: textWidth,
+              child: AutoSizeText(member.name, style: nameStyle, maxLines: 1,),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   static const TextStyle pointStyle = TextStyle(
@@ -169,19 +193,5 @@ class _RankingsState extends State<Rankings> {
       default:
         return blackColor;
     }
-  }
-}
-
-// TODO: ユーザアイコンと名前のView部分はここで定義して突っ込むようにしたい
-class RankingCard extends Card {
-  String name;
-  String imageUrl;
-  RankingCard(this.name, this.imageUrl);
-
-  @override 
-  Widget build(BuildContext context) {
-    return Card(
-
-    );
   }
 }

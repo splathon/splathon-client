@@ -1,24 +1,64 @@
 import 'package:flutter/material.dart';
 import 'package:splathon_app/styles/text.dart';
 import 'package:splathon_app/styles/color.dart';
-import 'package:splathon_app/views/myresult.dart';
+import 'package:splathon_app/views/report.dart';
 import 'package:splathon_app/views/Image.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:splathon_app/utils/preference.dart';
+import 'package:splathon_app/utils/config.dart';
 import 'package:english_words/english_words.dart';
-import 'package:openapi/api.dart';
+import 'package:openapi/api.dart' as API;
 
-class ResultDetail extends StatelessWidget { 
-  final Match2 _match;
+class ResultDetail extends StatefulWidget {
+  final int _matchId;
+  ResultDetail(this._matchId);
 
-  ResultDetail(this._match);
+  @override
+  _ResultDetailState createState() => _ResultDetailState(_matchId);
+}
+
+class _ResultDetailState extends State<ResultDetail> {
+  final int _matchId;
+  API.Match _match;
+
+  _ResultDetailState(this._matchId);
+
+  @override
+  void initState() {
+    super.initState();
+    fetchData();
+  }
 
   @override
   Widget build(BuildContext context) {
     return buildResultDetail(context);
   }
 
+  Future fetchData() async {
+    var client = new API.MatchApi();
+    var result = client.getMatch(Config().eventNumber, _matchId);
+    result.then(
+      (resultsObj) => setState(() { this._match = resultsObj; } )
+    );
+  }
+
   Widget buildResultDetail(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
+    final bool isAdmin = Preference().isAdmin();
+
+    if (_match == null) {
+      // Loading
+      return Scaffold(
+        appBar: AppBar(
+          title: SplaText('リザルト'),
+          backgroundColor: Color.fromRGBO(11, 49, 143, 1),
+        ),
+        body: Center(
+          child: const CircularProgressIndicator(),
+        ),
+      );
+    }
 
     return new Scaffold(
       appBar: new AppBar(
@@ -43,76 +83,156 @@ class ResultDetail extends StatelessWidget {
             );
           }
 
-          Battle battle = _match.battles[i - 1];
-          bool isWinAlpha = battle.winner == 'alpha';
-          return Container(
-            margin: const EdgeInsets.only(top: 10, left: 20, right: 20),
-            foregroundDecoration: BoxDecoration(
-              border: Border(
-                bottom: BorderSide(
-                  color: borderColor,
-                  width: 1,
+          API.Battle battle = _match.battles[i - 1];
+          final bool isNoId = battle.id == null;
+          final bool isNoWinner = battle.winner == null;
+          if (isNoId || isNoWinner) {
+            if (!isAdmin) {
+              return Container();
+            }
+            return Container(
+              margin: const EdgeInsets.only(top: 10, left: 20, right: 20),
+              foregroundDecoration: BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(
+                    color: borderColor,
+                    width: 1,
+                  ),
                 ),
               ),
-            ),
-            child: Column(
-              children: <Widget>[
-                Row(
-                  children: <Widget>[
-                    new Container(
-                      // margin: const EdgeInsets.only(top: 20, left: 20, right: 20),
-                      width: 50,
-                      child: new Stack(
-                        children: <Widget>[
-                          Image.asset('assets/images/silverInc.png'),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 12),
-                            child: Text('$i戦目', style: roundStyle),
-                          ),
-                        ],
+              child: Column(
+                children: <Widget>[
+                  Row(
+                    children: <Widget>[
+                      new Container(
+                        width: 50,
+                        child: new Stack(
+                          children: <Widget>[
+                            Image.asset('assets/images/silverInc.png'),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 12),
+                              child: Text('$i戦目', style: roundStyle),
+                            ),
+                          ],
+                        ),
                       ),
+                      SizedBox(width: 8,),
+                      isNoId ? SizedBox() : Text(battle.rule.name, style: ruleStageStyle,),
+                      SizedBox(width: 8,),
+                      isNoId ? SizedBox() : Text(battle.stage.name, style: ruleStageStyle,),
+                    ],
+                  ),
+                  Container(
+                    padding: const EdgeInsets.only(bottom: 10),
+                    child: RaisedButton(
+                      color: splaYellowColor,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(30.0))
+                      ),
+                      child: Text('結果を報告する',
+                        style: TextStyle(
+                          fontFamily: 'Splatfont',
+                          fontSize: 26,
+                          color: Colors.white,
+                        ),
+                      ),
+                      onPressed: () async {
+                        await Navigator.push(context, new MaterialPageRoute<Null>(
+                          settings: const RouteSettings(name: "/report"),
+                          builder: (BuildContext context) => new Report(_match, battle),
+                        ));
+                        fetchData();
+                      },
                     ),
-                    SizedBox(width: 8,),
-                    Text(battle.stage.name, style: ruleStageStyle,),
-                  ],
+                  ),
+                ],
+              ),
+            );
+          }
+
+          bool isWinAlpha = battle.winner == 'alpha';
+          return GestureDetector(
+            onTap: () async { 
+              if (!isAdmin) {
+                // Normal user can't show upcoming detail result
+                return;
+              }
+              await Navigator.push(context, new MaterialPageRoute<Null>(
+                settings: const RouteSettings(name: "/report"),
+                builder: (BuildContext context) => new Report(_match, battle),
+              ));
+              fetchData();
+            },
+            child: Container(
+              margin: const EdgeInsets.only(top: 10, left: 20, right: 20),
+              foregroundDecoration: BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(
+                    color: borderColor,
+                    width: 1,
+                  ),
                 ),
-                Row(
-                  children: <Widget>[
-                    Container(
-                      padding: const EdgeInsets.only(left: 10.0, right: 10.0,),
-                      width: 50,
-                      height: 17.0,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10.0),
-                        color: isWinAlpha ? winColor : loseColor,
+              ),
+              child: Column(
+                children: <Widget>[
+                  Row(
+                    children: <Widget>[
+                      new Container(
+                        width: 50,
+                        child: new Stack(
+                          children: <Widget>[
+                            Image.asset('assets/images/silverInc.png'),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 12),
+                              child: Text('$i戦目', style: roundStyle),
+                            ),
+                          ],
+                        ),
                       ),
-                      child: Center(
-                        child: Text(isWinAlpha ? 'WIN' : 'LOSE', style: resultResultStyle),
+                      SizedBox(width: 8,),
+                      Text(battle.rule.name, style: ruleStageStyle,),
+                      SizedBox(width: 8,),
+                      Text(battle.stage.name, style: ruleStageStyle,),
+                    ],
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Container(
+                        padding: const EdgeInsets.only(left: 10.0, right: 10.0,),
+                        width: 50,
+                        height: 17.0,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10.0),
+                          color: isWinAlpha ? winColor : loseColor,
+                        ),
+                        child: Center(
+                          child: Text(isWinAlpha ? 'WIN' : 'LOSE', style: resultResultStyle),
+                        ),
                       ),
-                    ),
-                    SizedBox(width: 8,),
-                    Text(_match.teamAlpha.name, style: resultDetailTeamNameStyle,),
-                  ],
-                ),
-                Row(
-                  children: <Widget>[
-                    Container(
-                      padding: const EdgeInsets.only(left: 10.0, right: 10.0,),
-                      width: 50,
-                      height: 17.0,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10.0),
-                        color: isWinAlpha ? loseColor : winColor,
+                      SizedBox(width: 8,),
+                      Text(_match.teamAlpha.name, style: resultDetailTeamNameStyle,),
+                    ],
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Container(
+                        padding: const EdgeInsets.only(left: 10.0, right: 10.0,),
+                        width: 50,
+                        height: 17.0,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10.0),
+                          color: isWinAlpha ? loseColor : winColor,
+                        ),
+                        child: Center(
+                          child: Text(isWinAlpha ? 'LOSE' : 'WIN', style: resultResultStyle),
+                        ),
                       ),
-                      child: Center(
-                        child: Text(isWinAlpha ? 'LOSE' : 'WIN', style: resultResultStyle),
-                      ),
-                    ),
-                    SizedBox(width: 8,),
-                    Text(_match.teamBravo.name, style: resultDetailTeamNameStyle,),
-                  ],
-                ),
-              ],
+                      SizedBox(width: 8,),
+                      Text(_match.teamBravo.name, style: resultDetailTeamNameStyle,),
+                    ],
+                  ),
+                ],
+              ),
             ),
           );
         }
@@ -121,6 +241,14 @@ class ResultDetail extends StatelessWidget {
   }
 
   Widget winLoseTopView() {
+    if (_match.winner == null) {
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          Text('UPCOMING', style: resultUpcomingStyle),
+        ],
+      );
+    }
     if (_match.winner != 'alpha' && _match.winner != 'bravo') {
       return Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -142,6 +270,83 @@ class ResultDetail extends StatelessWidget {
   }
 
   Widget teamMemberView(double screenWidth) {
+    final bool isNoMember = _match.teamAlpha.members.length < 4 || _match.teamBravo.members.length < 4;
+
+    List<Widget> alphaMembers = isNoMember ?
+      <Widget>[
+        SizedBox(
+          height: 50,
+          child: Center(child: AutoSizeText(_match.teamAlpha.name, style: resultTopTeamNameStyle, maxLines: 1,),)
+        ),
+      ] :
+      <Widget>[
+        SizedBox(
+          height: 50,
+          child: Center(child: AutoSizeText(_match.teamAlpha.name, style: resultTopTeamNameStyle, maxLines: 1,),),
+        ),
+        Row(
+          children: <Widget>[
+            CharactorImage(_match.teamAlpha.members[0].icon),
+            Text(_match.teamAlpha.members[0].name, style: resultPlayerNameStyle),
+          ],
+        ),
+        Row(
+          children: <Widget>[
+            CharactorImage(_match.teamAlpha.members[1].icon),
+            Text(_match.teamAlpha.members[1].name, style: resultPlayerNameStyle),
+          ],
+        ),
+        Row(
+          children: <Widget>[
+            CharactorImage(_match.teamAlpha.members[2].icon),
+            Text(_match.teamAlpha.members[2].name, style: resultPlayerNameStyle),
+          ],
+        ),
+        Row(
+          children: <Widget>[
+            CharactorImage(_match.teamAlpha.members[3].icon),
+            Text(_match.teamAlpha.members[3].name, style: resultPlayerNameStyle),
+          ],
+        ),
+      ];
+    List<Widget> bravoMembers = isNoMember ?
+      <Widget>[
+        SizedBox(
+          height: 50,
+          child: Center(child: AutoSizeText(_match.teamBravo.name, style: resultTopTeamNameStyle, maxLines: 1,),),
+        ),
+      ] :
+      <Widget>[
+        SizedBox(
+          height: 50,
+          child: Center(child: AutoSizeText(_match.teamBravo.name, style: resultTopTeamNameStyle, maxLines: 1,),),
+        ),
+        Row(
+          children: <Widget>[
+            CharactorImage(_match.teamBravo.members[0].icon),
+            Text(_match.teamBravo.members[0].name, style: resultPlayerNameStyle),
+          ],
+        ),
+        Row(
+          children: <Widget>[
+            CharactorImage(_match.teamBravo.members[1].icon),
+            Text(_match.teamBravo.members[1].name, style: resultPlayerNameStyle),
+          ],
+        ),
+        Row(
+          children: <Widget>[
+            CharactorImage(_match.teamBravo.members[2].icon),
+            Text(_match.teamBravo.members[2].name, style: resultPlayerNameStyle),
+          ],
+        ),
+        Row(
+          children: <Widget>[
+            CharactorImage(_match.teamBravo.members[3].icon),
+            Text(_match.teamBravo.members[3].name, style: resultPlayerNameStyle),
+          ],
+        ),
+      ];
+
     return Container(
       margin: const EdgeInsets.only(top: 40, left: 20, right: 20, bottom: 20),
       padding: const EdgeInsets.only(top: 20, bottom: 15),
@@ -152,33 +357,7 @@ class ResultDetail extends StatelessWidget {
           Container(
             width: screenWidth * 0.35,
             child: Column(
-              children: <Widget>[
-                Center(child: Text(_match.teamAlpha.name, style: resultTopTeamNameStyle, maxLines: 2,),),
-                Row(
-                  children: <Widget>[
-                    CharactorImage(_match.teamAlpha.members[0].icon),
-                    Text(_match.teamAlpha.members[0].name, style: resultPlayerNameStyle),
-                  ],
-                ),
-                Row(
-                  children: <Widget>[
-                    CharactorImage(_match.teamAlpha.members[1].icon),
-                    Text(_match.teamAlpha.members[1].name, style: resultPlayerNameStyle),
-                  ],
-                ),
-                Row(
-                  children: <Widget>[
-                    CharactorImage(_match.teamAlpha.members[2].icon),
-                    Text(_match.teamAlpha.members[2].name, style: resultPlayerNameStyle),
-                  ],
-                ),
-                Row(
-                  children: <Widget>[
-                    CharactorImage(_match.teamAlpha.members[3].icon),
-                    Text(_match.teamAlpha.members[3].name, style: resultPlayerNameStyle),
-                  ],
-                ),
-              ],
+              children: alphaMembers,
             ),
           ),
           Container(
@@ -190,33 +369,7 @@ class ResultDetail extends StatelessWidget {
           Container(
             width: screenWidth * 0.35,
             child: Column(
-              children: <Widget>[
-                Text(_match.teamBravo.name, style: resultTopTeamNameStyle, maxLines: 2,),
-                Row(
-                  children: <Widget>[
-                    CharactorImage(_match.teamBravo.members[0].icon),
-                    Text(_match.teamBravo.members[0].name, style: resultPlayerNameStyle),
-                  ],
-                ),
-                Row(
-                  children: <Widget>[
-                    CharactorImage(_match.teamBravo.members[1].icon),
-                    Text(_match.teamBravo.members[1].name, style: resultPlayerNameStyle),
-                  ],
-                ),
-                Row(
-                  children: <Widget>[
-                    CharactorImage(_match.teamBravo.members[2].icon),
-                    Text(_match.teamBravo.members[2].name, style: resultPlayerNameStyle),
-                  ],
-                ),
-                Row(
-                  children: <Widget>[
-                    CharactorImage(_match.teamBravo.members[3].icon),
-                    Text(_match.teamBravo.members[3].name, style: resultPlayerNameStyle),
-                  ],
-                ),
-              ],
+              children: bravoMembers,
             ),
           ),
         ],
@@ -239,6 +392,12 @@ class ResultDetail extends StatelessWidget {
   static const TextStyle resultDrawStyle = TextStyle(
     fontFamily: 'Splatfont',
     color: drawColor,
+    fontSize: 40.0,
+  );
+
+  static const TextStyle resultUpcomingStyle = TextStyle(
+    fontFamily: 'Splatfont',
+    color: splaYellowColor,
     fontSize: 40.0,
   );
 
