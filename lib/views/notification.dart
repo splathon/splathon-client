@@ -21,6 +21,7 @@ class Notifications extends StatefulWidget {
 
 class _NotificationsState extends State<Notifications> with AutomaticKeepAliveClientMixin {
   API.ListNoticesResponse _model;
+  API.GetNextMatchResponse _next;
   API.Team myTeam;
   int alreadyReadTime;
 
@@ -37,7 +38,11 @@ class _NotificationsState extends State<Notifications> with AutomaticKeepAliveCl
     }
 
     alreadyReadTime = Preference().getNoticeReadTime();
-    fetchNotices();
+    if (myTeam != null) {
+      fetchNextMatch(myTeam.id);
+    } else {
+      fetchNotices();
+    }    
   }
 
   @override
@@ -52,6 +57,19 @@ class _NotificationsState extends State<Notifications> with AutomaticKeepAliveCl
         this._model = responseObj; 
 
         updateReadTime();
+      })
+    );
+  }
+
+  Future fetchNextMatch(int teamId) async {
+    var client = new API.MatchApi();
+    String token = Preference().getToken();
+    var result = client.getNextMatch(Config().eventNumber, token, teamId: teamId);
+    result.then(
+      (responseObj) => setState(() {
+        this._next = responseObj;
+
+        fetchNotices();
       })
     );
   }
@@ -98,7 +116,7 @@ class _NotificationsState extends State<Notifications> with AutomaticKeepAliveCl
             );
           }
           if (i == 1) {
-            if (myTeam == null) {
+            if (myTeam == null || _next.nextMatch == null || _next.nextMatch.opponentTeam == null) {
               return Container();
             }
             return new Container(
@@ -115,7 +133,7 @@ class _NotificationsState extends State<Notifications> with AutomaticKeepAliveCl
             );
           }
           if (i == 2) {
-            if (myTeam == null) {
+            if (myTeam == null || _next.nextMatch == null || _next.nextMatch.opponentTeam == null) {
               return Container();
             }
             return new Container(
@@ -139,7 +157,7 @@ class _NotificationsState extends State<Notifications> with AutomaticKeepAliveCl
                     children: <Widget>[
                       Container(
                         height: 14.0,
-                        child: Text('予選 ROUND1 B卓 第4試合', style: nextMatchTitleStyle),
+                        child: Text(_next.nextMatch.roundName + " " + _next.nextMatch.room.name + " 第" + _next.nextMatch.matchOrderInRoom.toString() + "試合", style: nextMatchTitleStyle),
                         ),
                       Container(
                         height: 36.0,
@@ -147,7 +165,7 @@ class _NotificationsState extends State<Notifications> with AutomaticKeepAliveCl
                           mainAxisSize: MainAxisSize.max,
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: <Widget>[
-                            Text('AplatoonZZZからあげ定食', style: nextMatchNameStyle, maxLines: 1,),
+                            Text(_next.nextMatch.opponentTeam.name, style: nextMatchNameStyle, maxLines: 1,),
                             Text('戦', style: nextMatchNameStyle),
                           ],
                         ),
