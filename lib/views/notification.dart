@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import "package:intl/intl.dart";
 import 'package:splathon_app/styles/text.dart';
 import 'package:splathon_app/styles/color.dart';
 import 'package:splathon_app/views/roundedView.dart';
 import 'package:english_words/english_words.dart';
 import 'package:splathon_app/utils/preference.dart';
+import 'package:splathon_app/utils/config.dart';
 import 'dart:async';
 import 'package:openapi/api.dart' as API;
 
@@ -17,6 +19,7 @@ class Notifications extends StatefulWidget {
 }
 
 class _NotificationsState extends State<Notifications> with AutomaticKeepAliveClientMixin {
+  API.ListNoticesResponse _model;
   int notificationCount = 10;
   API.Team myTeam;
 
@@ -36,16 +39,32 @@ class _NotificationsState extends State<Notifications> with AutomaticKeepAliveCl
   @override
   bool get wantKeepAlive => true;
 
+  Future fetchNotices() async {
+    var client = new API.DefaultApi();
+    String token = Preference().getToken();
+    var result = client.listNotices(Config().eventNumber, token);
+    result.then(
+      (responseObj) => setState(() { this._model = responseObj; } )
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return buildNotifications();
   }
 
   Widget buildNotifications() {
+    if (_model == null) {
+      // Loading
+      return new Center(
+        child: const CircularProgressIndicator(),
+      );
+    }
+
     return Container(
       color: backgroundColor,
        child: new ListView.builder(
-        itemCount: 10 + 4,
+        itemCount: _model.notices.length + 4,
         itemBuilder: (BuildContext context, i) {
           if (i == 0) {
             if (myTeam == null) {
@@ -142,7 +161,8 @@ class _NotificationsState extends State<Notifications> with AutomaticKeepAliveCl
           }
 
           final index = i - 4;
-          final isLast = index == notificationCount - 1;
+          final isLast = index == _model.notices.length - 1;
+          final notice = _model.notices[index];
           return new Container(
             decoration: notificationDecoration(index),
             margin: isLast ? const EdgeInsets.only(left: 20, right: 20, bottom: 20) : const EdgeInsets.only(left: 20, right: 20),
@@ -155,7 +175,7 @@ class _NotificationsState extends State<Notifications> with AutomaticKeepAliveCl
                     padding: const EdgeInsets.only(left: 14),
                     child: Column(
                       children: <Widget>[
-                        Text('9:00', style: nextMatchTitleStyle, maxLines: 1, ),
+                        Text(timeString(notice.timestampSec * 1000), style: nextMatchTitleStyle, maxLines: 1, ),
                         accentNewView(),
                       ],
                     ),
@@ -166,7 +186,7 @@ class _NotificationsState extends State<Notifications> with AutomaticKeepAliveCl
                   new Expanded(            
                     child: Padding(
                       padding: const EdgeInsets.only(right: 10),
-                      child: Text('いよいよ明日3月26日午前9:00から「スプラトゥーン2 特別体験版」の体験期間がスタートする。 4月1日午前8:59までの期間限定で、「スプラトゥーン2」のオンラインプレイが無料で体験できるぞ。ぽよぽよぽよぽよぽよぽよぽよぽよぽよぽよぽよぽよぽよぽよぽよ', style: notificationStyle, ),
+                      child: Text(notice.text, style: notificationStyle, ),
                     ),
                   ),
                 ],
@@ -176,6 +196,13 @@ class _NotificationsState extends State<Notifications> with AutomaticKeepAliveCl
         }
       ),
     );
+  }
+
+  String timeString(int timeMillisecondsSince1970) {
+    final dateTime = DateTime.fromMillisecondsSinceEpoch(timeMillisecondsSince1970);
+    final formatter = new DateFormat('MM/dd\nHH:mm', "ja_JP");
+    final formattedDateString = formatter.format(dateTime);
+    return formattedDateString;
   }
 
   BoxDecoration notificationDecoration(int index) {
