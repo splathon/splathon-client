@@ -25,11 +25,7 @@ class _EachResultState extends State<EachResult> with AutomaticKeepAliveClientMi
   void initState() {
     super.initState();
 
-    
-
-    fetchTeams().then((_) {
-      
-    });
+    fetchTeams();
   }
 
   @override
