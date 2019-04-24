@@ -3,7 +3,7 @@ part of openapi.api;
 class Room {
   /* Room ID. */
   int id = null;
-  
+  /* Room name. e.g. A卓 */
   String name = null;
   
   List<Match> matches = [];

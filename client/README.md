@@ -72,6 +72,7 @@ Class | Method | HTTP request | Description
 *DefaultApi* | [**listTeams**](docs//DefaultApi.md#listteams) | **GET** /v{eventId}/teams | 
 *DefaultApi* | [**login**](docs//DefaultApi.md#login) | **POST** /v{eventId}/login | 
 *MatchApi* | [**getMatch**](docs//MatchApi.md#getmatch) | **GET** /v{eventId}/matches/{matchId} | 
+*MatchApi* | [**getNextMatch**](docs//MatchApi.md#getnextmatch) | **GET** /v{eventId}/next-match | 
 *MatchApi* | [**updateBattle**](docs//MatchApi.md#updatebattle) | **POST** /v{eventId}/matches/{matchId} | 
 *RankingApi* | [**getRanking**](docs//RankingApi.md#getranking) | **GET** /v{eventId}/ranking | 
 *ReceptionApi* | [**completeReception**](docs//ReceptionApi.md#completereception) | **POST** /v{eventId}/reception/{splathonReceptionCode}/complete | 
@@ -85,12 +86,15 @@ Class | Method | HTTP request | Description
  - [Battle](docs//Battle.md)
  - [Error](docs//Error.md)
  - [Event](docs//Event.md)
+ - [GetNextMatchResponse](docs//GetNextMatchResponse.md)
  - [ListNoticesResponse](docs//ListNoticesResponse.md)
  - [LoginRequest](docs//LoginRequest.md)
  - [LoginResponse](docs//LoginResponse.md)
  - [Match](docs//Match.md)
  - [Member](docs//Member.md)
  - [MemberDetail](docs//MemberDetail.md)
+ - [NextMatch](docs//NextMatch.md)
+ - [NextMatchRoom](docs//NextMatchRoom.md)
  - [Notice](docs//Notice.md)
  - [ParticipantReception](docs//ParticipantReception.md)
  - [Rank](docs//Rank.md)
