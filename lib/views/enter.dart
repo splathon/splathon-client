@@ -4,6 +4,7 @@ import 'package:splathon_app/styles/color.dart';
 import 'package:splathon_app/utils/preference.dart';
 import 'package:splathon_app/utils/config.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:splathon_app/utils/event.dart';
 import 'dart:async';
 import 'package:openapi/api.dart' as API;
 
@@ -25,6 +26,7 @@ class _EnterState extends State<Enter> with AutomaticKeepAliveClientMixin {
   void initState() {
     super.initState();
     fetchData();
+    listenReloadEvent();
   }
 
   @override
@@ -37,6 +39,24 @@ class _EnterState extends State<Enter> with AutomaticKeepAliveClientMixin {
     result.then(
       (resultsObj) => setState(() { this._model = resultsObj; } )
     );
+  }
+
+  listenReloadEvent() async {
+    if (_isBuilding) {
+      Event().bus.on<EnterBuildingReload>().listen((_) {
+        setState(() {
+          _model = null;
+          fetchData();
+        });
+      });
+    } else {
+      Event().bus.on<EnterSplathonReload>().listen((_) {
+        setState(() {
+          _model = null;
+          fetchData();
+        });
+      });
+    }
   }
   
   @override

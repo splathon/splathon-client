@@ -3,52 +3,82 @@ import 'package:splathon_app/styles/text.dart';
 import 'package:splathon_app/styles/color.dart';
 import 'package:splathon_app/views/myresult.dart';
 import 'package:splathon_app/views/allresult.dart';
-import 'package:splathon_app/views/resultdetail.dart';
+import 'package:splathon_app/utils/event.dart';
 
-/**
- * Reference Google Sample Code
- * https://flutter.dev/docs/catalog/samples/tabbed-app-bar
- */
-class ResultTabbedBar extends StatelessWidget {
+class ResultTabbedBar extends StatefulWidget {
+  ResultTabbedBar({Key key}) : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() {
+    return _ResultTabbedBarState();
+  }
+}
+
+class _ResultTabbedBarState extends State<ResultTabbedBar> with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
+  TabController controller;
+
+  @override
+  void initState() {
+    super.initState();
+
+    controller = TabController(length: 2, vsync: this);
+    listenReloadEvent();
+  }
+
+  @override
+  bool get wantKeepAlive => true;
+
+  listenReloadEvent() async {
+    Event().bus.on<ResultReload>().listen((_) {
+      switch (controller.index) {
+        case 0:
+          Event().bus.fire(MyResultReload());
+          return;
+        case 1:
+          Event().bus.fire(AllResultReload());
+          return;     
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
       color: backgroundColor,
-      child: DefaultTabController(
-        length: choices.length,
-        child: new Stack(
-          children: <Widget>[
-            TabBarView(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 60.0),
-                  child: EachResult(),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 60.0),
-                  child: AllResult(),//ResultDetail(),
-                ),
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 20.0, left: 20.0, right: 20.0),
-              child: TabBar(
-                isScrollable: false,
-                indicatorColor: splaBlueColor,
-                labelColor: splaBlueColor,
-                labelStyle: tabStyle,
-                tabs: choices.map((TabView tabView) {
-                  return new Container(
-                    height: 40.0,
-                    child: new Tab(
-                      text: tabView.title,
-                    ),
-                  );
-                }).toList(),
+      child: new Stack(
+        children: <Widget>[
+          TabBarView(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 60.0),
+                child: EachResult(),
               ),
+              Padding(
+                padding: const EdgeInsets.only(top: 60.0),
+                child: AllResult(),//ResultDetail(),
+              ),
+            ],
+            controller: controller,
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 20.0, left: 20.0, right: 20.0),
+            child: TabBar(
+              isScrollable: false,
+              indicatorColor: splaBlueColor,
+              labelColor: splaBlueColor,
+              labelStyle: tabStyle,
+              tabs: choices.map((TabView tabView) {
+                return new Container(
+                  height: 40.0,
+                  child: new Tab(
+                    text: tabView.title,
+                  ),
+                );
+              }).toList(),
+              controller: controller,
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

@@ -6,6 +6,7 @@ import 'package:english_words/english_words.dart';
 import 'package:splathon_app/views/resultdetail.dart';
 import 'package:splathon_app/utils/preference.dart';
 import 'package:splathon_app/utils/config.dart';
+import 'package:splathon_app/utils/event.dart';
 import 'package:splathon_app/views/customExpansionTile.dart' as CustomView;
 import 'dart:async';
 import 'package:openapi/api.dart' as API;
@@ -27,6 +28,7 @@ class _AllResultState extends State<AllResult> with AutomaticKeepAliveClientMixi
   void initState() {
     super.initState();
     fetchData();
+    listenReloadEvent();
   }
 
   @override
@@ -44,6 +46,15 @@ class _AllResultState extends State<AllResult> with AutomaticKeepAliveClientMixi
     result.then(
       (resultsObj) => setState(() { this._model = resultsObj; } )
     );
+  }
+
+  listenReloadEvent() async {
+    Event().bus.on<AllResultReload>().listen((_) {
+      setState(() {
+        _model = null;
+        fetchData();
+      });
+    });
   }
 
   Widget buildAllResult() {

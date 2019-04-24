@@ -2,47 +2,82 @@ import 'package:flutter/material.dart';
 import 'package:splathon_app/styles/text.dart';
 import 'package:splathon_app/styles/color.dart';
 import 'package:splathon_app/views/enter.dart';
+import 'package:splathon_app/utils/event.dart';
 
-class ReceptionTabbedBar extends StatelessWidget {
+class ReceptionTabbedBar extends StatefulWidget {
+  ReceptionTabbedBar({Key key}) : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() {
+    return _ReceptionTabbedBarState();
+  }
+}
+
+class _ReceptionTabbedBarState extends State<ReceptionTabbedBar> with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
+  TabController controller;
+
+  @override
+  void initState() {
+    super.initState();
+
+    controller = TabController(length: 2, vsync: this);
+    listenReloadEvent();
+  }
+
+  @override
+  bool get wantKeepAlive => true;
+
+  listenReloadEvent() async {
+    Event().bus.on<ReceptionReload>().listen((_) {
+      switch (controller.index) {
+        case 0:
+          Event().bus.fire(EnterBuildingReload());
+          return;
+        case 1:
+          Event().bus.fire(EnterSplathonReload());
+          return;     
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
       color: backgroundColor,
-      child: DefaultTabController(
-        length: choices.length,
-        child: new Stack(
-          children: <Widget>[
-            TabBarView(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 60.0),
-                  child: new Enter(true),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 60.0),
-                  child: new Enter(false),
-                ),
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 20.0, left: 20.0, right: 20.0),
-              child: TabBar(
-                isScrollable: false,
-                indicatorColor: splaBlueColor,
-                labelColor: splaBlueColor,
-                labelStyle: tabStyle,
-                tabs: choices.map((TabView tabView) {
-                  return new Container(
-                    height: 40.0,
-                    child: new Tab(
-                      text: tabView.title,
-                    ),
-                  );
-                }).toList(),
+      child: new Stack(
+        children: <Widget>[
+          TabBarView(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 60.0),
+                child: new Enter(true),
               ),
-            )
-          ],
-        ),
+              Padding(
+                padding: const EdgeInsets.only(top: 60.0),
+                child: new Enter(false),
+              ),
+            ],
+            controller: controller,
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 20.0, left: 20.0, right: 20.0),
+            child: TabBar(
+              isScrollable: false,
+              indicatorColor: splaBlueColor,
+              labelColor: splaBlueColor,
+              labelStyle: tabStyle,
+              tabs: choices.map((TabView tabView) {
+                return new Container(
+                  height: 40.0,
+                  child: new Tab(
+                    text: tabView.title,
+                  ),
+                );
+              }).toList(),
+              controller: controller,
+            ),
+          )
+        ],
       ),
     );
   }

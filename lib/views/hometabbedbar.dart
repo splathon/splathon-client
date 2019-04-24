@@ -6,6 +6,7 @@ import 'package:splathon_app/views/notification.dart';
 import 'package:splathon_app/views/reception.dart';
 import 'package:splathon_app/views/rankings.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:splathon_app/utils/event.dart';
 
 /**
  * Reference
@@ -35,12 +36,35 @@ class HomeTabbedBarState extends State<HomeTabbedBar> with SingleTickerProviderS
     super.dispose();
   }
 
+  reload() {
+    switch (controller.index) {
+      case 0:
+        Event().bus.fire(NotificationReload());
+        return;
+      case 1:
+        Event().bus.fire(ResultReload());
+        return;
+      case 2:
+        Event().bus.fire(RankingReload());
+        return;
+      case 3:
+        Event().bus.fire(ReceptionReload());
+        return;      
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
         title: SplaText('Splathon #10'),
         backgroundColor: Color.fromRGBO(11, 49, 143, 1),
+        actions: <Widget>[
+          IconButton(
+            icon: Image.asset('assets/images/reloadIcon.png'),
+            onPressed: reload,
+          ),
+        ],
       ),
       body: new TabBarView(
         physics: NeverScrollableScrollPhysics(),

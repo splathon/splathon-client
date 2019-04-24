@@ -6,6 +6,7 @@ import 'package:english_words/english_words.dart';
 import 'package:splathon_app/views/resultdetail.dart';
 import 'package:splathon_app/utils/preference.dart';
 import 'package:splathon_app/utils/config.dart';
+import 'package:splathon_app/utils/event.dart';
 import 'dart:async';
 import 'package:openapi/api.dart' as API;
 
@@ -26,6 +27,7 @@ class _EachResultState extends State<EachResult> with AutomaticKeepAliveClientMi
     super.initState();
 
     fetchTeams();
+    listenReloadEvent();
   }
 
   @override
@@ -57,6 +59,16 @@ class _EachResultState extends State<EachResult> with AutomaticKeepAliveClientMi
     result.then(
       (resultsObj) => setState(() { this._results = resultsObj; } )
     );
+  }
+
+  listenReloadEvent() async {
+    Event().bus.on<MyResultReload>().listen((_) {
+      setState(() {
+        _model = null;
+        _results = null;
+        fetchTeams();
+      });
+    });
   }
 
   void changedTeam(String teamName) {

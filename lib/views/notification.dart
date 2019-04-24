@@ -7,6 +7,7 @@ import 'package:splathon_app/views/roundedView.dart';
 import 'package:english_words/english_words.dart';
 import 'package:splathon_app/utils/preference.dart';
 import 'package:splathon_app/utils/config.dart';
+import 'package:splathon_app/utils/event.dart';
 import 'dart:async';
 import 'package:openapi/api.dart' as API;
 
@@ -42,11 +43,29 @@ class _NotificationsState extends State<Notifications> with AutomaticKeepAliveCl
       fetchNextMatch(myTeam.id);
     } else {
       fetchNotices();
-    }    
+    }
+
+    listenReloadEvent();
   }
 
   @override
   bool get wantKeepAlive => true;
+
+  listenReloadEvent() async {
+    Event().bus.on<NotificationReload>().listen((_) {
+      setState(() {
+        _model = null;
+        _next = null;
+
+        alreadyReadTime = Preference().getNoticeReadTime();
+        if (myTeam != null) {
+          fetchNextMatch(myTeam.id);
+        } else {
+          fetchNotices();
+        }
+      });
+    });
+  }
 
   Future fetchNotices() async {
     var client = new API.DefaultApi();
