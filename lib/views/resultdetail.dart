@@ -3,6 +3,7 @@ import 'package:splathon_app/styles/text.dart';
 import 'package:splathon_app/styles/color.dart';
 import 'package:splathon_app/views/report.dart';
 import 'package:splathon_app/views/Image.dart';
+import 'package:splathon_app/views/roundedView.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:splathon_app/utils/preference.dart';
@@ -198,16 +199,9 @@ class _ResultDetailState extends State<ResultDetail> {
                   Row(
                     children: <Widget>[
                       Container(
-                        padding: const EdgeInsets.only(left: 10.0, right: 10.0,),
+                        padding: const EdgeInsets.only(left: 2.0, right: 2.0,),
                         width: 50,
-                        height: 17.0,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10.0),
-                          color: isWinAlpha ? winColor : loseColor,
-                        ),
-                        child: Center(
-                          child: Text(isWinAlpha ? 'WIN' : 'LOSE', style: resultResultStyle),
-                        ),
+                        child: isWinAlpha ? accentWinView() : accentLoseView(),
                       ),
                       SizedBox(width: 8,),
                       Text(_match.teamAlpha.name, style: resultDetailTeamNameStyle,),
@@ -216,16 +210,9 @@ class _ResultDetailState extends State<ResultDetail> {
                   Row(
                     children: <Widget>[
                       Container(
-                        padding: const EdgeInsets.only(left: 10.0, right: 10.0,),
+                        padding: const EdgeInsets.only(left: 2.0, right: 2.0,),
                         width: 50,
-                        height: 17.0,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10.0),
-                          color: isWinAlpha ? loseColor : winColor,
-                        ),
-                        child: Center(
-                          child: Text(isWinAlpha ? 'LOSE' : 'WIN', style: resultResultStyle),
-                        ),
+                        child: isWinAlpha ? accentLoseView() : accentWinView(),
                       ),
                       SizedBox(width: 8,),
                       Text(_match.teamBravo.name, style: resultDetailTeamNameStyle,),
@@ -287,24 +274,28 @@ class _ResultDetailState extends State<ResultDetail> {
         Row(
           children: <Widget>[
             CharactorImage(_match.teamAlpha.members[0].icon),
+            SizedBox(width: 5,),
             Text(_match.teamAlpha.members[0].name, style: resultPlayerNameStyle),
           ],
         ),
         Row(
           children: <Widget>[
             CharactorImage(_match.teamAlpha.members[1].icon),
+            SizedBox(width: 5,),
             Text(_match.teamAlpha.members[1].name, style: resultPlayerNameStyle),
           ],
         ),
         Row(
           children: <Widget>[
             CharactorImage(_match.teamAlpha.members[2].icon),
+            SizedBox(width: 5,),
             Text(_match.teamAlpha.members[2].name, style: resultPlayerNameStyle),
           ],
         ),
         Row(
           children: <Widget>[
             CharactorImage(_match.teamAlpha.members[3].icon),
+            SizedBox(width: 5,),
             Text(_match.teamAlpha.members[3].name, style: resultPlayerNameStyle),
           ],
         ),
@@ -324,24 +315,28 @@ class _ResultDetailState extends State<ResultDetail> {
         Row(
           children: <Widget>[
             CharactorImage(_match.teamBravo.members[0].icon),
+            SizedBox(width: 5,),
             Text(_match.teamBravo.members[0].name, style: resultPlayerNameStyle),
           ],
         ),
         Row(
           children: <Widget>[
             CharactorImage(_match.teamBravo.members[1].icon),
+            SizedBox(width: 5,),
             Text(_match.teamBravo.members[1].name, style: resultPlayerNameStyle),
           ],
         ),
         Row(
           children: <Widget>[
             CharactorImage(_match.teamBravo.members[2].icon),
+            SizedBox(width: 5,),
             Text(_match.teamBravo.members[2].name, style: resultPlayerNameStyle),
           ],
         ),
         Row(
           children: <Widget>[
             CharactorImage(_match.teamBravo.members[3].icon),
+            SizedBox(width: 5,),
             Text(_match.teamBravo.members[3].name, style: resultPlayerNameStyle),
           ],
         ),
