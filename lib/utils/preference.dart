@@ -50,6 +50,14 @@ class Preference {
     prefs.setString('TeamName', teamName);
   }
 
+  int getNoticeReadTime() {
+    return prefs.getInt('NoticeReadTime');
+  }
+
+  setNoticeReadTime(int unixTime) {
+    prefs.setInt('NoticeReadTime', unixTime);
+  }
+
   // Private constractor
   Preference._internal();
 }

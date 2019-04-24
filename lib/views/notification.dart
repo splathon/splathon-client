@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import "package:intl/intl.dart";
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:splathon_app/styles/text.dart';
 import 'package:splathon_app/styles/color.dart';
 import 'package:splathon_app/views/roundedView.dart';
@@ -22,6 +23,7 @@ class _NotificationsState extends State<Notifications> with AutomaticKeepAliveCl
   API.ListNoticesResponse _model;
   int notificationCount = 10;
   API.Team myTeam;
+  int alreadyReadTime;
 
   @override
   void initState() {
@@ -34,6 +36,9 @@ class _NotificationsState extends State<Notifications> with AutomaticKeepAliveCl
       myTeam.id = teamId;
       myTeam.name = teamName;
     }
+
+    alreadyReadTime = Preference().getNoticeReadTime();
+    fetchNotices();
   }
 
   @override
@@ -44,13 +49,22 @@ class _NotificationsState extends State<Notifications> with AutomaticKeepAliveCl
     String token = Preference().getToken();
     var result = client.listNotices(Config().eventNumber, token);
     result.then(
-      (responseObj) => setState(() { this._model = responseObj; } )
+      (responseObj) => setState(() { 
+        this._model = responseObj; 
+
+        updateReadTime();
+      })
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return buildNotifications();
+  }
+
+  void updateReadTime() {
+    final secounds = DateTime.now().millisecondsSinceEpoch;
+    Preference().setNoticeReadTime(secounds);
   }
 
   Widget buildNotifications() {
@@ -175,8 +189,26 @@ class _NotificationsState extends State<Notifications> with AutomaticKeepAliveCl
                     padding: const EdgeInsets.only(left: 14),
                     child: Column(
                       children: <Widget>[
-                        Text(timeString(notice.timestampSec * 1000), style: nextMatchTitleStyle, maxLines: 1, ),
-                        accentNewView(),
+                        SizedBox(
+                          height: 40,
+                          width: 50,
+                          child: Stack(
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.only(left: 4),
+                                child: Text(dateString(notice.timestampSec * 1000), style: nextMatchTitleStyle, maxLines: 1, ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 15, left: 8),
+                                child: Text(timeString(notice.timestampSec * 1000), style: nextMatchTitleStyle, maxLines: 1, ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Container(
+                          margin: const EdgeInsets.only(bottom: 5),
+                          child: isAlreadyRead(notice.timestampSec * 1000) ? Container() : accentNewView(),
+                        ),
                       ],
                     ),
                   ),
@@ -198,11 +230,29 @@ class _NotificationsState extends State<Notifications> with AutomaticKeepAliveCl
     );
   }
 
-  String timeString(int timeMillisecondsSince1970) {
+  String dateString(int timeMillisecondsSince1970) {
+    initializeDateFormatting("ja_JP");
     final dateTime = DateTime.fromMillisecondsSinceEpoch(timeMillisecondsSince1970);
-    final formatter = new DateFormat('MM/dd\nHH:mm', "ja_JP");
+    final formatter = new DateFormat('MM/dd', "ja_JP");
     final formattedDateString = formatter.format(dateTime);
     return formattedDateString;
+  }
+
+  String timeString(int timeMillisecondsSince1970) {
+    initializeDateFormatting("ja_JP");
+    final dateTime = DateTime.fromMillisecondsSinceEpoch(timeMillisecondsSince1970);
+    final formatter = new DateFormat('HH:mm', "ja_JP");
+    //formatter.locale = .current;
+    final formattedDateString = formatter.format(dateTime);
+    return formattedDateString;
+  }
+
+  bool isAlreadyRead(int timeMillisecondsSince1970) {
+    if (alreadyReadTime == null) {
+      return false;
+    }
+
+    return alreadyReadTime > timeMillisecondsSince1970;
   }
 
   BoxDecoration notificationDecoration(int index) {
