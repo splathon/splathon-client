@@ -68,6 +68,7 @@ Class | Method | HTTP request | Description
 *AdminApi* | [**updateBattle**](docs//AdminApi.md#updatebattle) | **POST** /v{eventId}/matches/{matchId} | 
 *DefaultApi* | [**getEvent**](docs//DefaultApi.md#getevent) | **GET** /v{eventId}/event | 
 *DefaultApi* | [**getTeamDetail**](docs//DefaultApi.md#getteamdetail) | **GET** /v{eventId}/teams/{team_id} | 
+*DefaultApi* | [**listNotices**](docs//DefaultApi.md#listnotices) | **GET** /v{eventId}/notices | 
 *DefaultApi* | [**listTeams**](docs//DefaultApi.md#listteams) | **GET** /v{eventId}/teams | 
 *DefaultApi* | [**login**](docs//DefaultApi.md#login) | **POST** /v{eventId}/login | 
 *MatchApi* | [**getMatch**](docs//MatchApi.md#getmatch) | **GET** /v{eventId}/matches/{matchId} | 
@@ -84,11 +85,13 @@ Class | Method | HTTP request | Description
  - [Battle](docs//Battle.md)
  - [Error](docs//Error.md)
  - [Event](docs//Event.md)
+ - [ListNoticesResponse](docs//ListNoticesResponse.md)
  - [LoginRequest](docs//LoginRequest.md)
  - [LoginResponse](docs//LoginResponse.md)
  - [Match](docs//Match.md)
  - [Member](docs//Member.md)
  - [MemberDetail](docs//MemberDetail.md)
+ - [Notice](docs//Notice.md)
  - [ParticipantReception](docs//ParticipantReception.md)
  - [Rank](docs//Rank.md)
  - [Ranking](docs//Ranking.md)

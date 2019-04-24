@@ -11,6 +11,7 @@ Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**getEvent**](DefaultApi.md#getEvent) | **GET** /v{eventId}/event | 
 [**getTeamDetail**](DefaultApi.md#getTeamDetail) | **GET** /v{eventId}/teams/{team_id} | 
+[**listNotices**](DefaultApi.md#listNotices) | **GET** /v{eventId}/notices | 
 [**listTeams**](DefaultApi.md#listTeams) | **GET** /v{eventId}/teams | 
 [**login**](DefaultApi.md#login) | **POST** /v{eventId}/login | 
 
@@ -91,6 +92,51 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**Team**](Team.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json; charset=utf-8
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **listNotices**
+> ListNoticesResponse listNotices(eventId, X_SPLATHON_API_TOKEN)
+
+
+
+Return notices
+
+### Example 
+```dart
+import 'package:openapi/api.dart';
+
+var api_instance = new DefaultApi();
+var eventId = 789; // int | 
+var X_SPLATHON_API_TOKEN = X_SPLATHON_API_TOKEN_example; // String | 
+
+try { 
+    var result = api_instance.listNotices(eventId, X_SPLATHON_API_TOKEN);
+    print(result);
+} catch (e) {
+    print("Exception when calling DefaultApi->listNotices: $e\n");
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **eventId** | **int**|  | [default to null]
+ **X_SPLATHON_API_TOKEN** | **String**|  | [default to null]
+
+### Return type
+
+[**ListNoticesResponse**](ListNoticesResponse.md)
 
 ### Authorization
 
