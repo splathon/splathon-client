@@ -325,9 +325,45 @@ class _ReportState extends State<Report> {
         pop();
       })
     )
-    .catchError((onError) => setState(() {
-      pop();
-    })
+    .catchError(
+      (onError) {
+        buildDialog(context, 'エラー', '登録に失敗しました');
+      }
+    );
+  }
+
+  buildDialog(BuildContext context, String title, String message) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext build) {
+        return new AlertDialog(
+          titlePadding: EdgeInsets.all(0),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10))
+          ),
+          title: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(10),
+                topRight: Radius.circular(10),
+              ),
+              color: splaBlueColor,
+            ),
+            padding: const EdgeInsets.all(10),
+            child: Center(child: Text(title, style: popupTitleStyle,),),
+          ),
+          content: Text('$message', style: popupMessageStyle,),
+          actions: <Widget>[
+            FlatButton(
+              child: const Text('CLOSE'),
+              onPressed: () {
+                pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -351,5 +387,17 @@ class _ReportState extends State<Report> {
     fontFamily: 'Splatfont',
     color: blackColor,
     fontSize: 20.0,
+  );
+
+  static const TextStyle popupTitleStyle = TextStyle(
+    fontFamily: 'Splatfont',
+    color: Colors.white,
+    fontSize: 20.0,
+  );
+
+  static const TextStyle popupMessageStyle = TextStyle(
+    fontFamily: 'Splatfont',
+    color: blackColor,
+    fontSize: 16.0,
   );
 }
