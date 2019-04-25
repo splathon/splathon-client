@@ -43,7 +43,7 @@ class _AcceptState extends State<Accept> with AutomaticKeepAliveClientMixin {
   Future<Null> setupCameras() async {
     cameras = await availableCameras();
 
-    controller = new QRReaderController(cameras[0], ResolutionPreset.medium, [CodeFormat.qr], (dynamic value){
+    controller = new QRReaderController(cameras[0], ResolutionPreset.high, [CodeFormat.qr], (dynamic value){
       confirmAccept(value);
       scannedCode = value;
       new Future.delayed(const Duration(seconds: 3), controller.startScanning);
