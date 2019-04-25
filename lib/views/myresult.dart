@@ -213,7 +213,7 @@ class _EachResultState extends State<EachResult> with AutomaticKeepAliveClientMi
                       ],
                     ),
                   ),
-                  Image.asset('assets/images/arrowRight.png')
+                  (match.winner == null) ? SizedBox(width: 20,) : Image.asset('assets/images/arrowRight.png')
                 ],
               ),
             ),

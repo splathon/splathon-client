@@ -254,7 +254,7 @@ class _MatchItemState extends State<MatchItem> {
                 ],
               ),
             ),
-            Image.asset('assets/images/arrowRight.png')
+            (match.winner == null && !isAdmin) ? SizedBox(width: 20,) : Image.asset('assets/images/arrowRight.png')
           ],
         ),
       ),
