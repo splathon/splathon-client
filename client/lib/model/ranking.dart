@@ -1,22 +1,26 @@
 part of openapi.api;
 
 class Ranking {
+  /* ランキング計算時点の説明。e.g. 予選第2ラウンド終了時 */
+  String rankTime = null;
   
   List<Rank> rankings = [];
   Ranking();
 
   @override
   String toString() {
-    return 'Ranking[rankings=$rankings, ]';
+    return 'Ranking[rankTime=$rankTime, rankings=$rankings, ]';
   }
 
   Ranking.fromJson(Map<String, dynamic> json) {
     if (json == null) return;
+    rankTime = json['rank_time'];
     rankings = Rank.listFromJson(json['rankings']);
   }
 
   Map<String, dynamic> toJson() {
     return {
+      'rank_time': rankTime,
       'rankings': rankings
     };
   }

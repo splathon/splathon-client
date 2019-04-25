@@ -67,11 +67,23 @@ class _RankingsState extends State<Rankings> with AutomaticKeepAliveClientMixin 
     return Container(
       color: backgroundColor,
       child: ListView.builder(
-        itemCount: _model.rankings.length * 2,
+        itemCount: _model.rankings.length * 2 + 1,
         itemBuilder: (BuildContext context, i) {
-          final index = i ~/ 2;
+          if (i == 0) {
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.only(top: 2, right: 20),
+                  child: Text(_model.rankTime, style: timeStyle),
+                ),                
+              ],
+            );
+          }
+
+          final index = (i - 1) ~/ 2;
           API.Rank rank = _model.rankings[index];
-          if (!i.isOdd) {
+          if (i.isOdd) {
             return headerView(index, rank);
           }
 
@@ -128,7 +140,7 @@ class _RankingsState extends State<Rankings> with AutomaticKeepAliveClientMixin 
     final rankIndex = index + 1; // rankIndex: 1..N
     final isTop3 = rankIndex <= 3;
     return Container(
-      margin: const EdgeInsets.only(top: 12, left: 20, right: 20),
+      margin: index == 0 ? const EdgeInsets.only(left: 20, right: 20) : const EdgeInsets.only(top: 12, left: 20, right: 20),
       height: 36.0,
       child: Row(
         children: <Widget>[
@@ -185,6 +197,11 @@ class _RankingsState extends State<Rankings> with AutomaticKeepAliveClientMixin 
   static const TextStyle nameStyle = TextStyle(
     fontFamily: 'Splatfont',
     color: blackColor,
+    fontSize: 14.0,
+  );
+  static const TextStyle timeStyle = TextStyle(
+    fontFamily: 'Splatfont',
+    color: grayColor,
     fontSize: 14.0,
   );
 
