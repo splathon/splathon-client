@@ -134,100 +134,192 @@ class _AcceptState extends State<Accept> with AutomaticKeepAliveClientMixin {
         children: <Widget>[
           Container(
             margin: const EdgeInsets.only(top: 10, left: 20, right: 20),
-            child: new Stack(
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
-                Image.asset('assets/images/goldInc.png'),
-                Padding(
-                  padding: const EdgeInsets.only(left: 12),
-                  child: Text('名前', style: headerStyle),
+                Container(
+                  child: Stack(
+                    children: <Widget>[
+                      Image.asset('assets/images/goldInc.png'),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 12),
+                        child: Text('名前', style: headerStyle),
+                      ),
+                    ],
+                  ),
                 ),
+                Expanded(
+                  child: Container(),
+                ),
+                Container(
+                  child: Text(reception.fullnameKana +' さん', style: headerStyle, maxLines: 1,),
+                )
               ],
             ),
           ),
           Container(
-            margin: const EdgeInsets.only(left: 20, right: 20),
-            child: Text(reception.fullnameKana + '(' +  reception.nickname + ') さん', style: headerStyle, maxLines: 1,),
+            margin: const EdgeInsets.only(top: 10, left: 20, right: 20),
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Container(
+                  child: Stack(
+                    children: <Widget>[
+                      Image.asset('assets/images/silverInc.png'),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 12),
+                        child: Text('ニックネーム', style: headerStyle),
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: Container(),
+                ),
+                Container(
+                  child: Text(reception.nickname + ' さん', style: headerStyle, maxLines: 1,),
+                )
+              ],
+            ),
           ),
           Container(
             margin: const EdgeInsets.only(top:10, left: 20, right: 20),
-            child: new Stack(
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
-                Image.asset('assets/images/silverInc.png'),
-                Padding(
-                  padding: const EdgeInsets.only(left: 12),
-                  child: Text('チーム名', style: headerStyle),
+                Container(
+                  child: Stack(
+                    children: <Widget>[
+                      Image.asset('assets/images/goldInc.png'),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 12),
+                        child: Text('チーム名', style: headerStyle),
+                      ),
+                    ],
+                  ),
                 ),
+                Expanded(
+                  child: Container(),
+                ),
+                Container(
+                  child: Text(reception.teamName ??= 'チームなし', style: headerStyle, maxLines: 1,),
+                )
               ],
             ),
-          ),
-          Container(
-            margin: const EdgeInsets.only(left: 20, right: 20),
-            child: Text(reception.teamName ??= 'チームなし', style: headerStyle, maxLines: 1,),
           ),
           Container(
             margin: const EdgeInsets.only(top: 10, left: 20, right: 20),
-            child: new Stack(
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
-                Image.asset('assets/images/goldInc.png'),
-                Padding(
-                  padding: const EdgeInsets.only(left: 12),
-                  child: Text('区分', style: headerStyle),
+                Container(
+                  child: Stack(
+                    children: <Widget>[
+                      Image.asset('assets/images/silverInc.png'),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 12),
+                        child: Text('区分', style: headerStyle),
+                      ),
+                    ],
+                  ),
                 ),
+                Expanded(
+                  child: Container(),
+                ),
+                Container(
+                  child: Text(attendType(reception.isPlayer, reception.isStaff), style: headerStyle, maxLines: 1,),
+                )
               ],
             ),
           ),
           Container(
-            margin: const EdgeInsets.only(left: 20, right: 20),
-            child: Text(attendType(reception.isPlayer, reception.isStaff), style: headerStyle, maxLines: 1,),
+            margin: const EdgeInsets.only(top:10, left: 20, right: 20),
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Container(
+                  child: Stack(
+                    children: <Widget>[
+                      Image.asset('assets/images/goldInc.png'),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 12),
+                        child: Text('会費', style: headerStyle),
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: Container(),
+                ),
+                Container(
+                  child: Text(reception.participantFee.toString() + '円', style: headerStyle, maxLines: 1,),
+                )
+              ],
+            ),
           ),
           Container(
             margin: const EdgeInsets.only(top: 10, left: 20, right: 20),
-            child: new Stack(
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
-                Image.asset('assets/images/silverInc.png'),
-                Padding(
-                  padding: const EdgeInsets.only(left: 12),
-                  child: Text('会費', style: headerStyle),
+                Container(
+                  child: Stack(
+                    children: <Widget>[
+                      Image.asset('assets/images/silverInc.png'),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 12),
+                        child: Text('ドック有無', style: headerStyle),
+                      ),
+                    ],
+                  ),
                 ),
+                Expanded(
+                  child: Container(),
+                ),
+                Container(
+                  child: Text(reception.hasSwitchDock ? 'あり' : 'なし', style: headerStyle, maxLines: 1,),
+                )
               ],
             ),
           ),
           Container(
-            margin: const EdgeInsets.only(left: 20, right: 20),
-            child: Text(reception.participantFee.toString() + '円', style: headerStyle, maxLines: 1,),
-          ),
-          Container(
-            margin: const EdgeInsets.only(top: 10, left: 20, right: 20),
-            child: new Stack(
+            margin: const EdgeInsets.only(top:10, left: 20, right: 20),
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
-                Image.asset('assets/images/goldInc.png'),
-                Padding(
-                  padding: const EdgeInsets.only(left: 12),
-                  child: Text('ドック有無', style: headerStyle),
+                Container(
+                  child: Stack(
+                    children: <Widget>[
+                      Image.asset('assets/images/goldInc.png'),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 12),
+                        child: Text('懇親会', style: headerStyle),
+                      ),
+                    ],
+                  ),
                 ),
+                Expanded(
+                  child: Container(),
+                ),
+                Container(
+                  child: Text(reception.joinParty ? '参加' : '不参加', style: headerStyle, maxLines: 1,),
+                )
               ],
             ),
           ),
           Container(
-            margin: const EdgeInsets.only(left: 20, right: 20),
-            child: Text(reception.hasSwitchDock ? 'あり' : 'なし', style: headerStyle, maxLines: 1,),
-          ),
-          Container(
-            margin: const EdgeInsets.only(top: 10, left: 20, right: 20),
-            child: new Stack(
-              children: <Widget>[
-                Image.asset('assets/images/silverInc.png'),
-                Padding(
-                  padding: const EdgeInsets.only(left: 12),
-                  child: Text('懇親会', style: headerStyle),
-                ),
-              ],
-            ),
-          ),
-          Container(
-            margin: const EdgeInsets.only(left: 20, right: 20),
-            child: Text(reception.joinParty ? '参加' : '不参加', style: headerStyle, maxLines: 1,),
-          ),
+            margin: const EdgeInsets.only(top: 10),
+            color: borderColor,
+            height: 1,
+            width: double.maxFinite,
+          )
         ],
       ),
     );
@@ -235,7 +327,7 @@ class _AcceptState extends State<Accept> with AutomaticKeepAliveClientMixin {
 
   Widget completeButtonView() {
     return Container(
-      margin: const EdgeInsets.only(top: 40, left: 20, right: 20, bottom: 30),
+      margin: const EdgeInsets.only(top: 20, left: 20, right: 20, bottom: 10),
       child: Row(
         children: <Widget>[
           RaisedButton(
