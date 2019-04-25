@@ -94,8 +94,8 @@ class _RankingsState extends State<Rankings> with AutomaticKeepAliveClientMixin 
                   child: Row(
                     mainAxisSize: MainAxisSize.max,
                     children: <Widget>[
-                      memberView(getMember(rank.team.members, 0), screenWidth * 0.35),
-                      memberView(getMember(rank.team.members, 1), screenWidth * 0.35),
+                      memberView(getMember(rank.team.members, 0), screenWidth),
+                      memberView(getMember(rank.team.members, 1), screenWidth),
                     ],
                   ),
                 ),
@@ -104,8 +104,8 @@ class _RankingsState extends State<Rankings> with AutomaticKeepAliveClientMixin 
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
-                      memberView(getMember(rank.team.members, 2), screenWidth * 0.35),
-                      memberView(getMember(rank.team.members, 3), screenWidth * 0.35),
+                      memberView(getMember(rank.team.members, 2), screenWidth),
+                      memberView(getMember(rank.team.members, 3), screenWidth),
                     ],
                   ),
                 ),
@@ -147,13 +147,15 @@ class _RankingsState extends State<Rankings> with AutomaticKeepAliveClientMixin 
     ); 
   }
 
-  Widget memberView(API.Member member, double textWidth) {
+  Widget memberView(API.Member member, double screenWidth) {
     if (member == null) {
       return Expanded(
         flex: 1,
         child: Container()
       );
     }
+
+    final textWidth = (screenWidth / 2) - 65;
 
     return Expanded(
       flex: 1,
@@ -163,7 +165,7 @@ class _RankingsState extends State<Rankings> with AutomaticKeepAliveClientMixin 
           children: <Widget>[
             CharactorImage(member.icon),
             SizedBox(
-              width: 2,
+              width: 5,
             ),
             SizedBox(
               width: textWidth,
