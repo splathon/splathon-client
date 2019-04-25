@@ -91,10 +91,23 @@ class _EachResultState extends State<EachResult> with AutomaticKeepAliveClientMi
       );
     }
     
+    final rounds = _results.qualifiers + _results.tournament;
+    if (rounds.length == 0) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: <Widget>[
+           Text('試合を待て！', style: noResultTextStyle,),
+           Image.asset('assets/images/girl.png'),
+        ],
+      );
+    }
+
     double screenWidth = MediaQuery.of(context).size.width;
     
     List<String> teamNames = _model.teams.map((team) => team.name).toList();
-    final rounds = _results.qualifiers + _results.tournament;
+    
 
     return Container(
       color: backgroundColor,
@@ -272,4 +285,10 @@ class _EachResultState extends State<EachResult> with AutomaticKeepAliveClientMi
     color: Colors.white,
     fontSize: 11.0,
   );
+
+  static const TextStyle noResultTextStyle = TextStyle(
+  fontFamily: 'Splatfont',
+  color: blackColor,
+  fontSize: 26.0,
+);
 }

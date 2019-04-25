@@ -66,6 +66,17 @@ class _AllResultState extends State<AllResult> with AutomaticKeepAliveClientMixi
     }
 
     final rounds = _model.qualifiers + _model.tournament;
+    if (rounds.length == 0) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: <Widget>[
+          Text('試合を待て！', style: tableTitleStyle),
+          Image.asset('assets/images/girl.png'),
+        ],
+      );
+    }
 
     return Container(
       color: backgroundColor,
@@ -293,7 +304,7 @@ class _MatchItemState extends State<MatchItem> {
 
 const TextStyle roundClosedTitleStyle = TextStyle(
   fontFamily: 'Splatfont',
-  color: Colors.black,
+  color: blackColor,
   fontSize: 26.0,
 );
 
@@ -305,7 +316,7 @@ const TextStyle roundExpandedTitleStyle = TextStyle(
 
 const TextStyle tableTitleStyle = TextStyle(
   fontFamily: 'Splatfont',
-  color: Colors.black,
+  color: blackColor,
   fontSize: 26.0,
 );
 
