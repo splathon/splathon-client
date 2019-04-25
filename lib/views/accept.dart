@@ -149,9 +149,7 @@ class _AcceptState extends State<Accept> with AutomaticKeepAliveClientMixin {
                     ],
                   ),
                 ),
-                Expanded(
-                  child: Container(),
-                ),
+                SizedBox(width: 10,),
                 Container(
                   child: Text(reception.fullnameKana +' さん', style: headerStyle, maxLines: 1,),
                 )
@@ -175,9 +173,7 @@ class _AcceptState extends State<Accept> with AutomaticKeepAliveClientMixin {
                     ],
                   ),
                 ),
-                Expanded(
-                  child: Container(),
-                ),
+                SizedBox(width: 10,),
                 Container(
                   child: Text(reception.nickname + ' さん', style: headerStyle, maxLines: 1,),
                 )
@@ -201,9 +197,7 @@ class _AcceptState extends State<Accept> with AutomaticKeepAliveClientMixin {
                     ],
                   ),
                 ),
-                Expanded(
-                  child: Container(),
-                ),
+                SizedBox(width: 10,),
                 Container(
                   child: Text(reception.teamName ??= 'チームなし', style: headerStyle, maxLines: 1,),
                 )
@@ -227,9 +221,7 @@ class _AcceptState extends State<Accept> with AutomaticKeepAliveClientMixin {
                     ],
                   ),
                 ),
-                Expanded(
-                  child: Container(),
-                ),
+                SizedBox(width: 10,),
                 Container(
                   child: Text(attendType(reception.isPlayer, reception.isStaff), style: headerStyle, maxLines: 1,),
                 )
@@ -253,9 +245,7 @@ class _AcceptState extends State<Accept> with AutomaticKeepAliveClientMixin {
                     ],
                   ),
                 ),
-                Expanded(
-                  child: Container(),
-                ),
+                SizedBox(width: 10,),
                 Container(
                   child: Text(reception.participantFee.toString() + '円', style: headerStyle, maxLines: 1,),
                 )
@@ -279,9 +269,7 @@ class _AcceptState extends State<Accept> with AutomaticKeepAliveClientMixin {
                     ],
                   ),
                 ),
-                Expanded(
-                  child: Container(),
-                ),
+                SizedBox(width: 10,),
                 Container(
                   child: Text(reception.hasSwitchDock ? 'あり' : 'なし', style: headerStyle, maxLines: 1,),
                 )
@@ -305,9 +293,7 @@ class _AcceptState extends State<Accept> with AutomaticKeepAliveClientMixin {
                     ],
                   ),
                 ),
-                Expanded(
-                  child: Container(),
-                ),
+                SizedBox(width: 10,),
                 Container(
                   child: Text(reception.joinParty ? '参加' : '不参加', style: headerStyle, maxLines: 1,),
                 )
