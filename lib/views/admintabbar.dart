@@ -4,6 +4,7 @@ import 'package:splathon_app/styles/color.dart';
 import 'package:splathon_app/views/allresult.dart';
 import 'package:splathon_app/views/accept.dart';
 import 'package:splathon_app/views/customTabs.dart' as CustomView;
+import 'package:splathon_app/utils/event.dart';
 
 class AdminTabbedBar extends StatefulWidget {
   @override
@@ -26,12 +27,28 @@ class AdminTabbedBarState extends State<AdminTabbedBar> with SingleTickerProvide
     super.dispose();
   }
 
+  reload() {
+    switch (controller.index) {
+      case 0:
+        Event().bus.fire(AllResultReload());
+        return;
+      case 1:
+        return;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
         title: SplaText('Splathon #10 for Admin'),
         backgroundColor: Color.fromRGBO(11, 49, 143, 1),
+        actions: <Widget>[
+          IconButton(
+            icon: Image.asset('assets/images/reloadIcon.png'),
+            onPressed: reload,
+          ),
+        ],
       ),
       body: new TabBarView(
         physics: NeverScrollableScrollPhysics(),
