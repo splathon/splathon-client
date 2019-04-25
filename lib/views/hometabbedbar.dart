@@ -5,6 +5,7 @@ import 'package:splathon_app/views/result.dart';
 import 'package:splathon_app/views/notification.dart';
 import 'package:splathon_app/views/reception.dart';
 import 'package:splathon_app/views/rankings.dart';
+import 'package:splathon_app/views/customTabs.dart' as CustomView;
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:splathon_app/utils/event.dart';
 
@@ -82,21 +83,21 @@ class HomeTabbedBarState extends State<HomeTabbedBar> with SingleTickerProviderS
         child: SafeArea(child: 
           new TabBar(
             isScrollable: false,
-            tabs: <Tab>[
-              new Tab(
-                text: "お知らせ",
+            tabs: <CustomView.Tab>[
+              new CustomView.Tab(
+                child: Text('お知らせ', style: tabTextStyle,),
                 icon: Image.asset('assets/images/icon_notification.png'),
               ),
-              new Tab(
-                text: 'リザルト',
+              new CustomView.Tab(
+                child: Text('リザルト', style: tabTextStyle,),
                 icon: Image.asset('assets/images/icon_result.png'),
               ),
-              new Tab(
-                text: 'ランキング',
+              new CustomView.Tab(
+                child: Text('ランキング', style: tabTextStyle,),
                 icon: Image.asset('assets/images/icon_ranking.png'),
               ),
-              new Tab(
-                text: '受付コード',
+              new CustomView.Tab(
+                child: Text('受付コード', style: tabTextStyle,),
                 icon: Image.asset('assets/images/icon_reception.png'),
               ),
             ],
@@ -182,5 +183,11 @@ class HomeTabbedBarState extends State<HomeTabbedBar> with SingleTickerProviderS
     fontFamily: 'Splatfont',
     color: blackColor,
     fontSize: 16.0,
+  );
+
+  static const TextStyle tabTextStyle = TextStyle(
+    fontFamily: 'Splatfont',
+    color: Colors.white,
+    fontSize: 15.0,
   );
 }

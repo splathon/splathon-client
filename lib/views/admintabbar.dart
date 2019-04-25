@@ -3,6 +3,7 @@ import 'package:splathon_app/styles/text.dart';
 import 'package:splathon_app/styles/color.dart';
 import 'package:splathon_app/views/allresult.dart';
 import 'package:splathon_app/views/accept.dart';
+import 'package:splathon_app/views/customTabs.dart' as CustomView;
 
 class AdminTabbedBar extends StatefulWidget {
   @override
@@ -45,13 +46,13 @@ class AdminTabbedBarState extends State<AdminTabbedBar> with SingleTickerProvide
         child: SafeArea(child: 
           new TabBar(
             isScrollable: false,
-            tabs: <Tab>[
-              new Tab(
-                text: 'レポート',
+            tabs: <CustomView.Tab>[
+              new CustomView.Tab(
+                child: Text('レポート', style: tabTextStyle,),
                 icon: Image.asset('assets/images/icon_result.png'),
               ),
-              new Tab(
-                text: 'QR受付',
+              new CustomView.Tab(
+                child: Text('QR受付', style: tabTextStyle,),
                 icon: Image.asset('assets/images/icon_reception.png'),
               ),
             ],
@@ -72,5 +73,11 @@ class AdminTabbedBarState extends State<AdminTabbedBar> with SingleTickerProvide
     fontFamily: 'Splatfont',
     color: blackColor,
     fontSize: 16.0,
+  );
+
+  static const TextStyle tabTextStyle = TextStyle(
+    fontFamily: 'Splatfont',
+    color: Colors.white,
+    fontSize: 15.0,
   );
 }
