@@ -8,6 +8,7 @@ import 'package:english_words/english_words.dart';
 import 'package:splathon_app/utils/preference.dart';
 import 'package:splathon_app/utils/config.dart';
 import 'package:splathon_app/utils/event.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'dart:async';
 import 'package:openapi/api.dart' as API;
 
@@ -213,6 +214,11 @@ class _NotificationsState extends State<Notifications> with AutomaticKeepAliveCl
           final index = i - 4;
           final isLast = index == _model.notices.length - 1;
           final notice = _model.notices[index];
+          String url;
+          Match match = new RegExp(r"(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)", caseSensitive: false).firstMatch(notice.text);
+          if (match != null) {
+            url = match.group(0);
+          }
           return new Container(
             decoration: notificationDecoration(index),
             margin: isLast ? const EdgeInsets.only(left: 20, right: 20, bottom: 20) : const EdgeInsets.only(left: 20, right: 20),
@@ -254,7 +260,14 @@ class _NotificationsState extends State<Notifications> with AutomaticKeepAliveCl
                   new Expanded(            
                     child: Padding(
                       padding: const EdgeInsets.only(right: 10),
-                      child: Text(notice.text, style: notificationStyle, ),
+                      child: InkWell(
+                        child: Text(notice.text, style: notificationStyle, ),
+                        onTap: () async {
+                          if (url != null && await canLaunch(url)) {
+                            await launch(url);
+                          }
+                        },
+                      )
                     ),
                   ),
                 ],
