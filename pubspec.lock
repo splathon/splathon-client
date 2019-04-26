@@ -104,17 +104,19 @@ packages:
   fast_qr_reader_view:
     dependency: "direct main"
     description:
-      name: fast_qr_reader_view
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.1.5"
+      path: "."
+      ref: HEAD
+      resolved-ref: "13e0c534f82f5a4bc1f7cb90dfe277c2b0f41110"
+      url: "git://github.com/facundomedica/fast_qr_reader_view.git"
+    source: git
+    version: "0.1.6"
   firebase_messaging:
     dependency: "direct main"
     description:
       name: firebase_messaging
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.0.0+3"
+    version: "4.0.0+4"
   flutter:
     dependency: "direct main"
     description: flutter
