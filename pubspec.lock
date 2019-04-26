@@ -21,7 +21,7 @@ packages:
       name: async
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.8"
+    version: "2.1.0"
   auto_size_text:
     dependency: "direct main"
     description:
@@ -104,17 +104,19 @@ packages:
   fast_qr_reader_view:
     dependency: "direct main"
     description:
-      name: fast_qr_reader_view
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.1.5"
+      path: "."
+      ref: HEAD
+      resolved-ref: "13e0c534f82f5a4bc1f7cb90dfe277c2b0f41110"
+      url: "git://github.com/facundomedica/fast_qr_reader_view.git"
+    source: git
+    version: "0.1.6"
   firebase_messaging:
     dependency: "direct main"
     description:
       name: firebase_messaging
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.0.0+3"
+    version: "4.0.0+4"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -171,14 +173,14 @@ packages:
       name: intl
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.15.7"
+    version: "0.15.8"
   matcher:
     dependency: transitive
     description:
       name: matcher
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.12.3+1"
+    version: "0.12.5"
   meta:
     dependency: transitive
     description:
@@ -213,7 +215,7 @@ packages:
       name: pedantic
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.4.0"
+    version: "1.5.0"
   petitparser:
     dependency: transitive
     description:
@@ -248,7 +250,7 @@ packages:
       name: quiver
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.1"
+    version: "2.0.2"
   shared_preferences:
     dependency: "direct main"
     description:
@@ -267,7 +269,7 @@ packages:
       name: source_span
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.5.4"
+    version: "1.5.5"
   sqflite:
     dependency: transitive
     description:
@@ -288,7 +290,7 @@ packages:
       name: stream_channel
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.6.8"
+    version: "2.0.0"
   string_scanner:
     dependency: transitive
     description:
@@ -316,7 +318,7 @@ packages:
       name: test_api
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.2.2"
+    version: "0.2.4"
   typed_data:
     dependency: transitive
     description:
@@ -360,5 +362,5 @@ packages:
     source: hosted
     version: "2.1.15"
 sdks:
-  dart: ">=2.1.0 <3.0.0"
+  dart: ">=2.2.0 <3.0.0"
   flutter: ">=1.2.1 <2.0.0"
