@@ -8,6 +8,7 @@ import 'package:splathon_app/views/rankings.dart';
 import 'package:splathon_app/views/customTabs.dart' as CustomView;
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:splathon_app/utils/event.dart';
+import 'dart:io';
 
 /**
  * Reference
@@ -135,7 +136,15 @@ class HomeTabbedBarState extends State<HomeTabbedBar> with SingleTickerProviderS
   }
 
   buildDialog(BuildContext context, Map<String, dynamic> message) {
-    String text = '${message['aps']['alert']['body']}'; // iOS APNs
+    String text;
+    if (Platform.isIOS) { // iOS APNs
+      text = '${message['aps']['alert']['body']}';
+    } else if (Platform.isAndroid) { // Android FCM
+      text = '${message['notification']['body']}';
+    } else { // Other platform
+      return;
+    }
+    
     showDialog(
       context: context,
       barrierDismissible: false,
