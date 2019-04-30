@@ -124,7 +124,49 @@ class _AcceptState extends State<Accept> with AutomaticKeepAliveClientMixin {
   }
 
   List<Widget> receptionViews(API.ReceptionPartcipantsDataResponse receptionData) {
-    return receptionData.participants.map((participant) => receptionView(participant)).toList() + [completeButtonView()];
+    return [hasCompanionView(receptionData)] + receptionData.participants.map((participant) => receptionView(participant)).toList() + [completeButtonView()];
+  }
+
+  Widget hasCompanionView(API.ReceptionPartcipantsDataResponse receptionData) {
+    final hasCompanion = receptionData.participants.indexWhere((a) => a.hasCompanion == true) != -1;
+
+    return Container(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Container(
+            margin: const EdgeInsets.only(top: 10, left: 20, right: 20),
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Container(
+                  child: Stack(
+                    children: <Widget>[
+                      Image.asset('assets/images/silverInc.png'),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 12),
+                        child: Text('同伴者', style: headerStyle),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(width: 10,),
+                Container(
+                  child: hasCompanion ? Text('あり', style: hasCompanionStyle, maxLines: 1,) : Text('なし', style: headerStyle, maxLines: 1,),
+                )
+              ],
+            ),
+          ),
+          Container(
+            margin: const EdgeInsets.only(top: 10),
+            color: borderColor,
+            height: 1,
+            width: double.maxFinite,
+          )
+        ],
+      ),
+    );
   }
 
   Widget receptionView(API.ParticipantReception reception) {
@@ -428,6 +470,12 @@ class _AcceptState extends State<Accept> with AutomaticKeepAliveClientMixin {
   static const TextStyle headerStyle = TextStyle(
     fontFamily: 'Splatfont',
     color: blackColor,
+    fontSize: 18.0,
+  );
+
+  static const TextStyle hasCompanionStyle = TextStyle(
+    fontFamily: 'Splatfont',
+    color: Colors.red,
     fontSize: 18.0,
   );
 }
