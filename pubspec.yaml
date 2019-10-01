@@ -26,19 +26,19 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
   english_words: ^3.1.0
-  qr_flutter: ^2.0.0+51
-  cached_network_image: ^0.7.0
+  qr_flutter: ^3.0.1
+  cached_network_image: ^1.1.1
   # workaround fix https://github.com/facundomedica/fast_qr_reader_view/issues/32#issuecomment-471146441
   # 0.1.5だとandroid.supportに依存してしまっているが、masterでは修正されているので。
   # 次のversionがリリースされたら version 指定に戻すとかするべき
   fast_qr_reader_view:
     git:
       url: git://github.com/facundomedica/fast_qr_reader_view.git
-  firebase_messaging: ^4.0.0+4
-  shared_preferences: ^0.5.2
-  auto_size_text: ^1.1.2
+  firebase_messaging: ^5.1.6
+  shared_preferences: ^0.5.3+4
+  auto_size_text: ^2.1.0
   event_bus: ^1.1.0
-  url_launcher: ^5.0.2
+  url_launcher: ^5.1.4
   openapi:
     path: client/
 
