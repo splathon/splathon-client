@@ -24,6 +24,7 @@ class Notifications extends StatefulWidget {
 class _NotificationsState extends State<Notifications> with AutomaticKeepAliveClientMixin {
   API.ListNoticesResponse _model;
   API.GetNextMatchResponse _next;
+  API.Schedule _schedule;
   API.Team myTeam;
   int alreadyReadTime;
 
@@ -77,6 +78,7 @@ class _NotificationsState extends State<Notifications> with AutomaticKeepAliveCl
         this._model = responseObj; 
 
         updateReadTime();
+        fetchSchedule();
       })
     );
   }
@@ -94,6 +96,16 @@ class _NotificationsState extends State<Notifications> with AutomaticKeepAliveCl
     );
   }
 
+  Future fetchSchedule() async {
+    var client = new API.DefaultApi();
+    var result = client.getSchedule(Config().eventNumber);
+    result.then(
+      (responseObj) => setState(() {
+        this._schedule = responseObj;
+      })
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return buildNotifications();
@@ -105,7 +117,7 @@ class _NotificationsState extends State<Notifications> with AutomaticKeepAliveCl
   }
 
   Widget buildNotifications() {
-    if (_model == null) {
+    if (_model == null || _schedule == null) {
       // Loading
       return new Center(
         child: const CircularProgressIndicator(),
@@ -115,7 +127,7 @@ class _NotificationsState extends State<Notifications> with AutomaticKeepAliveCl
     return Container(
       color: backgroundColor,
        child: new ListView.builder(
-        itemCount: _model.notices.length + 4,
+        itemCount: _model.notices.length + _schedule.entries.length + 5,
         itemBuilder: (BuildContext context, i) {
           if (i == 0) {
             if (myTeam == null) {
@@ -143,7 +155,7 @@ class _NotificationsState extends State<Notifications> with AutomaticKeepAliveCl
               margin: const EdgeInsets.only(top: 20, left: 20, right: 20),
               child: new Stack(
                 children: <Widget>[
-                  Image.asset('assets/images/silverInc.png'),
+                  Image.asset('assets/images/goldInc.png'),
                   Padding(
                     padding: const EdgeInsets.only(left: 12),
                     child: Text('次の試合はここだ！', style: titleStyle),
@@ -201,7 +213,7 @@ class _NotificationsState extends State<Notifications> with AutomaticKeepAliveCl
               margin: const EdgeInsets.only(top: 20, left: 20, right: 20),
               child: new Stack(
                 children: <Widget>[
-                  Image.asset('assets/images/goldInc.png'),
+                  Image.asset('assets/images/silverInc.png'),
                   Padding(
                     padding: const EdgeInsets.only(left: 12),
                     child: Text('お知らせ', style: titleStyle),
@@ -211,69 +223,137 @@ class _NotificationsState extends State<Notifications> with AutomaticKeepAliveCl
             );
           }
 
-          final index = i - 4;
-          final isLast = index == _model.notices.length - 1;
-          final notice = _model.notices[index];
-          String url;
-          Match match = new RegExp(r"(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)", caseSensitive: false).firstMatch(notice.text);
-          if (match != null) {
-            url = match.group(0);
-          }
-          return new Container(
-            decoration: notificationDecoration(index),
-            margin: isLast ? const EdgeInsets.only(left: 20, right: 20, bottom: 20) : const EdgeInsets.only(left: 20, right: 20),
-            child: Center(
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  Container(
-                    padding: const EdgeInsets.only(left: 14),
-                    child: Column(
-                      children: <Widget>[
-                        SizedBox(
-                          height: 40,
-                          width: 50,
-                          child: Stack(
-                            children: <Widget>[
-                              Padding(
-                                padding: const EdgeInsets.only(left: 4),
-                                child: Text(dateString(notice.timestampSec * 1000), style: nextMatchTitleStyle, maxLines: 1, ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(top: 15, left: 8),
-                                child: Text(timeString(notice.timestampSec * 1000), style: nextMatchTitleStyle, maxLines: 1, ),
-                              ),
-                            ],
+          if (i - 4 < _model.notices.length) {
+            final index = i - 4;
+            final isLast = index == _model.notices.length - 1;
+            final notice = _model.notices[index];
+            String url;
+            Match match = new RegExp(r"(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)", caseSensitive: false).firstMatch(notice.text);
+            if (match != null) {
+              url = match.group(0);
+            }
+            return new Container(
+              decoration: notificationDecoration(index, _model.notices.length),
+              margin: isLast ? const EdgeInsets.only(left: 20, right: 20, bottom: 20) : const EdgeInsets.only(left: 20, right: 20),
+              child: Center(
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    Container(
+                      padding: const EdgeInsets.only(left: 14),
+                      child: Column(
+                        children: <Widget>[
+                          SizedBox(
+                            height: 40,
+                            width: 50,
+                            child: Stack(
+                              children: <Widget>[
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 4),
+                                  child: Text(dateString(notice.timestampSec * 1000), style: nextMatchTitleStyle, maxLines: 1, ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 15, left: 8),
+                                  child: Text(timeString(notice.timestampSec * 1000), style: nextMatchTitleStyle, maxLines: 1, ),
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.only(bottom: 5),
-                          child: isAlreadyRead(notice.timestampSec * 1000) ? Container() : accentNewView(),
-                        ),
-                      ],
+                          Container(
+                            margin: const EdgeInsets.only(bottom: 5),
+                            child: isAlreadyRead(notice.timestampSec * 1000) ? Container() : accentNewView(),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  new SizedBox(
-                    width: 12.0,
-                  ),
-                  new Expanded(            
-                    child: Padding(
-                      padding: const EdgeInsets.only(right: 10),
-                      child: InkWell(
-                        child: Text(notice.text, style: notificationStyle, ),
-                        onTap: () async {
-                          if (url != null && await canLaunch(url)) {
-                            await launch(url);
-                          }
-                        },
-                      )
+                    new SizedBox(
+                      width: 12.0,
                     ),
-                  ),
-                ],
+                    new Expanded(            
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 10),
+                        child: InkWell(
+                          child: Text(notice.text, style: notificationStyle, ),
+                          onTap: () async {
+                            if (url != null && await canLaunch(url)) {
+                              await launch(url);
+                            }
+                          },
+                        )
+                      ),
+                    ),
+                  ],
+                )
               )
-            )
-          );
+            );
+          }
+          if (i - 4 == _model.notices.length) {
+            return new Container(
+              margin: const EdgeInsets.only(top: 20, left: 20, right: 20),
+              child: new Stack(
+                children: <Widget>[
+                  Image.asset('assets/images/goldInc.png'),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 12),
+                    child: Text('スケジュール', style: titleStyle),
+                  )            
+                ],
+              ),
+            );
+          } else {
+            final index = i - 5 - _model.notices.length;
+            final isLast = index == _schedule.entries.length - 1;
+            final schedule = _schedule.entries[index];
+            final hasDurationTime = schedule.durationSec != null;
+            final endScheduleTimeStamp = schedule.durationSec != null ? schedule.startTimestampSec + schedule.durationSec : null;
+
+            return new Container(
+              decoration: notificationDecoration(index, _schedule.entries.length),
+              margin: isLast ? const EdgeInsets.only(left: 20, right: 20, bottom: 20) : const EdgeInsets.only(left: 20, right: 20),
+              child: Center(
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    Container(
+                      padding: const EdgeInsets.only(left: 14),
+                      child: Column(
+                        children: <Widget>[
+                          SizedBox(
+                            width: 60,
+                            child: Stack(
+                              children: <Widget>[
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 4),
+                                  child: Text(timeString(schedule.startTimestampSec * 1000) + "　", style: nextMatchTitleStyle, maxLines: 1, ),
+                                ),
+                                hasDurationTime ? Padding(
+                                  padding: const EdgeInsets.only(top: 15, left: 8),
+                                  child: Text("～" + timeString(endScheduleTimeStamp * 1000), style: nextMatchTitleStyle, maxLines: 1, ),
+                                ) : Container(),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    new SizedBox(
+                      width: 12.0,
+                    ),
+                    new Expanded(            
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 10),
+                        child: InkWell(
+                          child: Text(schedule.title, style: notificationStyle, ),
+                        )
+                      ),
+                    ),
+                  ],
+                )
+              )
+            );
+          }
         }
       ),
     );
@@ -304,7 +384,20 @@ class _NotificationsState extends State<Notifications> with AutomaticKeepAliveCl
     return alreadyReadTime > timeMillisecondsSince1970;
   }
 
-  BoxDecoration notificationDecoration(int index) {
+  BoxDecoration notificationDecoration(int index, int length) {
+    if (index == 0 && length == 1) {
+      return BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.all(
+          Radius.circular(10.0),
+        ),
+        border: Border.all(
+          color: borderColor,
+          width: 1,
+        ),
+      );
+    }
+
     if (index == 0) {
       return BoxDecoration(
         color: Colors.white,
@@ -318,7 +411,7 @@ class _NotificationsState extends State<Notifications> with AutomaticKeepAliveCl
         ),
       );
     }
-    if (index == _model.notices.length - 1) {
+    if (index == length - 1) {
       return BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.only(
@@ -328,6 +421,22 @@ class _NotificationsState extends State<Notifications> with AutomaticKeepAliveCl
         border: Border.all(
           color: borderColor,
           width: 1,
+        )
+      );
+    }
+
+    if (index == 1) {
+      return BoxDecoration(
+        color: Colors.white,
+        border: Border(
+          left: BorderSide(
+            color: borderColor,
+            width: 1,
+          ),
+          right: BorderSide(
+            color: borderColor,
+            width: 1,
+          ),
         )
       );
     }
@@ -343,7 +452,7 @@ class _NotificationsState extends State<Notifications> with AutomaticKeepAliveCl
           color: borderColor,
           width: 1,
         ),
-        bottom: BorderSide(
+        top: BorderSide(
           color: borderColor,
           width: 1,
         ),
