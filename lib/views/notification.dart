@@ -167,7 +167,7 @@ class _NotificationsState extends State<Notifications> with AutomaticKeepAliveCl
               ),
               margin: const EdgeInsets.only(left: 20, right: 20),
               padding: const EdgeInsets.only(left: 14.0, right: 14.0),
-              height: 62.0,
+              height: 70.0,
               child: Row(
                 mainAxisSize: MainAxisSize.max,
                 children: <Widget>[
@@ -176,7 +176,7 @@ class _NotificationsState extends State<Notifications> with AutomaticKeepAliveCl
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Container(
-                        height: 14.0,
+                        height: 20.0,
                         child: Text(_next.nextMatch.roundName + " " + _next.nextMatch.room.name + " 第" + _next.nextMatch.matchOrderInRoom.toString() + "試合", style: nextMatchTitleStyle),
                         ),
                       Container(
