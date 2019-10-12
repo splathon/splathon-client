@@ -46,13 +46,13 @@ import 'package:openapi/api.dart';
 
 var api_instance = new AdminApi();
 var eventId = 789; // int | 
-var splathonReceptionCode = splathonReceptionCode_example; // String | ReceptionResponse.splathon.code と同じもの(たぶん内部SlackID).
 var X_SPLATHON_API_TOKEN = X_SPLATHON_API_TOKEN_example; // String | 
+var addTournamentRoundRequest = new AddTournamentRoundRequest(); // AddTournamentRoundRequest | 
 
 try {
-    api_instance.completeReception(eventId, splathonReceptionCode, X_SPLATHON_API_TOKEN);
+    api_instance.addTournamentRound(eventId, X_SPLATHON_API_TOKEN, addTournamentRoundRequest);
 } catch (e) {
-    print("Exception when calling AdminApi->completeReception: $e\n");
+    print("Exception when calling AdminApi->addTournamentRound: $e\n");
 }
 
 ```
@@ -63,10 +63,20 @@ All URIs are relative to *https://splathon-api-us.appspot.com/splathon*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
+*AdminApi* | [**addTournamentRound**](docs//AdminApi.md#addtournamentround) | **POST** /v{eventId}/tournament/ | 
 *AdminApi* | [**completeReception**](docs//AdminApi.md#completereception) | **POST** /v{eventId}/reception/{splathonReceptionCode}/complete | 
+*AdminApi* | [**createNewQualifier**](docs//AdminApi.md#createnewqualifier) | **POST** /v{eventId}/qualifier | 
+*AdminApi* | [**deleteNotice**](docs//AdminApi.md#deletenotice) | **DELETE** /v{eventId}/notices/{noticeId} | 
 *AdminApi* | [**getParticipantsDataForReception**](docs//AdminApi.md#getparticipantsdataforreception) | **GET** /v{eventId}/reception/{splathonReceptionCode} | 
+*AdminApi* | [**getReleaseQualifier**](docs//AdminApi.md#getreleasequalifier) | **GET** /v{eventId}/release-qualifier | 
+*AdminApi* | [**listReception**](docs//AdminApi.md#listreception) | **GET** /v{eventId}/list-reception | 
 *AdminApi* | [**updateBattle**](docs//AdminApi.md#updatebattle) | **POST** /v{eventId}/matches/{matchId} | 
+*AdminApi* | [**updateMatch**](docs//AdminApi.md#updatematch) | **PUT** /v{eventId}/matches/{matchId} | 
+*AdminApi* | [**updateReception**](docs//AdminApi.md#updatereception) | **POST** /v{eventId}/update-reception | 
+*AdminApi* | [**updateReleaseQualifier**](docs//AdminApi.md#updatereleasequalifier) | **PUT** /v{eventId}/release-qualifier | 
+*AdminApi* | [**writeNotice**](docs//AdminApi.md#writenotice) | **POST** /v{eventId}/notices | 
 *DefaultApi* | [**getEvent**](docs//DefaultApi.md#getevent) | **GET** /v{eventId}/event | 
+*DefaultApi* | [**getSchedule**](docs//DefaultApi.md#getschedule) | **GET** /v{eventId}/schedule | 
 *DefaultApi* | [**getTeamDetail**](docs//DefaultApi.md#getteamdetail) | **GET** /v{eventId}/teams/{team_id} | 
 *DefaultApi* | [**listNotices**](docs//DefaultApi.md#listnotices) | **GET** /v{eventId}/notices | 
 *DefaultApi* | [**listTeams**](docs//DefaultApi.md#listteams) | **GET** /v{eventId}/teams | 
@@ -83,22 +93,26 @@ Class | Method | HTTP request | Description
 
 ## Documentation For Models
 
+ - [AddTournamentRoundRequest](docs//AddTournamentRoundRequest.md)
  - [Battle](docs//Battle.md)
  - [Error](docs//Error.md)
  - [Event](docs//Event.md)
  - [GetNextMatchResponse](docs//GetNextMatchResponse.md)
  - [ListNoticesResponse](docs//ListNoticesResponse.md)
+ - [ListReceptionResponse](docs//ListReceptionResponse.md)
  - [LoginRequest](docs//LoginRequest.md)
  - [LoginResponse](docs//LoginResponse.md)
  - [Match](docs//Match.md)
  - [Member](docs//Member.md)
  - [MemberDetail](docs//MemberDetail.md)
+ - [NewMatchRequest](docs//NewMatchRequest.md)
  - [NextMatch](docs//NextMatch.md)
  - [NextMatchRoom](docs//NextMatchRoom.md)
  - [Notice](docs//Notice.md)
  - [ParticipantReception](docs//ParticipantReception.md)
  - [Rank](docs//Rank.md)
  - [Ranking](docs//Ranking.md)
+ - [Reception](docs//Reception.md)
  - [ReceptionCode](docs//ReceptionCode.md)
  - [ReceptionPartcipantsDataResponse](docs//ReceptionPartcipantsDataResponse.md)
  - [ReceptionResponse](docs//ReceptionResponse.md)
@@ -106,9 +120,14 @@ Class | Method | HTTP request | Description
  - [Room](docs//Room.md)
  - [Round](docs//Round.md)
  - [Rule](docs//Rule.md)
+ - [Schedule](docs//Schedule.md)
+ - [ScheduleEntry](docs//ScheduleEntry.md)
  - [Stage](docs//Stage.md)
+ - [SupportedRoom](docs//SupportedRoom.md)
  - [Team](docs//Team.md)
  - [Teams](docs//Teams.md)
+ - [UpdateReceptionRequest](docs//UpdateReceptionRequest.md)
+ - [UpdateReleaseQualifierRequest](docs//UpdateReleaseQualifierRequest.md)
 
 
 ## Documentation For Authorization

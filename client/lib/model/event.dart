@@ -9,11 +9,13 @@ class Event {
   List<Rule> rules = [];
   
   List<Stage> stages = [];
+  
+  List<SupportedRoom> rooms = [];
   Event();
 
   @override
   String toString() {
-    return 'Event[name=$name, numbering=$numbering, rules=$rules, stages=$stages, ]';
+    return 'Event[name=$name, numbering=$numbering, rules=$rules, stages=$stages, rooms=$rooms, ]';
   }
 
   Event.fromJson(Map<String, dynamic> json) {
@@ -22,6 +24,7 @@ class Event {
     numbering = json['numbering'];
     rules = Rule.listFromJson(json['rules']);
     stages = Stage.listFromJson(json['stages']);
+    rooms = SupportedRoom.listFromJson(json['rooms']);
   }
 
   Map<String, dynamic> toJson() {
@@ -29,7 +32,8 @@ class Event {
       'name': name,
       'numbering': numbering,
       'rules': rules,
-      'stages': stages
+      'stages': stages,
+      'rooms': rooms
     };
   }
 

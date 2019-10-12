@@ -10,7 +10,7 @@ class ResultApi {
   /// 
   ///
   /// リザルト一覧を返す。リザルトと言いつつ終了していない未来のマッチも返す。ゲスト・管理アプリ両方から使う。team_idを指定するとそのチームのみの結果が返ってくる。
-  Future<Results> getResult(int eventId, { int teamId }) async {
+  Future<Results> getResult(int eventId, { int teamId, String X_SPLATHON_API_TOKEN }) async {
     Object postBody;
 
     // verify required params are set
@@ -28,6 +28,7 @@ class ResultApi {
     if(teamId != null) {
       queryParams.addAll(_convertParametersForCollectionFormat("", "team_id", teamId));
     }
+    headerParams["X-SPLATHON-API-TOKEN"] = X_SPLATHON_API_TOKEN;
 
     List<String> contentTypes = [];
 

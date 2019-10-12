@@ -2,6 +2,8 @@ part of openapi.api;
 
 class Notice {
   
+  int id = null;
+  
   String text = null;
   
   int timestampSec = null;
@@ -9,17 +11,19 @@ class Notice {
 
   @override
   String toString() {
-    return 'Notice[text=$text, timestampSec=$timestampSec, ]';
+    return 'Notice[id=$id, text=$text, timestampSec=$timestampSec, ]';
   }
 
   Notice.fromJson(Map<String, dynamic> json) {
     if (json == null) return;
+    id = json['id'];
     text = json['text'];
     timestampSec = json['timestamp_sec'];
   }
 
   Map<String, dynamic> toJson() {
     return {
+      'id': id,
       'text': text,
       'timestamp_sec': timestampSec
     };

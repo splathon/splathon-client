@@ -1,6 +1,8 @@
 part of openapi.api;
 
 class Round {
+  /* Round ID. (Qualifier ID or Tournament ID) */
+  int id = null;
   /* ラウンド名。e.g. 予選第1ラウンド, 決勝T1回戦, 決勝戦 */
   String name = null;
   /* 何ラウンドか。i.e. 予選第Nラウンド, 決勝T N回戦 */
@@ -11,11 +13,12 @@ class Round {
 
   @override
   String toString() {
-    return 'Round[name=$name, round=$round, rooms=$rooms, ]';
+    return 'Round[id=$id, name=$name, round=$round, rooms=$rooms, ]';
   }
 
   Round.fromJson(Map<String, dynamic> json) {
     if (json == null) return;
+    id = json['id'];
     name = json['name'];
     round = json['round'];
     rooms = Room.listFromJson(json['rooms']);
@@ -23,6 +26,7 @@ class Round {
 
   Map<String, dynamic> toJson() {
     return {
+      'id': id,
       'name': name,
       'round': round,
       'rooms': rooms

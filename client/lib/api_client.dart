@@ -37,6 +37,8 @@ class ApiClient {
           return value is bool ? value : '$value'.toLowerCase() == 'true';
         case 'double':
           return value is double ? value : double.parse('$value');
+        case 'AddTournamentRoundRequest':
+          return AddTournamentRoundRequest.fromJson(value);
         case 'Battle':
           return Battle.fromJson(value);
         case 'Error':
@@ -47,6 +49,8 @@ class ApiClient {
           return GetNextMatchResponse.fromJson(value);
         case 'ListNoticesResponse':
           return ListNoticesResponse.fromJson(value);
+        case 'ListReceptionResponse':
+          return ListReceptionResponse.fromJson(value);
         case 'LoginRequest':
           return LoginRequest.fromJson(value);
         case 'LoginResponse':
@@ -57,6 +61,8 @@ class ApiClient {
           return Member.fromJson(value);
         case 'MemberDetail':
           return MemberDetail.fromJson(value);
+        case 'NewMatchRequest':
+          return NewMatchRequest.fromJson(value);
         case 'NextMatch':
           return NextMatch.fromJson(value);
         case 'NextMatchRoom':
@@ -69,6 +75,8 @@ class ApiClient {
           return Rank.fromJson(value);
         case 'Ranking':
           return Ranking.fromJson(value);
+        case 'Reception':
+          return Reception.fromJson(value);
         case 'ReceptionCode':
           return ReceptionCode.fromJson(value);
         case 'ReceptionPartcipantsDataResponse':
@@ -83,12 +91,22 @@ class ApiClient {
           return Round.fromJson(value);
         case 'Rule':
           return Rule.fromJson(value);
+        case 'Schedule':
+          return Schedule.fromJson(value);
+        case 'ScheduleEntry':
+          return ScheduleEntry.fromJson(value);
         case 'Stage':
           return Stage.fromJson(value);
+        case 'SupportedRoom':
+          return SupportedRoom.fromJson(value);
         case 'Team':
           return Team.fromJson(value);
         case 'Teams':
           return Teams.fromJson(value);
+        case 'UpdateReceptionRequest':
+          return UpdateReceptionRequest.fromJson(value);
+        case 'UpdateReleaseQualifierRequest':
+          return UpdateReleaseQualifierRequest.fromJson(value);
         default:
           {
             Core.Match match;

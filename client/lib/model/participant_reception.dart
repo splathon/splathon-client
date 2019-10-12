@@ -1,6 +1,10 @@
 part of openapi.api;
 
 class ParticipantReception {
+  /* internal id */
+  int id = null;
+  /* Slack ID */
+  String slackUserId = null;
   /* ハンドルネーム。 e.g. みーくん */
   String nickname = null;
   /* カタカナのフルネーム。 e.g. ヤマダタロウ */
@@ -23,15 +27,19 @@ class ParticipantReception {
   bool hasSwitchDock = null;
   /* 同伴者がいるかどうか。いる場合は用スプレッドシート確認。 */
   bool hasCompanion = null;
+  
+  Reception reception = null;
   ParticipantReception();
 
   @override
   String toString() {
-    return 'ParticipantReception[nickname=$nickname, fullnameKana=$fullnameKana, companyName=$companyName, teamName=$teamName, teamId=$teamId, participantFee=$participantFee, joinParty=$joinParty, isStaff=$isStaff, isPlayer=$isPlayer, hasSwitchDock=$hasSwitchDock, hasCompanion=$hasCompanion, ]';
+    return 'ParticipantReception[id=$id, slackUserId=$slackUserId, nickname=$nickname, fullnameKana=$fullnameKana, companyName=$companyName, teamName=$teamName, teamId=$teamId, participantFee=$participantFee, joinParty=$joinParty, isStaff=$isStaff, isPlayer=$isPlayer, hasSwitchDock=$hasSwitchDock, hasCompanion=$hasCompanion, reception=$reception, ]';
   }
 
   ParticipantReception.fromJson(Map<String, dynamic> json) {
     if (json == null) return;
+    id = json['id'];
+    slackUserId = json['slack_user_id'];
     nickname = json['nickname'];
     fullnameKana = json['fullname_kana'];
     companyName = json['company_name'];
@@ -43,10 +51,13 @@ class ParticipantReception {
     isPlayer = json['is_player'];
     hasSwitchDock = json['has_switch_dock'];
     hasCompanion = json['has_companion'];
+    reception = new Reception.fromJson(json['reception']);
   }
 
   Map<String, dynamic> toJson() {
     return {
+      'id': id,
+      'slack_user_id': slackUserId,
       'nickname': nickname,
       'fullname_kana': fullnameKana,
       'company_name': companyName,
@@ -57,7 +68,8 @@ class ParticipantReception {
       'is_staff': isStaff,
       'is_player': isPlayer,
       'has_switch_dock': hasSwitchDock,
-      'has_companion': hasCompanion
+      'has_companion': hasCompanion,
+      'reception': reception
     };
   }
 

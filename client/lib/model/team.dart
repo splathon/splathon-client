@@ -5,6 +5,8 @@ class Team {
   int id = null;
   
   String name = null;
+  /* チーム名のよみがな(ひらがな) */
+  String nameKana = null;
   /* Team の大会にむけての意気込みコメント */
   String shortComment = null;
   
@@ -13,13 +15,14 @@ class Team {
 
   @override
   String toString() {
-    return 'Team[id=$id, name=$name, shortComment=$shortComment, members=$members, ]';
+    return 'Team[id=$id, name=$name, nameKana=$nameKana, shortComment=$shortComment, members=$members, ]';
   }
 
   Team.fromJson(Map<String, dynamic> json) {
     if (json == null) return;
     id = json['id'];
     name = json['name'];
+    nameKana = json['name_kana'];
     shortComment = json['short_comment'];
     members = Member.listFromJson(json['members']);
   }
@@ -28,6 +31,7 @@ class Team {
     return {
       'id': id,
       'name': name,
+      'name_kana': nameKana,
       'short_comment': shortComment,
       'members': members
     };

@@ -10,6 +10,7 @@ All URIs are relative to *https://splathon-api-us.appspot.com/splathon*
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**getEvent**](DefaultApi.md#getEvent) | **GET** /v{eventId}/event | 
+[**getSchedule**](DefaultApi.md#getSchedule) | **GET** /v{eventId}/schedule | 
 [**getTeamDetail**](DefaultApi.md#getTeamDetail) | **GET** /v{eventId}/teams/{team_id} | 
 [**listNotices**](DefaultApi.md#listNotices) | **GET** /v{eventId}/notices | 
 [**listTeams**](DefaultApi.md#listTeams) | **GET** /v{eventId}/teams | 
@@ -47,6 +48,49 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**Event**](Event.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json; charset=utf-8
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **getSchedule**
+> Schedule getSchedule(eventId)
+
+
+
+Return event schedule data
+
+### Example 
+```dart
+import 'package:openapi/api.dart';
+
+var api_instance = new DefaultApi();
+var eventId = 789; // int | 
+
+try { 
+    var result = api_instance.getSchedule(eventId);
+    print(result);
+} catch (e) {
+    print("Exception when calling DefaultApi->getSchedule: $e\n");
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **eventId** | **int**|  | [default to null]
+
+### Return type
+
+[**Schedule**](Schedule.md)
 
 ### Authorization
 
