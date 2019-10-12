@@ -220,7 +220,7 @@ class _MatchItemState extends State<MatchItem> {
       child: new Container(
         decoration: boxDecoration,
         padding: const EdgeInsets.only(left: 14.0, right: 14.0),
-        height: 82.0,
+        height: 90.0,
         child: Row(
           mainAxisSize: MainAxisSize.max,
           children: <Widget>[
@@ -230,7 +230,7 @@ class _MatchItemState extends State<MatchItem> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Container(
-                    height: 14.0,
+                    height: 20.0,
                     child: Text(round.name + " " + room.name + " 第$order試合", style: resultTitleStyle),
                     ),
                   Container(
@@ -252,6 +252,9 @@ class _MatchItemState extends State<MatchItem> {
                     ),
                   ),
                   winloseView(match),
+                  Container(
+                    height: 5.0,
+                  ),
                 ],
               ),
             ),

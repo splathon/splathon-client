@@ -179,7 +179,7 @@ class _EachResultState extends State<EachResult> with AutomaticKeepAliveClientMi
               ),
               margin: isLast ? const EdgeInsets.only(top: 10, left: 20, right: 20, bottom: 20) : const EdgeInsets.only(top: 10, left: 20, right: 20),
               padding: const EdgeInsets.only(left: 14.0, right: 14.0),
-              height: 82.0,
+              height: 90.0,
               child: Row(
                 mainAxisSize: MainAxisSize.max,
                 children: <Widget>[
@@ -189,7 +189,7 @@ class _EachResultState extends State<EachResult> with AutomaticKeepAliveClientMi
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Container(
-                          height: 14.0,
+                          height: 20.0,
                           child: Text(round.name + " " + room.name + " 第$order試合", style: resultTitleStyle),
                           ),
                         Container(
@@ -211,6 +211,9 @@ class _EachResultState extends State<EachResult> with AutomaticKeepAliveClientMi
                           ),
                         ),
                         winloseView(match.winner),
+                        Container(
+                          height: 5,
+                        ),
                       ],
                     ),
                   ),
