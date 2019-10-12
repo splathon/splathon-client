@@ -10,12 +10,15 @@ class ResultApi {
   /// 
   ///
   /// リザルト一覧を返す。リザルトと言いつつ終了していない未来のマッチも返す。ゲスト・管理アプリ両方から使う。team_idを指定するとそのチームのみの結果が返ってくる。
-  Future<Results> getResult(int eventId, { int teamId, String X_SPLATHON_API_TOKEN }) async {
+  Future<Results> getResult(int eventId, String X_SPLATHON_API_TOKEN, { int teamId }) async {
     Object postBody;
 
     // verify required params are set
     if(eventId == null) {
      throw new ApiException(400, "Missing required param: eventId");
+    }
+    if(X_SPLATHON_API_TOKEN == null) {
+     throw new ApiException(400, "Missing required param: X_SPLATHON_API_TOKEN");
     }
 
     // create path and map variables

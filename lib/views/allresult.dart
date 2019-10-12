@@ -42,7 +42,8 @@ class _AllResultState extends State<AllResult> with AutomaticKeepAliveClientMixi
 
   Future fetchData() async {
     var client = new API.ResultApi();
-    var result = client.getResult(Config().eventNumber);
+    String token = Preference().getToken();
+    var result = client.getResult(Config().eventNumber, token);
     result.then(
       (resultsObj) => setState(() { this._model = resultsObj; } )
     );

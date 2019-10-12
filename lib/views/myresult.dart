@@ -55,7 +55,8 @@ class _EachResultState extends State<EachResult> with AutomaticKeepAliveClientMi
 
   Future fetchResult(int teamId) async {
     var client = new API.ResultApi();
-    var result = client.getResult(Config().eventNumber, teamId: teamId);
+    String token = Preference().getToken();
+    var result = client.getResult(Config().eventNumber, token, teamId: teamId);
     result.then(
       (resultsObj) => setState(() { this._results = resultsObj; } )
     );

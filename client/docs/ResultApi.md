@@ -13,7 +13,7 @@ Method | HTTP request | Description
 
 
 # **getResult**
-> Results getResult(eventId, teamId, X_SPLATHON_API_TOKEN)
+> Results getResult(eventId, X_SPLATHON_API_TOKEN, teamId)
 
 
 
@@ -25,11 +25,11 @@ import 'package:openapi/api.dart';
 
 var api_instance = new ResultApi();
 var eventId = 789; // int | 
-var teamId = 789; // int | team id
 var X_SPLATHON_API_TOKEN = X_SPLATHON_API_TOKEN_example; // String | 
+var teamId = 789; // int | team id
 
 try { 
-    var result = api_instance.getResult(eventId, teamId, X_SPLATHON_API_TOKEN);
+    var result = api_instance.getResult(eventId, X_SPLATHON_API_TOKEN, teamId);
     print(result);
 } catch (e) {
     print("Exception when calling ResultApi->getResult: $e\n");
@@ -41,8 +41,8 @@ try {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **eventId** | **int**|  | [default to null]
+ **X_SPLATHON_API_TOKEN** | **String**|  | [default to null]
  **teamId** | **int**| team id | [optional] [default to null]
- **X_SPLATHON_API_TOKEN** | **String**|  | [optional] [default to null]
 
 ### Return type
 
