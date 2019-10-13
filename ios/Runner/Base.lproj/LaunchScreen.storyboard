@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
     <device id="retina6_1" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -22,10 +22,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mtO-ag-GCx">
-                                <rect key="frame" x="20" y="0.0" width="374" height="545"/>
+                                <rect key="frame" x="20" y="0.0" width="374" height="453"/>
                                 <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="splathon_10_logo" translatesAutoresizingMaskIntoConstraints="NO" id="ian-H9-9Wh">
-                                        <rect key="frame" x="46" y="210" width="282" height="125"/>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="splathon_11_logo" translatesAutoresizingMaskIntoConstraints="NO" id="ian-H9-9Wh">
+                                        <rect key="frame" x="46" y="164" width="282" height="125"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="282" id="YQI-kh-L8U"/>
                                         </constraints>
@@ -37,10 +37,10 @@
                                     <constraint firstItem="ian-H9-9Wh" firstAttribute="centerX" secondItem="mtO-ag-GCx" secondAttribute="centerX" id="TaT-MY-i7K"/>
                                 </constraints>
                             </view>
-                            <imageView userInteractionEnabled="NO" contentMode="bottom" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ika_x_logo" translatesAutoresizingMaskIntoConstraints="NO" id="fkh-Bb-BT5">
-                                <rect key="frame" x="5" y="545" width="404" height="351"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="splathon11" translatesAutoresizingMaskIntoConstraints="NO" id="fkh-Bb-BT5">
+                                <rect key="frame" x="30" y="453" width="354" height="443"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" secondItem="fkh-Bb-BT5" secondAttribute="height" multiplier="358:311" id="J9A-5p-yDN"/>
+                                    <constraint firstAttribute="width" secondItem="fkh-Bb-BT5" secondAttribute="height" multiplier="925:1158" id="Zdy-5J-0zG"/>
                                 </constraints>
                             </imageView>
                         </subviews>
@@ -49,10 +49,10 @@
                             <constraint firstItem="fkh-Bb-BT5" firstAttribute="top" secondItem="mtO-ag-GCx" secondAttribute="bottom" id="95V-JV-HY1"/>
                             <constraint firstAttribute="trailingMargin" secondItem="mtO-ag-GCx" secondAttribute="trailing" id="BEn-t5-ed3"/>
                             <constraint firstAttribute="bottom" secondItem="fkh-Bb-BT5" secondAttribute="bottom" id="XBz-hy-BBn"/>
-                            <constraint firstItem="fkh-Bb-BT5" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" constant="5" id="YNi-1Y-b5c"/>
+                            <constraint firstItem="fkh-Bb-BT5" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" constant="30" id="YNi-1Y-b5c"/>
                             <constraint firstItem="mtO-ag-GCx" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="ezK-4j-Juh"/>
                             <constraint firstItem="mtO-ag-GCx" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leadingMargin" id="rF9-pn-PLG"/>
-                            <constraint firstAttribute="trailing" secondItem="fkh-Bb-BT5" secondAttribute="trailing" constant="5" id="tsS-NE-GJ7"/>
+                            <constraint firstAttribute="trailing" secondItem="fkh-Bb-BT5" secondAttribute="trailing" constant="30" id="tsS-NE-GJ7"/>
                         </constraints>
                     </view>
                 </viewController>
@@ -62,7 +62,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="ika_x_logo" width="358" height="311"/>
-        <image name="splathon_10_logo" width="282" height="125"/>
+        <image name="splathon11" width="308.5" height="386"/>
+        <image name="splathon_11_logo" width="282" height="125"/>
     </resources>
 </document>
