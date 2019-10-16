@@ -62,7 +62,7 @@ Widget pointLabelView(int point) {
 Widget reportedLabelView() {
   return SizedBox(
     width: 54,
-    height: 23,
+    height: 19,
     child: Stack(
       children: [
         Container(
@@ -83,7 +83,7 @@ Widget reportedLabelView() {
 Widget unreportedLabelView() {
   return SizedBox(
     width: 65,
-    height: 23,
+    height: 19,
     child: Stack(
       children: [
         Container(

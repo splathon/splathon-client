@@ -3,6 +3,7 @@ import 'package:splathon_app/styles/text.dart';
 import 'package:splathon_app/styles/color.dart';
 import 'package:splathon_app/views/roundedView.dart';
 import 'package:english_words/english_words.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:splathon_app/views/resultdetail.dart';
 import 'package:splathon_app/utils/preference.dart';
 import 'package:splathon_app/utils/config.dart';
@@ -238,16 +239,17 @@ class _MatchItemState extends State<MatchItem> {
                     child: Row(
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
                         SizedBox(
                           width: screenWidth * 0.35,
-                          child: Text(match.teamAlpha.name, style: resultNameStyle, maxLines: 1,),
+                          child: AutoSizeText(match.teamAlpha.name, style: resultNameStyle, maxLines: 1,),
                         ),
-                        Text('vs', style: resultNameStyle),
+                        AutoSizeText('vs', style: resultNameStyle),
                         SizedBox(
                           width: screenWidth * 0.35,
-                          child: Text(match.teamBravo.name, style: resultNameStyle, maxLines: 1,),
-                        ),                    
+                          child: AutoSizeText(match.teamBravo.name, style: resultNameStyle, maxLines: 1,),
+                          ),
                       ],
                     ),
                   ),
