@@ -19,11 +19,11 @@ class Preference {
   }
 
   String getToken() {
-    return prefs.getString('Token');
+    return prefs.getString('Token11');
   }
 
   setToken(String token) {
-    prefs.setString('Token', token);
+    prefs.setString('Token11', token);
   }
 
   bool isAdmin() {
