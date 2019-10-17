@@ -12,7 +12,7 @@ class Config {
     return _singleton;
   }
 
-  int eventNumber = 10;
+  int eventNumber = 11;
 
   // Private constractor
   Config._internal();
