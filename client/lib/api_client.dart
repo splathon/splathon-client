@@ -18,7 +18,7 @@ class ApiClient {
   final _regList = RegExp(r'^List<(.*)>$');
   final _regMap = RegExp(r'^Map<String,(.*)>$');
 
-  ApiClient({this.basePath: "https://splathon-api-us.appspot.com/splathon"}) {
+  ApiClient({this.basePath: "https://splathon-api.appspot.com/splathon"}) {
     // Setup authentications (key: authentication name, value: authentication).
   }
 
