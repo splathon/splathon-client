@@ -21,7 +21,7 @@ class _LoginState extends State<Login> {
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
-        title: SplaText('Splathon #10'),
+        title: SplaText('Splathon #11'),
         backgroundColor: splaBlueColor,
       ),
       body: new Center(
@@ -36,7 +36,7 @@ class _LoginState extends State<Login> {
                     border: const UnderlineInputBorder(),
                     labelText: 'User ID',
                     labelStyle: _labelStyle,
-                    hintText: 'splathon#10',
+                    hintText: 'splathon#11',
                     hintStyle: _hintStyle,
                   ),
                   controller: _userIdController,

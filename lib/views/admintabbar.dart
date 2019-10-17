@@ -41,7 +41,7 @@ class AdminTabbedBarState extends State<AdminTabbedBar> with SingleTickerProvide
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
-        title: SplaText('Splathon #10 for Admin'),
+        title: SplaText('Splathon #11 for Admin'),
         backgroundColor: Color.fromRGBO(11, 49, 143, 1),
         actions: <Widget>[
           IconButton(

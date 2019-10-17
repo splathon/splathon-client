@@ -59,7 +59,7 @@ class HomeTabbedBarState extends State<HomeTabbedBar> with SingleTickerProviderS
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
-        title: SplaText('Splathon #10'),
+        title: SplaText('Splathon #11'),
         backgroundColor: Color.fromRGBO(11, 49, 143, 1),
         actions: <Widget>[
           IconButton(
