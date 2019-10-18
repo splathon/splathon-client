@@ -111,6 +111,7 @@ flutter:
    - assets/images/arrowDownW.png
    - assets/images/reloadIcon.png
    - assets/images/girl.png
+   - assets/images/boys.png
 
   fonts:
     - family: Splatfont

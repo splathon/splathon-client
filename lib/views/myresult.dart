@@ -101,7 +101,7 @@ class _EachResultState extends State<EachResult> with AutomaticKeepAliveClientMi
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
            Text('試合を待て！', style: noResultTextStyle,),
-           Image.asset('assets/images/girl.png'),
+           Image.asset('assets/images/boys.png'),
         ],
       );
     }
