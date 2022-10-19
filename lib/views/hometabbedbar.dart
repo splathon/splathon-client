@@ -86,6 +86,7 @@ class HomeTabbedBarState extends State<HomeTabbedBar>
             tabs: <Tab>[
               Tab(
                 icon: Image.asset('assets/images/icon_notification.png'),
+                iconMargin: const EdgeInsets.only(bottom: 0),
                 child: const Text(
                   'お知らせ',
                   style: tabTextStyle,
@@ -93,6 +94,7 @@ class HomeTabbedBarState extends State<HomeTabbedBar>
               ),
               Tab(
                 icon: Image.asset('assets/images/icon_result.png'),
+                iconMargin: const EdgeInsets.only(bottom: 0),
                 child: const Text(
                   'リザルト',
                   style: tabTextStyle,
@@ -100,6 +102,7 @@ class HomeTabbedBarState extends State<HomeTabbedBar>
               ),
               Tab(
                 icon: Image.asset('assets/images/icon_ranking.png'),
+                iconMargin: const EdgeInsets.only(bottom: 0),
                 child: const Text(
                   'ランキング',
                   style: tabTextStyle,
@@ -107,6 +110,7 @@ class HomeTabbedBarState extends State<HomeTabbedBar>
               ),
               Tab(
                 icon: Image.asset('assets/images/icon_reception.png'),
+                iconMargin: const EdgeInsets.only(bottom: 0),
                 child: const Text(
                   '受付コード',
                   style: tabTextStyle,
