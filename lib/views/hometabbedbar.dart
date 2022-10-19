@@ -1,35 +1,34 @@
-import 'package:flutter/material.dart';
-import 'package:splathon_app/styles/text.dart';
-import 'package:splathon_app/styles/color.dart';
-import 'package:splathon_app/views/result.dart';
-import 'package:splathon_app/views/notification.dart';
-import 'package:splathon_app/views/reception.dart';
-import 'package:splathon_app/views/rankings.dart';
-import 'package:splathon_app/views/customTabs.dart' as CustomView;
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:splathon_app/utils/event.dart';
 import 'dart:io';
 
-/**
- * Reference
- * https://github.com/nisrulz/flutter-examples/blob/master/using_bottom_nav_bar/lib/main.dart
- */
+import 'package:flutter/material.dart';
+import 'package:splathon_app/styles/color.dart';
+import 'package:splathon_app/styles/text.dart';
+//import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:splathon_app/utils/event.dart';
+import 'package:splathon_app/views/notification.dart';
+import 'package:splathon_app/views/rankings.dart';
+import 'package:splathon_app/views/reception.dart';
+import 'package:splathon_app/views/result.dart';
+
+/// Reference
+/// https://github.com/nisrulz/flutter-examples/blob/master/using_bottom_nav_bar/lib/main.dart
 class HomeTabbedBar extends StatefulWidget {
   @override
-  HomeTabbedBarState createState() => new HomeTabbedBarState();
+  HomeTabbedBarState createState() => HomeTabbedBarState();
 }
 
 // SingleTickerProviderStateMixin is used for animation
-class HomeTabbedBarState extends State<HomeTabbedBar> with SingleTickerProviderStateMixin {
-  TabController controller;
-  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+class HomeTabbedBarState extends State<HomeTabbedBar>
+    with SingleTickerProviderStateMixin {
+  late TabController controller;
+  //final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
 
   @override
   void initState() {
     super.initState();
 
-    controller = new TabController(length: 4, vsync: this);
-    setupFirebaseCloudMessaging(context);
+    controller = TabController(length: 4, vsync: this);
+    //setupFirebaseCloudMessaging(context);
   }
 
   @override
@@ -51,16 +50,16 @@ class HomeTabbedBarState extends State<HomeTabbedBar> with SingleTickerProviderS
         return;
       case 3:
         Event().bus.fire(ReceptionReload());
-        return;      
+        return;
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      appBar: new AppBar(
+    return Scaffold(
+      appBar: AppBar(
         title: SplaText('Splathon #11'),
-        backgroundColor: Color.fromRGBO(11, 49, 143, 1),
+        backgroundColor: const Color.fromRGBO(11, 49, 143, 1),
         actions: <Widget>[
           IconButton(
             icon: Image.asset('assets/images/reloadIcon.png'),
@@ -68,38 +67,50 @@ class HomeTabbedBarState extends State<HomeTabbedBar> with SingleTickerProviderS
           ),
         ],
       ),
-      body: new TabBarView(
-        physics: NeverScrollableScrollPhysics(),
+      body: TabBarView(
+        physics: const NeverScrollableScrollPhysics(),
+        controller: controller,
         // TODO: Set each Views
         children: <Widget>[
-            new Notifications(),
-            new ResultTabbedBar(),
-            new Rankings(),
-            new ReceptionTabbedBar(),
-          ],
-        controller: controller,
+          Notifications(),
+          ResultTabbedBar(),
+          Rankings(),
+          ReceptionTabbedBar(),
+        ],
       ),
-      bottomNavigationBar: new Material(
+      bottomNavigationBar: Material(
         color: splaBlueColor,
-        child: SafeArea(child: 
-          new TabBar(
+        child: SafeArea(
+          child: TabBar(
             isScrollable: false,
-            tabs: <CustomView.Tab>[
-              new CustomView.Tab(
-                child: Text('お知らせ', style: tabTextStyle,),
+            tabs: <Tab>[
+              Tab(
                 icon: Image.asset('assets/images/icon_notification.png'),
+                child: const Text(
+                  'お知らせ',
+                  style: tabTextStyle,
+                ),
               ),
-              new CustomView.Tab(
-                child: Text('リザルト', style: tabTextStyle,),
+              Tab(
                 icon: Image.asset('assets/images/icon_result.png'),
+                child: const Text(
+                  'リザルト',
+                  style: tabTextStyle,
+                ),
               ),
-              new CustomView.Tab(
-                child: Text('ランキング', style: tabTextStyle,),
+              Tab(
                 icon: Image.asset('assets/images/icon_ranking.png'),
+                child: const Text(
+                  'ランキング',
+                  style: tabTextStyle,
+                ),
               ),
-              new CustomView.Tab(
-                child: Text('受付コード', style: tabTextStyle,),
+              Tab(
                 icon: Image.asset('assets/images/icon_reception.png'),
+                child: const Text(
+                  '受付コード',
+                  style: tabTextStyle,
+                ),
               ),
             ],
             controller: controller,
@@ -108,54 +119,56 @@ class HomeTabbedBarState extends State<HomeTabbedBar> with SingleTickerProviderS
       ),
     );
   }
-  
+
   // TODO: 隠蔽化したい
-  void setupFirebaseCloudMessaging(BuildContext context) {
-    _firebaseMessaging.configure(
-      onMessage: (Map<String, dynamic> message) async {
-        print('onMessage: $message');
-        buildDialog(context, message);
-      },
-      onLaunch: (Map<String, dynamic> message) async {
-        print('onLaunch: $message');
-      },
-      onResume: (Map<String, dynamic> message) async {
-        print('onResume: $message');
-      },
-    );
-    _firebaseMessaging.requestNotificationPermissions(
-      const IosNotificationSettings(sound: true, badge: true, alert: true)
-    );
-    _firebaseMessaging.onIosSettingsRegistered.listen((IosNotificationSettings settings) {
-      print('Settings registered: $settings');
-    });
-    _firebaseMessaging.getToken().then((String token) {
-      assert(token != null);
-      print('Push Teken: $token');
-    });
-  }
+  // void setupFirebaseCloudMessaging(BuildContext context) {
+  //   _firebaseMessaging.configure(
+  //     onMessage: (Map<String, dynamic> message) async {
+  //       print('onMessage: $message');
+  //       buildDialog(context, message);
+  //     },
+  //     onLaunch: (Map<String, dynamic> message) async {
+  //       print('onLaunch: $message');
+  //     },
+  //     onResume: (Map<String, dynamic> message) async {
+  //       print('onResume: $message');
+  //     },
+  //   );
+  //   _firebaseMessaging.requestNotificationPermissions(
+  //     const IosNotificationSettings(sound: true, badge: true, alert: true)
+  //   );
+  //   _firebaseMessaging.onIosSettingsRegistered.listen((IosNotificationSettings settings) {
+  //     print('Settings registered: $settings');
+  //   });
+  //   _firebaseMessaging.getToken().then((String token) {
+  //     assert(token != null);
+  //     print('Push Teken: $token');
+  //   });
+  // }
 
   buildDialog(BuildContext context, Map<String, dynamic> message) {
     String text;
-    if (Platform.isIOS) { // iOS APNs
+    if (Platform.isIOS) {
+      // iOS APNs
       text = '${message['aps']['alert']['body']}';
-    } else if (Platform.isAndroid) { // Android FCM
+    } else if (Platform.isAndroid) {
+      // Android FCM
       text = '${message['notification']['body']}';
-    } else { // Other platform
+    } else {
+      // Other platform
       return;
     }
-    
+
     showDialog(
       context: context,
       barrierDismissible: false,
       builder: (BuildContext build) {
-        return new AlertDialog(
-          titlePadding: EdgeInsets.all(0),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10))
-          ),
+        return AlertDialog(
+          titlePadding: const EdgeInsets.all(0),
+          shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10))),
           title: Container(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(10),
                 topRight: Radius.circular(10),
@@ -163,14 +176,22 @@ class HomeTabbedBarState extends State<HomeTabbedBar> with SingleTickerProviderS
               color: splaBlueColor,
             ),
             padding: const EdgeInsets.all(10),
-            child: Center(child: Text('お知らせ', style: popupTitleStyle,),),
+            child: const Center(
+              child: Text(
+                'お知らせ',
+                style: popupTitleStyle,
+              ),
+            ),
           ),
           content: ConstrainedBox(
-            constraints: BoxConstraints(minHeight: 100),
-            child: Text('$text', style: popupMessageStyle,),
+            constraints: const BoxConstraints(minHeight: 100),
+            child: Text(
+              text,
+              style: popupMessageStyle,
+            ),
           ),
           actions: <Widget>[
-            FlatButton(
+            TextButton(
               child: const Text('CLOSE'),
               onPressed: () {
                 Navigator.pop(context, false);

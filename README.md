@@ -1,20 +1,16 @@
-# splathon-client
+# splathon_client
 
-Splathon client application
-
-<img src="https://raw.githubusercontent.com/splathon/splathon-client/master/assets/images/icon-splathon-app.png" width="500px">
+A new Flutter project.
 
 ## Getting Started
 
 This project is a starting point for a Flutter application.
-- [Flutter Get started](https://flutter.dev/docs/get-started)
-- [Cookbook: Useful Flutter Samples](https://flutter.io/docs/cookbook)
-- [Flutter Documentation](https://flutter.io/docs)
 
-## Specs
+A few resources to get you started if this is your first Flutter project:
 
-- [Google Drive - Splathon#10 App develop](https://drive.google.com/drive/folders/1IkOe2ItR_ZYUKULYlUSvZwqRhMjebM7z)
+- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
+- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
 
-## Design
-
-- [Zeplin - splathon app](https://app.zeplin.io/project/5c9f792b57fbe3581e78215b)
+For help getting started with Flutter development, view the
+[online documentation](https://docs.flutter.dev/), which offers tutorials,
+samples, guidance on mobile development, and a full API reference.

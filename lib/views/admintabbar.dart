@@ -1,24 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:splathon_app/styles/text.dart';
 import 'package:splathon_app/styles/color.dart';
-import 'package:splathon_app/views/allresult.dart';
-import 'package:splathon_app/views/accept.dart';
-import 'package:splathon_app/views/customTabs.dart' as CustomView;
+import 'package:splathon_app/styles/text.dart';
 import 'package:splathon_app/utils/event.dart';
+import 'package:splathon_app/views/accept.dart';
+import 'package:splathon_app/views/allresult.dart';
 
 class AdminTabbedBar extends StatefulWidget {
   @override
-  AdminTabbedBarState createState() => new AdminTabbedBarState();
+  AdminTabbedBarState createState() => AdminTabbedBarState();
 }
 
-class AdminTabbedBarState extends State<AdminTabbedBar> with SingleTickerProviderStateMixin {
-  TabController controller;
+class AdminTabbedBarState extends State<AdminTabbedBar>
+    with SingleTickerProviderStateMixin {
+  late TabController controller;
 
   @override
   void initState() {
     super.initState();
 
-    controller = new TabController(length: 2, vsync: this);
+    controller = TabController(length: 2, vsync: this);
   }
 
   @override
@@ -39,10 +39,10 @@ class AdminTabbedBarState extends State<AdminTabbedBar> with SingleTickerProvide
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      appBar: new AppBar(
+    return Scaffold(
+      appBar: AppBar(
         title: SplaText('Splathon #11 for Admin'),
-        backgroundColor: Color.fromRGBO(11, 49, 143, 1),
+        backgroundColor: const Color.fromRGBO(11, 49, 143, 1),
         actions: <Widget>[
           IconButton(
             icon: Image.asset('assets/images/reloadIcon.png'),
@@ -50,27 +50,33 @@ class AdminTabbedBarState extends State<AdminTabbedBar> with SingleTickerProvide
           ),
         ],
       ),
-      body: new TabBarView(
-        physics: NeverScrollableScrollPhysics(),
-        children: <Widget>[
-            AllResult(),
-            Accept(),
-          ],
+      body: TabBarView(
+        physics: const NeverScrollableScrollPhysics(),
         controller: controller,
+        children: <Widget>[
+          AllResult(),
+          Accept(),
+        ],
       ),
-      bottomNavigationBar: new Material(
+      bottomNavigationBar: Material(
         color: splaBlueColor,
-        child: SafeArea(child: 
-          new TabBar(
+        child: SafeArea(
+          child: TabBar(
             isScrollable: false,
-            tabs: <CustomView.Tab>[
-              new CustomView.Tab(
-                child: Text('レポート', style: tabTextStyle,),
+            tabs: <Tab>[
+              Tab(
                 icon: Image.asset('assets/images/icon_result.png'),
+                child: const Text(
+                  'レポート',
+                  style: tabTextStyle,
+                ),
               ),
-              new CustomView.Tab(
-                child: Text('QR受付', style: tabTextStyle,),
+              Tab(
                 icon: Image.asset('assets/images/icon_reception.png'),
+                child: const Text(
+                  'QR受付',
+                  style: tabTextStyle,
+                ),
               ),
             ],
             controller: controller,

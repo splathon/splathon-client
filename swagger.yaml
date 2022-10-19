@@ -1,0 +1,1321 @@
+swagger: "2.0"
+info:
+  description: "Splathonで使うAPI"
+  version: "1.0.0"
+  title: "SplathonAPI"
+host: "splathon-api-us.appspot.com"
+basePath: "/splathon/"
+schemes:
+  - "https"
+consumes:
+  - "application/json"
+produces:
+  - "application/json; charset=utf-8"
+tags:
+- name: "result"
+  description: "リザルト一覧"
+- name: "match"
+  description: "マッチ"
+- name: "ranking"
+  description: "予選ランキング"
+- name: "admin"
+  description: "管理機能"
+- name: "reception"
+  description: "受付機能"
+
+paths:
+  "/v{eventId}/login":
+    post:
+      operationId: "login"
+      parameters:
+      - name: eventId
+        in: path
+        required: true
+        type: integer
+        format: int64
+      - name: request
+        in: body
+        required: true
+        schema:
+          $ref: "#/definitions/LoginRequest"
+      responses:
+        200:
+          description: Success
+          schema:
+            $ref: "#/definitions/LoginResponse"
+        default:
+          description: Generic error
+          schema:
+            $ref: "#/definitions/Error"
+
+  "/v{eventId}/event":
+    get:
+      description: "Return event data"
+      operationId: "getEvent"
+      parameters:
+      - name: eventId
+        in: path
+        required: true
+        type: integer
+        format: int64
+      responses:
+        200:
+          description: Success
+          schema:
+            $ref: "#/definitions/Event"
+        default:
+          description: Generic error
+          schema:
+            $ref: "#/definitions/Error"
+
+  "/v{eventId}/next-match":
+    get:
+      tags:
+      - "match"
+      description: "次の試合を返す。team_id
+      を指定した場合そのチームの、なければログインしている参加者のチームの
+      次のマッチをあれば返す。
+      team_idを指定せず参加者がチームに属して無い場合などはエラー。"
+      operationId: "getNextMatch"
+      parameters:
+      - name: eventId
+        in: path
+        required: true
+        type: integer
+        format: int64
+      - name: "X-SPLATHON-API-TOKEN"
+        in: header
+        type: string
+        required: true
+      - name: team_id
+        in: query
+        description: team id
+        type: integer
+        format: int64
+      responses:
+        200:
+          description: Success
+          schema:
+            $ref: "#/definitions/GetNextMatchResponse"
+        default:
+          description: Generic error
+          schema:
+            $ref: "#/definitions/Error"
+
+  "/v{eventId}/notices":
+    get:
+      description: "Return notices"
+      operationId: "listNotices"
+      parameters:
+      - name: eventId
+        in: path
+        required: true
+        type: integer
+        format: int64
+      - name: "X-SPLATHON-API-TOKEN"
+        in: header
+        type: string
+        required: true
+      responses:
+        200:
+          description: Success
+          schema:
+            $ref: "#/definitions/ListNoticesResponse"
+        default:
+          description: Generic error
+          schema:
+            $ref: "#/definitions/Error"
+
+    post:
+      tags:
+      - "admin"
+      description: "Insert or update notices. Update if Notice.id is specified."
+      operationId: "writeNotice"
+      parameters:
+      - name: eventId
+        in: path
+        required: true
+        type: integer
+        format: int64
+      - name: "X-SPLATHON-API-TOKEN"
+        in: header
+        type: string
+        required: true
+      - name: notice
+        in: body
+        required: true
+        schema:
+          $ref: "#/definitions/Notice"
+      responses:
+        200:
+          description: Success
+        default:
+          description: Generic error
+          schema:
+            $ref: "#/definitions/Error"
+
+  "/v{eventId}/notices/{noticeId}":
+    delete:
+      tags:
+      - "admin"
+      operationId: "DeleteNotice"
+      parameters:
+      - name: eventId
+        in: path
+        required: true
+        type: integer
+        format: int64
+      - name: noticeId
+        in: path
+        required: true
+        type: integer
+        format: int64
+      - name: "X-SPLATHON-API-TOKEN"
+        in: header
+        type: string
+        required: true
+      responses:
+        200:
+          description: Success
+        default:
+          description: Generic error
+          schema:
+            $ref: "#/definitions/Error"
+
+  "/v{eventId}/results":
+    get:
+      tags:
+      - "result"
+      description: "リザルト一覧を返す。リザルトと言いつつ終了していない未来のマッチも返す。ゲスト・管理アプリ両方から使う。team_idを指定するとそのチームのみの結果が返ってくる。"
+      operationId: "getResult"
+      parameters:
+      - name: eventId
+        in: path
+        required: true
+        type: integer
+        format: int64
+      - name: team_id
+        in: query
+        description: team id
+        type: integer
+        format: int64
+      - name: "X-SPLATHON-API-TOKEN"
+        in: header
+        type: string
+      responses:
+        200:
+          description: Success
+          schema:
+            $ref: "#/definitions/Results"
+        default:
+          description: Generic error
+          schema:
+            $ref: "#/definitions/Error"
+
+  "/v{eventId}/matches/{matchId}":
+    get:
+      tags:
+      - "match"
+      description: "マッチの詳細を返す。スコアボードとかで使える。"
+      operationId: "getMatch"
+      parameters:
+      - name: eventId
+        in: path
+        required: true
+        type: integer
+        format: int64
+      - name: matchId
+        in: path
+        required: true
+        description: match id
+        type: integer
+        format: int64
+      responses:
+        200:
+          description: Success
+          schema:
+            $ref: "#/definitions/Match"
+        default:
+          description: Generic error
+          schema:
+            $ref: "#/definitions/Error"
+
+    post:
+      tags:
+      - "match"
+      - "admin"
+      description: "Update a battle data in the match."
+      operationId: "updateBattle"
+      parameters:
+      - name: eventId
+        in: path
+        required: true
+        type: integer
+        format: int64
+      - name: matchId
+        in: path
+        required: true
+        description: match id
+        type: integer
+        format: int64
+      - name: battle
+        in: body
+        required: true
+        schema:
+          $ref: "#/definitions/Battle"
+      - name: "X-SPLATHON-API-TOKEN"
+        in: header
+        type: string
+        required: true
+      responses:
+        200:
+          description: Success
+        default:
+          description: Generic error
+          schema:
+            $ref: "#/definitions/Error"
+
+    put:
+      tags:
+      - "admin"
+      operationId: "updateMatch"
+      parameters:
+      - name: eventId
+        in: path
+        required: true
+        type: integer
+        format: int64
+      - name: matchId
+        in: path
+        required: true
+        description: match id
+        type: integer
+        format: int64
+      - name: match
+        in: body
+        required: true
+        schema:
+          $ref: "#/definitions/NewMatchRequest"
+      - name: "X-SPLATHON-API-TOKEN"
+        in: header
+        type: string
+        required: true
+      responses:
+        200:
+          description: Success
+        default:
+          description: Generic error
+          schema:
+            $ref: "#/definitions/Error"
+
+  "/v{eventId}/ranking":
+    get:
+      tags:
+      - "ranking"
+      description: "予選ランキングを返す。"
+      operationId: "getRanking"
+      parameters:
+      - name: eventId
+        in: path
+        required: true
+        type: integer
+        format: int64
+      - name: latest
+        in: query
+        description: "Return latest ranking if true."
+        type: boolean
+      responses:
+        200:
+          description: Success
+          schema:
+            $ref: "#/definitions/Ranking"
+        default:
+          description: Generic error
+          schema:
+            $ref: "#/definitions/Error"
+
+  "/v{eventId}/teams":
+    get:
+      description: "Return team list"
+      operationId: "listTeams"
+      parameters:
+      - name: eventId
+        in: path
+        required: true
+        type: integer
+        format: int64
+      responses:
+        200:
+          description: Success
+          schema:
+            $ref: "#/definitions/Teams"
+        default:
+          description: Generic error
+          schema:
+            $ref: "#/definitions/Error"
+
+  "/v{eventId}/teams/{team_id}":
+    get:
+      description: "Return detail team data"
+      operationId: "getTeamDetail"
+      parameters:
+      - name: eventId
+        in: path
+        required: true
+        type: integer
+        format: int64
+      - name: team_id
+        in: path
+        required: true
+        description: team id
+        type: integer
+        format: int64
+      responses:
+        200:
+          description: Success
+          schema:
+            $ref: "#/definitions/Team"
+        default:
+          description: Generic error
+          schema:
+            $ref: "#/definitions/Error"
+
+  "/v{eventId}/reception":
+    get:
+      tags:
+      - "reception"
+      operationId: "getReception"
+      parameters:
+      - name: eventId
+        in: path
+        required: true
+        type: integer
+        format: int64
+      - name: "X-SPLATHON-API-TOKEN"
+        in: header
+        type: string
+        required: true
+      responses:
+        200:
+          description: Success
+          schema:
+            $ref: "#/definitions/ReceptionResponse"
+        default:
+          description: Generic error
+          schema:
+            $ref: "#/definitions/Error"
+
+  "/v{eventId}/reception/{splathonReceptionCode}":
+    get:
+      operationId: "getParticipantsDataForReception"
+      description: "参加者情報取得API"
+      tags:
+      - "reception"
+      - "admin"
+      parameters:
+      - name: eventId
+        in: path
+        required: true
+        type: integer
+        format: int64
+      - name: splathonReceptionCode
+        description: "ReceptionResponse.splathon.code と同じもの(たぶん内部SlackID)."
+        in: path
+        required: true
+        type: string
+      - name: "X-SPLATHON-API-TOKEN"
+        in: header
+        type: string
+        required: true
+      responses:
+        200:
+          description: Success
+          schema:
+            $ref: "#/definitions/ReceptionPartcipantsDataResponse"
+        default:
+          description: Generic error
+          schema:
+            $ref: "#/definitions/Error"
+
+  "/v{eventId}/reception/{splathonReceptionCode}/complete":
+    post:
+      operationId: "completeReception"
+      description: "参加登録API"
+      tags:
+      - "reception"
+      - "admin"
+      parameters:
+      - name: eventId
+        in: path
+        required: true
+        type: integer
+        format: int64
+      - name: splathonReceptionCode
+        description: "ReceptionResponse.splathon.code と同じもの(たぶん内部SlackID)."
+        in: path
+        required: true
+        type: string
+      - name: "X-SPLATHON-API-TOKEN"
+        in: header
+        type: string
+        required: true
+      responses:
+        200:
+          description: Success
+        default:
+          description: Generic error
+          schema:
+            $ref: "#/definitions/Error"
+
+  "/v{eventId}/list-reception":
+    get:
+      operationId: "listReception"
+      tags:
+      - "admin"
+      parameters:
+      - name: eventId
+        in: path
+        required: true
+        type: integer
+        format: int64
+      - name: "X-SPLATHON-API-TOKEN"
+        in: header
+        type: string
+        required: true
+      responses:
+        200:
+          description: Success
+          schema:
+            $ref: "#/definitions/ListReceptionResponse"
+        default:
+          description: Generic error
+          schema:
+            $ref: "#/definitions/Error"
+
+  "/v{eventId}/update-reception":
+    post:
+      operationId: "updateReception"
+      tags:
+      - "admin"
+      parameters:
+      - name: eventId
+        in: path
+        required: true
+        type: integer
+        format: int64
+      - name: "X-SPLATHON-API-TOKEN"
+        in: header
+        type: string
+        required: true
+      - name: request
+        in: body
+        required: true
+        schema:
+          $ref: "#/definitions/UpdateReceptionRequest"
+      responses:
+        200:
+          description: Success
+        default:
+          description: Generic error
+          schema:
+            $ref: "#/definitions/Error"
+
+  "/v{eventId}/tournament/":
+    post:
+      operationId: "addTournamentRound"
+      tags:
+      - "admin"
+      parameters:
+      - name: eventId
+        in: path
+        required: true
+        type: integer
+        format: int64
+      - name: "X-SPLATHON-API-TOKEN"
+        in: header
+        type: string
+        required: true
+      - name: request
+        in: body
+        required: true
+        schema:
+          $ref: "#/definitions/AddTournamentRoundRequest"
+      responses:
+        200:
+          description: Success
+        default:
+          description: Generic error
+          schema:
+            $ref: "#/definitions/Error"
+
+  "/v{eventId}/qualifier":
+    post:
+      operationId: "CreateNewQualifier"
+      tags:
+      - "admin"
+      parameters:
+      - name: eventId
+        in: path
+        required: true
+        type: integer
+        format: int64
+      - name: "X-SPLATHON-API-TOKEN"
+        in: header
+        type: string
+        required: true
+      responses:
+        200:
+          description: Success
+        default:
+          description: Generic error
+          schema:
+            $ref: "#/definitions/Error"
+
+  "/v{eventId}/delete-qualifier":
+    post:
+      operationId: "DeleteQualifier"
+      tags:
+      - "admin"
+      parameters:
+      - name: eventId
+        in: path
+        required: true
+        type: integer
+        format: int64
+      - name: "X-SPLATHON-API-TOKEN"
+        in: header
+        type: string
+        required: true
+      - name: request
+        in: body
+        schema:
+          $ref: "#/definitions/DeleteQualifierRequest"
+      responses:
+        200:
+          description: Success
+        default:
+          description: Generic error
+          schema:
+            $ref: "#/definitions/Error"
+
+  "/v{eventId}/release-qualifier":
+    get:
+      operationId: "getReleaseQualifier"
+      tags:
+      - "admin"
+      parameters:
+      - name: eventId
+        in: path
+        required: true
+        type: integer
+        format: int64
+      - name: "X-SPLATHON-API-TOKEN"
+        in: header
+        type: string
+        required: true
+      responses:
+        200:
+          description: Success
+          schema:
+            type: integer
+            format: int32
+        default:
+          description: Generic error
+          schema:
+            $ref: "#/definitions/Error"
+
+    put:
+      operationId: "UpdateReleaseQualifier"
+      tags:
+      - "admin"
+      parameters:
+      - name: eventId
+        in: path
+        required: true
+        type: integer
+        format: int64
+      - name: "X-SPLATHON-API-TOKEN"
+        in: header
+        type: string
+        required: true
+      - name: request
+        in: body
+        schema:
+          $ref: "#/definitions/UpdateReleaseQualifierRequest"
+      responses:
+        200:
+          description: Success
+        default:
+          description: Generic error
+          schema:
+            $ref: "#/definitions/Error"
+
+  "/v{eventId}/schedule":
+    get:
+      description: "Return event schedule data"
+      operationId: "getSchedule"
+      parameters:
+      - name: eventId
+        in: path
+        required: true
+        type: integer
+        format: int64
+      responses:
+        200:
+          description: Success
+          schema:
+            $ref: "#/definitions/Schedule"
+        default:
+          description: Generic error
+          schema:
+            $ref: "#/definitions/Error"
+
+    put:
+      tags:
+      - "admin"
+      description: "Update event schedule data"
+      operationId: "updateSchedule"
+      parameters:
+      - name: eventId
+        in: path
+        required: true
+        type: integer
+        format: int64
+      - name: "X-SPLATHON-API-TOKEN"
+        in: header
+        type: string
+        required: true
+      - name: request
+        in: body
+        required: true
+        schema:
+          $ref: "#/definitions/Schedule"
+      responses:
+        200:
+          description: Success
+        default:
+          description: Generic error
+          schema:
+            $ref: "#/definitions/Error"
+
+definitions:
+  Error:
+    type: object
+    required:
+      - message
+    properties:
+      message:
+        type: string
+      code:
+        type: integer
+        format: int64
+
+  LoginRequest:
+    type: object
+    required:
+      - user_id
+      - password
+    properties:
+      user_id:
+        description: "Slack username (https://splathon.slack.com/account/settings#username)"
+        type: string
+      password:
+        type: string
+
+  LoginResponse:
+    type: object
+    required:
+      - token
+      - is_admin
+    properties:
+      token:
+        description: "Session API token. Send this token via X-SPLATHON-API-TOKEN HTTP hader. 'X-SPLATHON-API-TOKEN: <token>'"
+        type: string
+      is_admin:
+        description: "管理者かどうか。(e.g. true なら battle data を送信できる。)"
+        type: boolean
+      team:
+        description:
+          "所属チーム。観戦だとないこともある。またloginユーザーはSlack
+          アカウントを共有している複数の参加者と紐ずいていることもあるが、所属チームは必ず1つ以下。"
+        $ref: "#/definitions/Team"
+
+  ListNoticesResponse:
+    type: object
+    properties:
+      notices:
+        description: "List of notices ordered by reverse chronological order."
+        type: array
+        items:
+          $ref: "#/definitions/Notice"
+
+  Notice:
+    type: object
+    required:
+      - text
+      - timestamp_sec
+    properties:
+      id:
+        type: integer
+        format: int64
+      text:
+        type: string
+      timestamp_sec:
+        type: integer
+        format: int64
+
+  GetNextMatchResponse:
+    type: object
+    properties:
+      next_match:
+        description: "次のマッチがない、または決まってない場合nullになる。"
+        $ref: "#/definitions/NextMatch"
+
+  NextMatch:
+    type: object
+    properties:
+      own_team:
+        $ref: "#/definitions/Team"
+      opponent_team:
+        $ref: "#/definitions/Team"
+      round_name:
+        type: string
+        description: "ラウンド名。e.g. 予選第1ラウンド, 決勝T1回戦, 決勝戦."
+      room:
+        type: object
+        required:
+          - name
+        properties:
+          id:
+            description: "Room ID."
+            type: integer
+            format: int32
+          name:
+            description: "Room name. e.g. A卓"
+            type: string
+      match_order_in_room:
+        description: "Room内でのマッチの順番"
+        type: integer
+        format: int32
+      match_detail:
+        $ref: "#/definitions/Match"
+
+  Results:
+    description: "予選/決勝Tのリザルト。予選/決勝Tは同じ構造なのでフラットにできるがクライアントがトーナメント表だせる拡張性持たせるために別フィールドで持つ。"
+    type: object
+    properties:
+      qualifiers:
+        type: array
+        items:
+          $ref: "#/definitions/Round"
+      tournament:
+        type: array
+        items:
+          $ref: "#/definitions/Round"
+
+  Round:
+    description: "予選/決勝Tラウンド両方扱う。"
+    type: object
+    required:
+      - name
+    properties:
+      id:
+        description: "Round ID. (Qualifier ID or Tournament ID)"
+        type: integer
+        format: int64
+      name:
+        description: "ラウンド名。e.g. 予選第1ラウンド, 決勝T1回戦, 決勝戦"
+        type: string
+      round:
+        description: "何ラウンドか。i.e. 予選第Nラウンド, 決勝T N回戦"
+        type: integer
+        format: int32
+      rooms:
+        type: array
+        items:
+          $ref: '#/definitions/Room'
+
+  Room:
+    description: "Roomごとのマッチ"
+    type: object
+    required:
+      - name
+      - matches
+    properties:
+      id:
+        description: "Room ID."
+        type: integer
+        format: int32
+      name:
+        description: "Room name. e.g. A卓"
+        type: string
+      matches:
+        type: array
+        items:
+          $ref: "#/definitions/Match"
+
+  SupportedRoom:
+    description: "Room data"
+    type: object
+    required:
+      - id
+      - name
+      - priority
+    properties:
+      id:
+        description: "Room ID."
+        type: integer
+        format: int64
+      name:
+        description: "Room name. e.g. A卓"
+        type: string
+      priority:
+        type: integer
+        format: int32
+
+  Match:
+    type: object
+    required:
+      - id
+      - teamAlpha
+      - teamBravo
+    properties:
+      id:
+        description: "Match ID"
+        type: integer
+        format: int32
+      winner:
+        type: string
+        description: "勝者がどちらか。または引き分け。"
+        enum:
+          - "alpha"
+          - "bravo"
+          - "draw"
+      order:
+        description: "Room内でのマッチの順番"
+        type: integer
+        format: int32
+      teamAlpha:
+        $ref: "#/definitions/Team"
+      teamBravo:
+        $ref: "#/definitions/Team"
+      battles:
+        type: array
+        items:
+          $ref: "#/definitions/Battle"
+      round_name:
+        type: string
+        description: "ラウンド名。e.g. 予選第1ラウンド, 決勝T1回戦, 決勝戦. Match APIから読んだときに埋まっている"
+
+  Team:
+    type: object
+    required:
+      - id
+      - name
+    properties:
+      id:
+        description: "Team ID"
+        type: integer
+        format: int32
+      name:
+        type: string
+      name_kana:
+        description: "チーム名のよみがな(ひらがな)"
+        type: string
+      short_comment:
+        description: "Team の大会にむけての意気込みコメント"
+        type: string
+      members:
+        type: array
+        items:
+          $ref: "#/definitions/Member"
+
+  Member:
+    type: object
+    description: "チーム一覧表示などのAPIではdetailが埋まってることもある"
+    required:
+      - name
+    properties:
+      id:
+        description: "Member ID (Slack ID かも?)"
+        type: integer
+        format: int32
+      name:
+        type: string
+      icon:
+        description: "Slack icon URL"
+        type: string
+      detail:
+        $ref: "#/definitions/MemberDetail"
+
+  MemberDetail:
+    type: object
+    properties:
+      short_comment:
+        description: "一言コメント"
+        type: string
+      rank_splat_zones:
+        description: "A+, X (2401~2500)"
+        type: string
+      rank_tower_control:
+        description: "A+, X (2401~2500)"
+        type: string
+      rank_rainmaker:
+        description: "A+, X (2401~2500)"
+        type: string
+      rank_clam_blitz:
+        description: "A+, X (2401~2500)"
+        type: string
+      main_weapon:
+        description: "メインウェポン/好きなブキ"
+        type: string
+
+  Battle:
+    description: "バトル。勝敗などは決まってない状態のこともある。"
+    type: object
+    required:
+      - order
+    properties:
+      id:
+        description: "Battle ID"
+        type: integer
+        format: int64
+      winner:
+        type: string
+        description: "勝者がどちらか。"
+        enum:
+          - "alpha"
+          - "bravo"
+      order:
+        description: "何戦目か"
+        type: integer
+        format: int32
+      rule:
+        $ref: "#/definitions/Rule"
+      stage:
+        $ref: "#/definitions/Stage"
+
+  Ranking:
+    description: "予選ランキング"
+    type: object
+    properties:
+      rank_time:
+        type: string
+        description: "ランキング計算時点の説明。e.g. 予選第2ラウンド終了時"
+      rankings:
+        type: array
+        items:
+          $ref: "#/definitions/Rank"
+
+  Rank:
+    type: object
+    required:
+      - rank
+      - team
+      - point
+    properties:
+      rank:
+        description: "順位"
+        type: integer
+        format: int32
+      team:
+        description: "member も fill される"
+        $ref: "#/definitions/Team"
+      point:
+        description: "勝ち点"
+        type: integer
+        format: int32
+      omwp:
+        description: "OMWP (Opponent Match Win Percentage)"
+        type: number
+      num_of_matches:
+        description: "何戦こなしたか。"
+        type: integer
+        format: int32
+
+  Teams:
+    type: object
+    properties:
+      teams:
+        type: array
+        items:
+          $ref: "#/definitions/Team"
+
+  Event:
+    type: object
+    required:
+      - name
+      - numbering
+    properties:
+      name:
+        type: string
+      numbering:
+        type: integer
+        format: int32
+      rules:
+        type: array
+        items:
+          $ref: "#/definitions/Rule"
+      stages:
+        type: array
+        items:
+          $ref: "#/definitions/Stage"
+      rooms:
+        type: array
+        items:
+          $ref: "#/definitions/SupportedRoom"
+
+  Rule:
+    type: object
+    required:
+      - key
+    properties:
+      key:
+        type: string
+        description: "Rule key. ref: https://splatoon2.ink/data/locale/ja.json"
+        enum:
+          - "turf_war"
+          - "splat_zones"
+          - "tower_control"
+          - "rainmaker"
+          - "clam_blitz"
+      name:
+        description: "Localized rule name."
+        type: string
+
+  Stage:
+    type: object
+    required:
+      - id
+    properties:
+      id:
+        description: "Stage ID. ref: https://splatoon2.ink/data/locale/ja.json"
+        type: integer
+        format: int32
+      name:
+        description: "Localized stage name."
+        type: string
+
+  ReceptionResponse:
+    type: object
+    properties:
+      building:
+        description: "ビル入館情報"
+        $ref: "#/definitions/ReceptionCode"
+      splathon:
+        description: "Splathon会場受付情報"
+        $ref: "#/definitions/ReceptionCode"
+
+  ReceptionCode:
+    type: object
+    description: "ビル入館情報/Splathon会場受付情報"
+    properties:
+      name:
+        description: "Splathon会場入場コード/XXXビル入館コード"
+        type: string
+      description:
+        description: "入場の説明"
+        type: string
+      short_text:
+        description: "コードの説明"
+        type: string
+      qrcode_img:
+        description: "Image URL of QR code"
+        type: string
+      code:
+        type: string
+      code_type:
+        type: string
+        enum:
+          - "qrcode"
+          - "barcode"
+
+  ReceptionPartcipantsDataResponse:
+    type: object
+    properties:
+      description:
+        description: "受付の仕方の説明や注意点などのフリーテキスト。"
+        type: string
+      slack_internal_id:
+        description: "参加者の Slack Internal ID"
+        type: string
+      participants:
+        description: "1つのSlackIDで複数の参加者をカバーしている。また
+        participants とは別に参加者情報のない同伴者が存在する可能性があり、
+        もしいる場合は has_companion flag が true となる"
+        type: array
+        items:
+          $ref: "#/definitions/ParticipantReception"
+
+  ListReceptionResponse:
+    type: object
+    properties:
+      participants:
+        type: array
+        items:
+          $ref: "#/definitions/ParticipantReception"
+
+  ParticipantReception:
+    type: object
+    required:
+      - id
+      - slack_user_id
+      - nickname
+      - fullname_kana
+      - company_name
+      - participant_fee
+      - join_party
+      - is_staff
+      - is_player
+      - has_switch_dock
+      - has_companion
+    properties:
+      id:
+        type: integer
+        format: int64
+        description: "internal id"
+      slack_user_id:
+        type: string
+        description: "Slack ID"
+      nickname:
+        type: string
+        description: "ハンドルネーム。 e.g. みーくん"
+      fullname_kana:
+        type: string
+        description: "カタカナのフルネーム。 e.g. ヤマダタロウ"
+      company_name:
+        type: string
+        description: "所属企業名"
+      team_name:
+        description: "チーム名"
+        type: string
+      team_id:
+        description: "チームID(一応)"
+        type: integer
+        format: int64
+      participant_fee:
+        type: integer
+        format: int32
+        description: "合計参加費(円)"
+      join_party:
+        type: boolean
+        description: "懇親会に参加するか否か"
+      is_staff:
+        type: boolean
+        description: "スタッフかどうか"
+      is_player:
+        type: boolean
+        description: "playerとして参加するかどうか。falseならスタッフか観戦"
+      has_switch_dock:
+        type: boolean
+        description: "Nintendo Switch doc を持ってきたか"
+      has_companion:
+        type: boolean
+        description: "同伴者がいるかどうか。いる場合は用スプレッドシート確認。"
+      reception:
+        $ref: "#/definitions/Reception"
+
+  Reception:
+    type: object
+    required:
+      - participant_id
+    properties:
+      id:
+        type: integer
+        format: int64
+      participant_id:
+        type: integer
+        format: int64
+      created_at_timestamp_sec:
+        type: integer
+        format: int64
+      updated_at_timestamp_sec:
+        type: integer
+        format: int64
+      memo:
+        type: string
+
+  UpdateReceptionRequest:
+    type: object
+    required:
+      - participant
+      - complete
+    properties:
+      participant:
+        $ref: "#/definitions/ParticipantReception"
+      complete:
+        type: boolean
+
+  AddTournamentRoundRequest:
+    type: object
+    required:
+      - round_name
+      - round
+      - matches
+    properties:
+      round_name:
+        type: string
+      round:
+        type: integer
+        format: int32
+      matches:
+        type: array
+        items:
+          $ref: "#/definitions/NewMatchRequest"
+
+  NewMatchRequest:
+    type: object
+    required:
+      - alpha_team_id
+      - bravo_team_id
+      - room_id
+      - order_in_room
+    properties:
+      alpha_team_id:
+        type: integer
+        format: int64
+      bravo_team_id:
+        type: integer
+        format: int64
+      room_id:
+        type: integer
+        format: int64
+      order_in_room:
+        description: "Match order in this room."
+        type: integer
+        format: int32
+
+  UpdateReleaseQualifierRequest:
+    type: object
+    properties:
+      round:
+        type: integer
+        format: int32
+
+  DeleteQualifierRequest:
+    type: object
+    properties:
+      round:
+        type: integer
+        format: int32
+
+  Schedule:
+    type: object
+    properties:
+      entries:
+        type: array
+        items:
+          $ref: "#/definitions/ScheduleEntry"
+
+  ScheduleEntry:
+    type: object
+    properties:
+      title:
+        type: string
+      start_timestamp_sec:
+        description: "Unix timestamp in seconds."
+        type: integer
+        format: int64
+      duration_sec:
+        type: integer
+        format: int64

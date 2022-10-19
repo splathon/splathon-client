@@ -1,25 +1,25 @@
-import 'package:flutter/material.dart';
-import 'package:splathon_app/styles/text.dart';
-import 'package:splathon_app/styles/color.dart';
-import 'package:splathon_app/views/roundedView.dart';
-import 'package:splathon_app/views/Image.dart';
-import 'package:english_words/english_words.dart';
-import 'package:splathon_app/utils/config.dart';
-import 'package:auto_size_text/auto_size_text.dart';
-import 'package:splathon_app/utils/event.dart';
 import 'dart:async';
+
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:flutter/material.dart';
 import 'package:openapi/api.dart' as API;
+import 'package:splathon_app/styles/color.dart';
+import 'package:splathon_app/utils/config.dart';
+import 'package:splathon_app/utils/event.dart';
+import 'package:splathon_app/views/Image.dart';
+import 'package:splathon_app/views/roundedView.dart';
 
 class Rankings extends StatefulWidget {
-  Rankings({Key key}) : super(key: key);
+  //const Rankings({required Key key}) : super(key: key);
 
   @override
   _RankingsState createState() => _RankingsState();
 }
 
-class _RankingsState extends State<Rankings> with AutomaticKeepAliveClientMixin {
+class _RankingsState extends State<Rankings>
+    with AutomaticKeepAliveClientMixin {
   // ViewModel
-  API.Ranking _model;
+  API.Ranking? _model;
 
   @override
   void initState() {
@@ -34,15 +34,17 @@ class _RankingsState extends State<Rankings> with AutomaticKeepAliveClientMixin 
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
+
     return buildRankings();
   }
 
   Future fetchData() async {
-    var client = new API.RankingApi();
+    var client = API.RankingApi();
     var result = client.getRanking(Config().eventNumber);
-    result.then(
-      (rankingObj) => setState(() { this._model = rankingObj; } )
-    );
+    result.then((rankingObj) => setState(() {
+          _model = rankingObj;
+        }));
   }
 
   listenReloadEvent() async {
@@ -57,8 +59,8 @@ class _RankingsState extends State<Rankings> with AutomaticKeepAliveClientMixin 
   Widget buildRankings() {
     if (_model == null) {
       // Loading
-      return new Center(
-        child: const CircularProgressIndicator(),
+      return const Center(
+        child: CircularProgressIndicator(),
       );
     }
 
@@ -67,7 +69,7 @@ class _RankingsState extends State<Rankings> with AutomaticKeepAliveClientMixin 
     return Container(
       color: backgroundColor,
       child: ListView.builder(
-        itemCount: _model.rankings.length * 2 + 1,
+        itemCount: _model!.rankings.length * 2 + 1,
         itemBuilder: (BuildContext context, i) {
           if (i == 0) {
             return Row(
@@ -75,33 +77,33 @@ class _RankingsState extends State<Rankings> with AutomaticKeepAliveClientMixin 
               children: <Widget>[
                 Padding(
                   padding: const EdgeInsets.only(top: 2, right: 20),
-                  child: Text(_model.rankTime, style: timeStyle),
-                ),                
+                  child: Text(_model!.rankTime ?? '',
+                      style: timeStyle), // TODO: null case
+                ),
               ],
             );
           }
 
           final index = (i - 1) ~/ 2;
-          API.Rank rank = _model.rankings[index];
+          API.Rank rank = _model!.rankings[index];
           if (i.isOdd) {
             return headerView(index, rank);
           }
 
-          return new Container(
+          return Container(
             decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(10.0),
-              border: Border.all(
-                color: borderColor,
-                width: 1,
-              )
-            ),
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10.0),
+                border: Border.all(
+                  color: borderColor,
+                  width: 1,
+                )),
             margin: const EdgeInsets.only(left: 20, right: 20),
             height: 75.0,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                Container(
+                SizedBox(
                   height: 36.0,
                   child: Row(
                     mainAxisSize: MainAxisSize.max,
@@ -111,7 +113,7 @@ class _RankingsState extends State<Rankings> with AutomaticKeepAliveClientMixin 
                     ],
                   ),
                 ),
-                Container(
+                SizedBox(
                   height: 36.0,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -140,12 +142,22 @@ class _RankingsState extends State<Rankings> with AutomaticKeepAliveClientMixin 
     final rankIndex = index + 1; // rankIndex: 1..N
     final isTop3 = rankIndex <= 3;
     return Container(
-      margin: index == 0 ? const EdgeInsets.only(left: 20, right: 20) : const EdgeInsets.only(top: 12, left: 20, right: 20),
+      margin: index == 0
+          ? const EdgeInsets.only(left: 20, right: 20)
+          : const EdgeInsets.only(top: 12, left: 20, right: 20),
       height: 36.0,
       child: Row(
         children: <Widget>[
-          isTop3 ? Image.asset('assets/images/crown$rankIndex.png') : SizedBox(),
-          Padding(padding: const EdgeInsets.only(left: 4.0, right: 4.0), child: Text('$rankIndex位', style: rankTextStyle(rankIndex),),),
+          isTop3
+              ? Image.asset('assets/images/crown$rankIndex.png')
+              : const SizedBox(),
+          Padding(
+            padding: const EdgeInsets.only(left: 4.0, right: 4.0),
+            child: Text(
+              '$rankIndex位',
+              style: rankTextStyle(rankIndex),
+            ),
+          ),
           Text(rank.team.name, style: rankTextStyle(rankIndex)),
           Expanded(
             child: Container(),
@@ -156,15 +168,12 @@ class _RankingsState extends State<Rankings> with AutomaticKeepAliveClientMixin 
           ),
         ],
       ),
-    ); 
+    );
   }
 
   Widget memberView(API.Member member, double screenWidth) {
     if (member == null) {
-      return Expanded(
-        flex: 1,
-        child: Container()
-      );
+      return Expanded(flex: 1, child: Container());
     }
 
     final textWidth = (screenWidth / 2) - 65;
@@ -173,15 +182,19 @@ class _RankingsState extends State<Rankings> with AutomaticKeepAliveClientMixin 
       flex: 1,
       child: Container(
         padding: const EdgeInsets.only(left: 8, right: 8),
-        child :Row(
+        child: Row(
           children: <Widget>[
-            CharactorImage(member.icon),
-            SizedBox(
+            CharactorImage(member.icon ?? ''), // TODO: null case
+            const SizedBox(
               width: 5,
             ),
             SizedBox(
               width: textWidth,
-              child: AutoSizeText(member.name, style: nameStyle, maxLines: 1,),
+              child: AutoSizeText(
+                member.name,
+                style: nameStyle,
+                maxLines: 1,
+              ),
             ),
           ],
         ),
@@ -212,15 +225,15 @@ class _RankingsState extends State<Rankings> with AutomaticKeepAliveClientMixin 
       fontSize: 18.0,
     );
   }
-  
+
   Color rankTextColor(int index) {
     switch (index) {
       case 1:
-        return Color.fromRGBO(187, 150, 0, 1.0);
+        return const Color.fromRGBO(187, 150, 0, 1.0);
       case 2:
-        return Color.fromRGBO(120, 130, 154, 1.0);
+        return const Color.fromRGBO(120, 130, 154, 1.0);
       case 3:
-        return Color.fromRGBO(188, 130, 89, 1.0);
+        return const Color.fromRGBO(188, 130, 89, 1.0);
       default:
         return blackColor;
     }

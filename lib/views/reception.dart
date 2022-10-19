@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:splathon_app/styles/text.dart';
 import 'package:splathon_app/styles/color.dart';
-import 'package:splathon_app/views/enter.dart';
 import 'package:splathon_app/utils/event.dart';
+import 'package:splathon_app/views/enter.dart';
 
 class ReceptionTabbedBar extends StatefulWidget {
-  ReceptionTabbedBar({Key key}) : super(key: key);
+  //const ReceptionTabbedBar({required Key key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -13,8 +12,9 @@ class ReceptionTabbedBar extends StatefulWidget {
   }
 }
 
-class _ReceptionTabbedBarState extends State<ReceptionTabbedBar> with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
-  TabController controller;
+class _ReceptionTabbedBarState extends State<ReceptionTabbedBar>
+    with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
+  late TabController controller;
 
   @override
   void initState() {
@@ -35,7 +35,7 @@ class _ReceptionTabbedBarState extends State<ReceptionTabbedBar> with SingleTick
           return;
         case 1:
           Event().bus.fire(EnterSplathonReload());
-          return;     
+          return;
       }
     });
   }
@@ -44,20 +44,20 @@ class _ReceptionTabbedBarState extends State<ReceptionTabbedBar> with SingleTick
   Widget build(BuildContext context) {
     return Container(
       color: backgroundColor,
-      child: new Stack(
+      child: Stack(
         children: <Widget>[
           TabBarView(
+            controller: controller,
             children: [
               Padding(
                 padding: const EdgeInsets.only(top: 60.0),
-                child: new Enter(true),
+                child: Enter(true),
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 60.0),
-                child: new Enter(false),
+                child: Enter(false),
               ),
             ],
-            controller: controller,
           ),
           Padding(
             padding: const EdgeInsets.only(top: 20.0, left: 20.0, right: 20.0),
@@ -67,9 +67,9 @@ class _ReceptionTabbedBarState extends State<ReceptionTabbedBar> with SingleTick
               labelColor: splaBlueColor,
               labelStyle: tabStyle,
               tabs: choices.map((TabView tabView) {
-                return new Container(
+                return SizedBox(
                   height: 40.0,
-                  child: new Tab(
+                  child: Tab(
                     text: tabView.title,
                   ),
                 );
@@ -90,25 +90,26 @@ class _ReceptionTabbedBarState extends State<ReceptionTabbedBar> with SingleTick
 }
 
 class TabView {
-  const TabView({this.title, this.icon});
+  const TabView({required this.title, this.icon});
 
   final String title;
-  final IconData icon;
+  final IconData? icon;
 }
 
-const List<TabView> choices = const <TabView>[
-  const TabView(title: 'ビル入館ゲート'),
-  const TabView(title: '会場入場コード'),
+const List<TabView> choices = <TabView>[
+  TabView(title: 'ビル入館ゲート'),
+  TabView(title: '会場入場コード'),
 ];
 
 class TabViewCard extends StatelessWidget {
-  const TabViewCard({Key key, this.tabView}) : super(key: key);
+  const TabViewCard({required Key key, required this.tabView})
+      : super(key: key);
 
   final TabView tabView;
 
   @override
   Widget build(BuildContext context) {
-    final TextStyle textStyle = Theme.of(context).textTheme.display1;
+    final TextStyle? textStyle = Theme.of(context).textTheme.headline4;
     return Card(
       color: Colors.white,
       child: Center(
