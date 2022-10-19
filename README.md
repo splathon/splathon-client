@@ -1,16 +1,39 @@
-# splathon_client
+# splathon-client
 
-A new Flutter project.
+Splathon client application
 
-## Getting Started
+<img src="https://raw.githubusercontent.com/splathon/splathon-client/master/assets/images/icon-splathon-app.png" width="500px">
 
-This project is a starting point for a Flutter application.
+## Setup
 
-A few resources to get you started if this is your first Flutter project:
+### Install dart
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+```
+$ brew tap dart-lang/dart
+$ brew install dart
+```
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### Install FVM
+
+```
+$ dart pub global activate fvm
+```
+
+### Install Xcode, Android Studio
+
+https://docs.flutter.dev/get-started/install/macos
+
+### Generate APIs client code
+
+```
+$ openapi-generator generate -i swagger.yaml -g dart -o client
+```
+
+## Specs
+
+- [Google Drive - Splathon#10 App develop](https://drive.google.com/drive/folders/1IkOe2ItR_ZYUKULYlUSvZwqRhMjebM7z)
+
+## Design
+
+- [Zeplin - splathon app](https://app.zeplin.io/project/5c9f792b57fbe3581e78215b)
+
