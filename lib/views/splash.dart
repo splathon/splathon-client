@@ -3,7 +3,7 @@ import 'package:splathon_app/utils/preference.dart';
 
 class Splash extends StatefulWidget {
   @override
-  _SplashState createState() => new _SplashState();
+  _SplashState createState() => _SplashState();
 }
 
 class _SplashState extends State<Splash> {
@@ -12,15 +12,15 @@ class _SplashState extends State<Splash> {
     super.initState();
 
     // MEMO: Wait Preference initialized
-    new Future.delayed(const Duration(milliseconds: 500))
-      .then((value) => handleRouting());
+    Future.delayed(const Duration(milliseconds: 500))
+        .then((value) => handleRouting());
   }
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      body: new Center(
-        child: const CircularProgressIndicator(),
+    return const Scaffold(
+      body: Center(
+        child: CircularProgressIndicator(),
       ),
     );
   }
@@ -29,12 +29,14 @@ class _SplashState extends State<Splash> {
     String token = Preference().getToken();
     bool isAdmin = Preference().isAdmin();
 
-    if (token == null) {
+    print('token: $token isAdmin: $isAdmin');
+
+    if (token.isEmpty) {
       Navigator.of(context).pushReplacementNamed("/login");
     } else if (isAdmin) {
       Navigator.of(context).pushReplacementNamed("/admin");
     } else {
       Navigator.of(context).pushReplacementNamed("/home");
-    }    
+    }
   }
 }

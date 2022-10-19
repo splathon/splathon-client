@@ -1,25 +1,22 @@
-import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:openapi/api.dart' as API;
 
 class Preference {
-  static Preference _singleton;
-  SharedPreferences prefs;
-
+  static final Preference _singleton = Preference._internal();
+  // Private constractor
+  Preference._internal() {
+    setup();
+  }
   factory Preference() {
-    if (_singleton == null) {
-      _singleton = new Preference._internal();
-      _singleton.setup();
-    }
     return _singleton;
   }
+  late SharedPreferences prefs;
 
   setup() async {
     prefs = await SharedPreferences.getInstance();
   }
 
   String getToken() {
-    return prefs.getString('Token11');
+    return prefs.getString('Token11') ?? '';
   }
 
   setToken(String token) {
@@ -27,7 +24,7 @@ class Preference {
   }
 
   bool isAdmin() {
-    return prefs.getBool('isAdmin');
+    return prefs.getBool('isAdmin') ?? false;
   }
 
   setIsAdmin(bool isAdmin) {
@@ -35,7 +32,7 @@ class Preference {
   }
 
   int getTeamId() {
-    return prefs.getInt('TeamId');
+    return prefs.getInt('TeamId') ?? 0;
   }
 
   setTeamId(int teamId) {
@@ -43,7 +40,7 @@ class Preference {
   }
 
   String getTeamName() {
-    return prefs.getString('TeamName');
+    return prefs.getString('TeamName') ?? '';
   }
 
   setTeamName(String teamName) {
@@ -51,13 +48,10 @@ class Preference {
   }
 
   int getNoticeReadTime() {
-    return prefs.getInt('NoticeReadTime');
+    return prefs.getInt('NoticeReadTime') ?? 0;
   }
 
   setNoticeReadTime(int unixTime) {
     prefs.setInt('NoticeReadTime', unixTime);
   }
-
-  // Private constractor
-  Preference._internal();
 }

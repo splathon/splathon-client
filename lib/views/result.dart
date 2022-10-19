@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:splathon_app/styles/text.dart';
 import 'package:splathon_app/styles/color.dart';
-import 'package:splathon_app/views/myresult.dart';
-import 'package:splathon_app/views/allresult.dart';
 import 'package:splathon_app/utils/event.dart';
+import 'package:splathon_app/views/allresult.dart';
+import 'package:splathon_app/views/myresult.dart';
 
 class ResultTabbedBar extends StatefulWidget {
-  ResultTabbedBar({Key key}) : super(key: key);
+  //const ResultTabbedBar({required Key key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -14,8 +13,9 @@ class ResultTabbedBar extends StatefulWidget {
   }
 }
 
-class _ResultTabbedBarState extends State<ResultTabbedBar> with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
-  TabController controller;
+class _ResultTabbedBarState extends State<ResultTabbedBar>
+    with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
+  late TabController controller;
 
   @override
   void initState() {
@@ -36,7 +36,7 @@ class _ResultTabbedBarState extends State<ResultTabbedBar> with SingleTickerProv
           return;
         case 1:
           Event().bus.fire(AllResultReload());
-          return;     
+          return;
       }
     });
   }
@@ -45,9 +45,10 @@ class _ResultTabbedBarState extends State<ResultTabbedBar> with SingleTickerProv
   Widget build(BuildContext context) {
     return Container(
       color: backgroundColor,
-      child: new Stack(
+      child: Stack(
         children: <Widget>[
           TabBarView(
+            controller: controller,
             children: [
               Padding(
                 padding: const EdgeInsets.only(top: 60.0),
@@ -55,10 +56,9 @@ class _ResultTabbedBarState extends State<ResultTabbedBar> with SingleTickerProv
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 60.0),
-                child: AllResult(),//ResultDetail(),
+                child: AllResult(), //ResultDetail(),
               ),
             ],
-            controller: controller,
           ),
           Padding(
             padding: const EdgeInsets.only(top: 20.0, left: 20.0, right: 20.0),
@@ -68,9 +68,9 @@ class _ResultTabbedBarState extends State<ResultTabbedBar> with SingleTickerProv
               labelColor: splaBlueColor,
               labelStyle: tabStyle,
               tabs: choices.map((TabView tabView) {
-                return new Container(
+                return SizedBox(
                   height: 40.0,
-                  child: new Tab(
+                  child: Tab(
                     text: tabView.title,
                   ),
                 );
@@ -91,25 +91,26 @@ class _ResultTabbedBarState extends State<ResultTabbedBar> with SingleTickerProv
 }
 
 class TabView {
-  const TabView({this.title, this.icon});
+  const TabView({required this.title, this.icon});
 
   final String title;
-  final IconData icon;
+  final IconData? icon;
 }
 
-const List<TabView> choices = const <TabView>[
-  const TabView(title: '各チームの試合結果'),
-  const TabView(title: '全ての試合結果'),
+const List<TabView> choices = <TabView>[
+  TabView(title: '各チームの試合結果'),
+  TabView(title: '全ての試合結果'),
 ];
 
 class TabViewCard extends StatelessWidget {
-  const TabViewCard({Key key, this.tabView}) : super(key: key);
+  const TabViewCard({required Key key, required this.tabView})
+      : super(key: key);
 
   final TabView tabView;
 
   @override
   Widget build(BuildContext context) {
-    final TextStyle textStyle = Theme.of(context).textTheme.display1;
+    final TextStyle? textStyle = Theme.of(context).textTheme.headline4;
     return Card(
       color: Colors.white,
       child: Center(

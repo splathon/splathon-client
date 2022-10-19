@@ -1,26 +1,27 @@
-import 'package:flutter/material.dart';
-import 'package:splathon_app/styles/text.dart';
-import 'package:splathon_app/styles/color.dart';
-import 'package:splathon_app/utils/preference.dart';
-import 'package:splathon_app/utils/config.dart';
-import 'package:qr_flutter/qr_flutter.dart';
-import 'package:splathon_app/utils/event.dart';
 import 'dart:async';
+
+import 'package:flutter/material.dart';
 import 'package:openapi/api.dart' as API;
+import 'package:qr_flutter/qr_flutter.dart';
+import 'package:splathon_app/styles/color.dart';
+import 'package:splathon_app/styles/text.dart';
+import 'package:splathon_app/utils/config.dart';
+import 'package:splathon_app/utils/event.dart';
+import 'package:splathon_app/utils/preference.dart';
 
 class Enter extends StatefulWidget {
-  bool _isBuilding;
-  Enter(this._isBuilding);
-  
+  final bool _isBuilding;
+  const Enter(this._isBuilding);
+
   @override
   _EnterState createState() => _EnterState(_isBuilding);
 }
 
 class _EnterState extends State<Enter> with AutomaticKeepAliveClientMixin {
-  bool _isBuilding;
+  final bool _isBuilding;
   _EnterState(this._isBuilding);
 
-  API.ReceptionResponse _model;
+  API.ReceptionResponse? _model;
 
   @override
   void initState() {
@@ -33,12 +34,12 @@ class _EnterState extends State<Enter> with AutomaticKeepAliveClientMixin {
   bool get wantKeepAlive => true;
 
   Future fetchData() async {
-    var client = new API.ReceptionApi();
+    var client = API.ReceptionApi();
     String token = Preference().getToken();
     var result = client.getReception(Config().eventNumber, token);
-    result.then(
-      (resultsObj) => setState(() { this._model = resultsObj; } )
-    );
+    result.then((resultsObj) => setState(() {
+          _model = resultsObj;
+        }));
   }
 
   listenReloadEvent() async {
@@ -58,17 +59,24 @@ class _EnterState extends State<Enter> with AutomaticKeepAliveClientMixin {
       });
     }
   }
-  
+
   @override
   Widget build(BuildContext context) {
     if (_model == null) {
       // Loading
-      return new Center(
-        child: const CircularProgressIndicator(),
+      return const Center(
+        child: CircularProgressIndicator(),
       );
     }
 
-    API.ReceptionCode reception = _isBuilding ? _model.building : _model.splathon;
+    API.ReceptionCode? reception =
+        _isBuilding ? _model?.building : _model?.splathon;
+    if (reception == null) {
+      // TODO: null case
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    }
 
     return Container(
       color: backgroundColor,
@@ -78,7 +86,7 @@ class _EnterState extends State<Enter> with AutomaticKeepAliveClientMixin {
           if (i == 0) {
             return Container(
               margin: const EdgeInsets.only(top: 20, left: 20, right: 20),
-              child: SplaText(reception.description),
+              child: SplaText(reception.description!),
             );
           }
           return Container(
@@ -88,11 +96,13 @@ class _EnterState extends State<Enter> with AutomaticKeepAliveClientMixin {
             child: Column(
               children: <Widget>[
                 QrImage(
-                  data: reception.code,
+                  data: reception.code!,
                   size: 250,
                 ),
-                SizedBox(height: 40),
-                reception.shortText == null ? Container() : SplaText(reception.shortText),
+                const SizedBox(height: 40),
+                reception.shortText == null
+                    ? Container()
+                    : SplaText(reception.shortText!),
               ],
             ),
           );

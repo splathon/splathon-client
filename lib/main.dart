@@ -1,21 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:splathon_app/views/splash.dart';
-import 'package:splathon_app/views/login.dart';
-import 'package:splathon_app/views/hometabbedbar.dart';
-import 'package:splathon_app/views/admintabbar.dart';
 import 'package:splathon_app/utils/preference.dart';
+import 'package:splathon_app/views/admintabbar.dart';
+import 'package:splathon_app/views/hometabbedbar.dart';
+import 'package:splathon_app/views/login.dart';
+import 'package:splathon_app/views/splash.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  // await Firebase.initializeApp(
+  //   options: DefaultFirebaseOptions.currentPlatform,
+  // );
   // Initialize preference
   Preference();
-  
-  runApp(new MaterialApp(
+
+  runApp(MaterialApp(
     title: 'Navigation with Routes',
     routes: <String, WidgetBuilder>{
-      '/': (_) => new Splash(),
-      '/login': (_) => new Login(),
-      '/home': (_) => new HomeTabbedBar(),
-      '/admin': (_) => new AdminTabbedBar(),
+      '/': (_) => Splash(),
+      '/login': (_) => Login(),
+      '/home': (_) => HomeTabbedBar(),
+      '/admin': (_) => AdminTabbedBar(),
     },
   ));
 }

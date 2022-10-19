@@ -1,19 +1,18 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
-import "package:intl/intl.dart";
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:splathon_app/styles/text.dart';
+import "package:intl/intl.dart";
+import 'package:openapi/api.dart' as API;
 import 'package:splathon_app/styles/color.dart';
-import 'package:splathon_app/views/roundedView.dart';
-import 'package:english_words/english_words.dart';
-import 'package:splathon_app/utils/preference.dart';
 import 'package:splathon_app/utils/config.dart';
 import 'package:splathon_app/utils/event.dart';
+import 'package:splathon_app/utils/preference.dart';
+import 'package:splathon_app/views/roundedView.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'dart:async';
-import 'package:openapi/api.dart' as API;
 
 class Notifications extends StatefulWidget {
-  Notifications({Key key}) : super(key: key);
+  //const Notifications({required Key key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -21,12 +20,13 @@ class Notifications extends StatefulWidget {
   }
 }
 
-class _NotificationsState extends State<Notifications> with AutomaticKeepAliveClientMixin {
-  API.ListNoticesResponse _model;
-  API.GetNextMatchResponse _next;
-  API.Schedule _schedule;
-  API.Team myTeam;
-  int alreadyReadTime;
+class _NotificationsState extends State<Notifications>
+    with AutomaticKeepAliveClientMixin {
+  API.ListNoticesResponse? _model;
+  API.GetNextMatchResponse? _next;
+  API.Schedule? _schedule;
+  API.Team? myTeam;
+  int? alreadyReadTime;
 
   @override
   void initState() {
@@ -34,15 +34,15 @@ class _NotificationsState extends State<Notifications> with AutomaticKeepAliveCl
 
     int teamId = Preference().getTeamId();
     String teamName = Preference().getTeamName();
-    if (teamId != null && teamName != null) {
-      myTeam = API.Team();
-      myTeam.id = teamId;
-      myTeam.name = teamName;
-    }
+    myTeam = API.Team(id: teamId, name: teamName);
+    print('team $myTeam');
+    // myTeam?.id = teamId;
+    // myTeam?.name = teamName;
 
     alreadyReadTime = Preference().getNoticeReadTime();
-    if (myTeam != null) {
-      fetchNextMatch(myTeam.id);
+    //if (myTeam != null) {
+    if (teamId > 0 && teamName.isNotEmpty) {
+      fetchNextMatch(myTeam!.id);
     } else {
       fetchNotices();
     }
@@ -60,8 +60,9 @@ class _NotificationsState extends State<Notifications> with AutomaticKeepAliveCl
         _next = null;
 
         alreadyReadTime = Preference().getNoticeReadTime();
-        if (myTeam != null) {
-          fetchNextMatch(myTeam.id);
+        //if (myTeam != null) {
+        if (myTeam!.id > 0 && myTeam!.name.isNotEmpty) {
+          fetchNextMatch(myTeam!.id);
         } else {
           fetchNotices();
         }
@@ -70,40 +71,35 @@ class _NotificationsState extends State<Notifications> with AutomaticKeepAliveCl
   }
 
   Future fetchNotices() async {
-    var client = new API.DefaultApi();
+    var client = API.DefaultApi();
     String token = Preference().getToken();
     var result = client.listNotices(Config().eventNumber, token);
-    result.then(
-      (responseObj) => setState(() { 
-        this._model = responseObj; 
+    result.then((responseObj) => setState(() {
+          _model = responseObj;
 
-        updateReadTime();
-        fetchSchedule();
-      })
-    );
+          updateReadTime();
+          fetchSchedule();
+        }));
   }
 
   Future fetchNextMatch(int teamId) async {
-    var client = new API.MatchApi();
+    var client = API.MatchApi();
     String token = Preference().getToken();
-    var result = client.getNextMatch(Config().eventNumber, token, teamId: teamId);
-    result.then(
-      (responseObj) => setState(() {
-        this._next = responseObj;
+    var result =
+        client.getNextMatch(Config().eventNumber, token, teamId: teamId);
+    result.then((responseObj) => setState(() {
+          _next = responseObj;
 
-        fetchNotices();
-      })
-    );
+          fetchNotices();
+        }));
   }
 
   Future fetchSchedule() async {
-    var client = new API.DefaultApi();
+    var client = API.DefaultApi();
     var result = client.getSchedule(Config().eventNumber);
-    result.then(
-      (responseObj) => setState(() {
-        this._schedule = responseObj;
-      })
-    );
+    result.then((responseObj) => setState(() {
+          _schedule = responseObj;
+        }));
   }
 
   @override
@@ -117,260 +113,303 @@ class _NotificationsState extends State<Notifications> with AutomaticKeepAliveCl
   }
 
   Widget buildNotifications() {
-    if (_model == null || _schedule == null) {
+    if (_schedule == null || _model == null) {
       // Loading
-      return new Center(
-        child: const CircularProgressIndicator(),
+      return const Center(
+        child: CircularProgressIndicator(),
       );
     }
 
     return Container(
       color: backgroundColor,
-       child: new ListView.builder(
-        itemCount: _model.notices.length + _schedule.entries.length + 5,
-        itemBuilder: (BuildContext context, i) {
-          if (i == 0) {
-            if (myTeam == null) {
-              return Container();
+      child: ListView.builder(
+          itemCount: _model!.notices.length + _schedule!.entries.length + 5,
+          itemBuilder: (BuildContext context, i) {
+            if (i == 0) {
+              if (myTeam == null) {
+                return Container();
+              }
+              return Container(
+                margin: const EdgeInsets.only(top: 15, left: 20, right: 20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    const Text('ようこそ', style: topLabelMiniStyle),
+                    const SizedBox(width: 5),
+                    Text(myTeam!.name, style: nextMatchNameStyle),
+                    const SizedBox(width: 5),
+                    const Text('チーム', style: topLabelMiniStyle),
+                  ],
+                ),
+              );
             }
-            return Container(
-              margin: const EdgeInsets.only(top: 15, left: 20, right: 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Text('ようこそ', style: topLabelMiniStyle),
-                  SizedBox(width: 5),
-                  Text(myTeam.name, style: nextMatchNameStyle),
-                  SizedBox(width: 5),
-                  Text('チーム', style: topLabelMiniStyle),
-                ],
-              ),
-            );
-          }
-          if (i == 1) {
-            if (myTeam == null || _next.nextMatch == null || _next.nextMatch.opponentTeam == null) {
-              return Container();
+            if (i == 1) {
+              if (_next?.nextMatch?.opponentTeam == null) {
+                return Container();
+              }
+              return Container(
+                margin: const EdgeInsets.only(top: 20, left: 20, right: 20),
+                child: Stack(
+                  children: <Widget>[
+                    Image.asset('assets/images/goldInc.png'),
+                    const Padding(
+                      padding: EdgeInsets.only(left: 12),
+                      child: Text('次の試合はここだ！', style: titleStyle),
+                    ),
+                  ],
+                ),
+              );
             }
-            return new Container(
-              margin: const EdgeInsets.only(top: 20, left: 20, right: 20),
-              child: new Stack(
-                children: <Widget>[
-                  Image.asset('assets/images/goldInc.png'),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 12),
-                    child: Text('次の試合はここだ！', style: titleStyle),
-                  ),
-                ],
-              ),
-            );
-          }
-          if (i == 2) {
-            if (myTeam == null || _next.nextMatch == null || _next.nextMatch.opponentTeam == null) {
-              return Container();
+            if (i == 2) {
+              if (_next?.nextMatch?.opponentTeam == null) {
+                return Container();
+              }
+              return Container(
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10.0),
+                    border: Border.all(
+                      color: borderColor,
+                      width: 1,
+                    )),
+                margin: const EdgeInsets.only(left: 20, right: 20),
+                padding: const EdgeInsets.only(left: 14.0, right: 14.0),
+                height: 70.0,
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: <Widget>[
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        SizedBox(
+                          height: 20.0,
+                          child: Text(
+                              "${_next!.nextMatch!.roundName} ${_next!.nextMatch!.room?.name} 第${_next!.nextMatch!.matchOrderInRoom}試合",
+                              style: nextMatchTitleStyle),
+                        ),
+                        SizedBox(
+                          height: 36.0,
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: <Widget>[
+                              Text(
+                                _next!.nextMatch!.opponentTeam?.name ?? '',
+                                style: nextMatchNameStyle,
+                                maxLines: 1,
+                              ),
+                              const Text('戦', style: nextMatchNameStyle),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              );
             }
-            return new Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10.0),
-                border: Border.all(
-                  color: borderColor,
-                  width: 1,
-                )
-              ),
-              margin: const EdgeInsets.only(left: 20, right: 20),
-              padding: const EdgeInsets.only(left: 14.0, right: 14.0),
-              height: 70.0,
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                children: <Widget>[
-                  Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
+            if (i == 3) {
+              return Container(
+                margin: const EdgeInsets.only(top: 20, left: 20, right: 20),
+                child: Stack(
+                  children: <Widget>[
+                    Image.asset('assets/images/silverInc.png'),
+                    const Padding(
+                      padding: EdgeInsets.only(left: 12),
+                      child: Text('お知らせ', style: titleStyle),
+                    )
+                  ],
+                ),
+              );
+            }
+
+            if (i - 4 < _model!.notices.length) {
+              final index = i - 4;
+              final isLast = index == _model!.notices.length - 1;
+              final notice = _model!.notices[index];
+              String? url;
+              RegExpMatch? match = RegExp(
+                      r"(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)",
+                      caseSensitive: false)
+                  .firstMatch(notice.text);
+              url = match?.group(0);
+              return Container(
+                  decoration:
+                      notificationDecoration(index, _model!.notices.length),
+                  margin: isLast
+                      ? const EdgeInsets.only(left: 20, right: 20, bottom: 20)
+                      : const EdgeInsets.only(left: 20, right: 20),
+                  child: Center(
+                      child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
                       Container(
-                        height: 20.0,
-                        child: Text(_next.nextMatch.roundName + " " + _next.nextMatch.room.name + " 第" + _next.nextMatch.matchOrderInRoom.toString() + "試合", style: nextMatchTitleStyle),
-                        ),
-                      Container(
-                        height: 36.0,
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        padding: const EdgeInsets.only(left: 14),
+                        child: Column(
                           children: <Widget>[
-                            Text(_next.nextMatch.opponentTeam.name, style: nextMatchNameStyle, maxLines: 1,),
-                            Text('戦', style: nextMatchNameStyle),
+                            SizedBox(
+                              height: 40,
+                              width: 50,
+                              child: Stack(
+                                children: <Widget>[
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 4),
+                                    child: Text(
+                                      dateString(notice.timestampSec * 1000),
+                                      style: nextMatchTitleStyle,
+                                      maxLines: 1,
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.only(top: 15, left: 8),
+                                    child: Text(
+                                      timeString(notice.timestampSec * 1000),
+                                      style: nextMatchTitleStyle,
+                                      maxLines: 1,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Container(
+                              margin: const EdgeInsets.only(bottom: 5),
+                              child: isAlreadyRead(notice.timestampSec * 1000)
+                                  ? Container()
+                                  : accentNewView(),
+                            ),
                           ],
                         ),
                       ),
+                      const SizedBox(
+                        width: 12.0,
+                      ),
+                      Expanded(
+                        child: Padding(
+                            padding: const EdgeInsets.only(right: 10),
+                            child: InkWell(
+                              child: Text(
+                                notice.text,
+                                style: notificationStyle,
+                              ),
+                              onTap: () async {
+                                if (url == null) {
+                                  return;
+                                }
+                                if (await canLaunch(url)) {
+                                  await launch(url);
+                                }
+                              },
+                            )),
+                      ),
                     ],
-                  ),
-                ],
-              ),
-            );
-          }
-          if (i == 3) {
-            return new Container(
-              margin: const EdgeInsets.only(top: 20, left: 20, right: 20),
-              child: new Stack(
-                children: <Widget>[
-                  Image.asset('assets/images/silverInc.png'),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 12),
-                    child: Text('お知らせ', style: titleStyle),
-                  )            
-                ],
-              ),
-            );
-          }
-
-          if (i - 4 < _model.notices.length) {
-            final index = i - 4;
-            final isLast = index == _model.notices.length - 1;
-            final notice = _model.notices[index];
-            String url;
-            Match match = new RegExp(r"(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)", caseSensitive: false).firstMatch(notice.text);
-            if (match != null) {
-              url = match.group(0);
+                  )));
             }
-            return new Container(
-              decoration: notificationDecoration(index, _model.notices.length),
-              margin: isLast ? const EdgeInsets.only(left: 20, right: 20, bottom: 20) : const EdgeInsets.only(left: 20, right: 20),
-              child: Center(
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            if (i - 4 == _model!.notices.length) {
+              return Container(
+                margin: const EdgeInsets.only(top: 20, left: 20, right: 20),
+                child: Stack(
                   children: <Widget>[
-                    Container(
-                      padding: const EdgeInsets.only(left: 14),
-                      child: Column(
-                        children: <Widget>[
-                          SizedBox(
-                            height: 40,
-                            width: 50,
-                            child: Stack(
-                              children: <Widget>[
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 4),
-                                  child: Text(dateString(notice.timestampSec * 1000), style: nextMatchTitleStyle, maxLines: 1, ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 15, left: 8),
-                                  child: Text(timeString(notice.timestampSec * 1000), style: nextMatchTitleStyle, maxLines: 1, ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Container(
-                            margin: const EdgeInsets.only(bottom: 5),
-                            child: isAlreadyRead(notice.timestampSec * 1000) ? Container() : accentNewView(),
-                          ),
-                        ],
-                      ),
-                    ),
-                    new SizedBox(
-                      width: 12.0,
-                    ),
-                    new Expanded(            
-                      child: Padding(
-                        padding: const EdgeInsets.only(right: 10),
-                        child: InkWell(
-                          child: Text(notice.text, style: notificationStyle, ),
-                          onTap: () async {
-                            if (url != null && await canLaunch(url)) {
-                              await launch(url);
-                            }
-                          },
-                        )
-                      ),
-                    ),
+                    Image.asset('assets/images/goldInc.png'),
+                    const Padding(
+                      padding: EdgeInsets.only(left: 12),
+                      child: Text('スケジュール', style: titleStyle),
+                    )
                   ],
-                )
-              )
-            );
-          }
-          if (i - 4 == _model.notices.length) {
-            return new Container(
-              margin: const EdgeInsets.only(top: 20, left: 20, right: 20),
-              child: new Stack(
-                children: <Widget>[
-                  Image.asset('assets/images/goldInc.png'),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 12),
-                    child: Text('スケジュール', style: titleStyle),
-                  )            
-                ],
-              ),
-            );
-          } else {
-            final index = i - 5 - _model.notices.length;
-            final isLast = index == _schedule.entries.length - 1;
-            final schedule = _schedule.entries[index];
-            final hasDurationTime = schedule.durationSec != null;
-            final endScheduleTimeStamp = schedule.durationSec != null ? schedule.startTimestampSec + schedule.durationSec : null;
+                ),
+              );
+            } else {
+              final index = i - 5 - _model!.notices.length;
+              final isLast = index == _schedule!.entries.length - 1;
+              final schedule = _schedule!.entries[index];
+              final hasDurationTime = schedule.durationSec != null;
+              final endScheduleTimeStamp = schedule.durationSec != null
+                  ? (schedule.startTimestampSec ?? 0) +
+                      (schedule.durationSec ?? 0) // TODO: null case
+                  : null;
 
-            return new Container(
-              decoration: notificationDecoration(index, _schedule.entries.length),
-              margin: isLast ? const EdgeInsets.only(left: 20, right: 20, bottom: 20) : const EdgeInsets.only(left: 20, right: 20),
-              child: Center(
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    Container(
-                      padding: const EdgeInsets.only(left: 14),
-                      child: Column(
-                        children: <Widget>[
-                          SizedBox(
-                            width: 60,
-                            child: Stack(
-                              children: <Widget>[
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 4),
-                                  child: Text(timeString(schedule.startTimestampSec * 1000) + "　", style: nextMatchTitleStyle, maxLines: 1, ),
-                                ),
-                                hasDurationTime ? Padding(
-                                  padding: const EdgeInsets.only(top: 15, left: 8),
-                                  child: Text("～" + timeString(endScheduleTimeStamp * 1000), style: nextMatchTitleStyle, maxLines: 1, ),
-                                ) : Container(),
-                              ],
+              return Container(
+                  decoration:
+                      notificationDecoration(index, _schedule!.entries.length),
+                  margin: isLast
+                      ? const EdgeInsets.only(left: 20, right: 20, bottom: 20)
+                      : const EdgeInsets.only(left: 20, right: 20),
+                  child: Center(
+                      child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      Container(
+                        padding: const EdgeInsets.only(left: 14),
+                        child: Column(
+                          children: <Widget>[
+                            SizedBox(
+                              width: 60,
+                              child: Stack(
+                                children: <Widget>[
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 4),
+                                    child: Text(
+                                      "${timeString((schedule.startTimestampSec ?? 0) * 1000)}　", // TODO: null case
+                                      style: nextMatchTitleStyle,
+                                      maxLines: 1,
+                                    ),
+                                  ),
+                                  hasDurationTime
+                                      ? Padding(
+                                          padding: const EdgeInsets.only(
+                                              top: 15, left: 8),
+                                          child: Text(
+                                            endScheduleTimeStamp == null
+                                                ? "-"
+                                                : "～${timeString(endScheduleTimeStamp * 1000)}",
+                                            style: nextMatchTitleStyle,
+                                            maxLines: 1,
+                                          ),
+                                        )
+                                      : Container(),
+                                ],
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                    new SizedBox(
-                      width: 12.0,
-                    ),
-                    new Expanded(            
-                      child: Padding(
-                        padding: const EdgeInsets.only(right: 10),
-                        child: InkWell(
-                          child: Text(schedule.title, style: notificationStyle, ),
-                        )
+                      const SizedBox(
+                        width: 12.0,
                       ),
-                    ),
-                  ],
-                )
-              )
-            );
-          }
-        }
-      ),
+                      Expanded(
+                        child: Padding(
+                            padding: const EdgeInsets.only(right: 10),
+                            child: InkWell(
+                              child: Text(
+                                schedule.title ?? '', // TODO: null case
+                                style: notificationStyle,
+                              ),
+                            )),
+                      ),
+                    ],
+                  )));
+            }
+          }),
     );
   }
 
   String dateString(int timeMillisecondsSince1970) {
     initializeDateFormatting("ja_JP");
-    final dateTime = DateTime.fromMillisecondsSinceEpoch(timeMillisecondsSince1970);
-    final formatter = new DateFormat('MM/dd', "ja_JP");
+    final dateTime =
+        DateTime.fromMillisecondsSinceEpoch(timeMillisecondsSince1970);
+    final formatter = DateFormat('MM/dd', "ja_JP");
     final formattedDateString = formatter.format(dateTime);
     return formattedDateString;
   }
 
   String timeString(int timeMillisecondsSince1970) {
     initializeDateFormatting("ja_JP");
-    final dateTime = DateTime.fromMillisecondsSinceEpoch(timeMillisecondsSince1970);
-    final formatter = new DateFormat('HH:mm', "ja_JP");
+    final dateTime =
+        DateTime.fromMillisecondsSinceEpoch(timeMillisecondsSince1970);
+    final formatter = DateFormat('HH:mm', "ja_JP");
     //formatter.locale = .current;
     final formattedDateString = formatter.format(dateTime);
     return formattedDateString;
@@ -381,14 +420,14 @@ class _NotificationsState extends State<Notifications> with AutomaticKeepAliveCl
       return false;
     }
 
-    return alreadyReadTime > timeMillisecondsSince1970;
+    return alreadyReadTime! > timeMillisecondsSince1970;
   }
 
   BoxDecoration notificationDecoration(int index, int length) {
     if (index == 0 && length == 1) {
       return BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.all(
+        borderRadius: const BorderRadius.all(
           Radius.circular(10.0),
         ),
         border: Border.all(
@@ -401,10 +440,8 @@ class _NotificationsState extends State<Notifications> with AutomaticKeepAliveCl
     if (index == 0) {
       return BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(10.0),
-          topRight: Radius.circular(10.0)
-        ),
+        borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(10.0), topRight: Radius.circular(10.0)),
         border: Border.all(
           color: borderColor,
           width: 1,
@@ -413,20 +450,32 @@ class _NotificationsState extends State<Notifications> with AutomaticKeepAliveCl
     }
     if (index == length - 1) {
       return BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(10.0),
-          bottomRight: Radius.circular(10.0)
-        ),
-        border: Border.all(
-          color: borderColor,
-          width: 1,
-        )
-      );
+          color: Colors.white,
+          borderRadius: const BorderRadius.only(
+              bottomLeft: Radius.circular(10.0),
+              bottomRight: Radius.circular(10.0)),
+          border: Border.all(
+            color: borderColor,
+            width: 1,
+          ));
     }
 
     if (index == 1) {
-      return BoxDecoration(
+      return const BoxDecoration(
+          color: Colors.white,
+          border: Border(
+            left: BorderSide(
+              color: borderColor,
+              width: 1,
+            ),
+            right: BorderSide(
+              color: borderColor,
+              width: 1,
+            ),
+          ));
+    }
+
+    return const BoxDecoration(
         color: Colors.white,
         border: Border(
           left: BorderSide(
@@ -437,27 +486,11 @@ class _NotificationsState extends State<Notifications> with AutomaticKeepAliveCl
             color: borderColor,
             width: 1,
           ),
-        )
-      );
-    }
-
-    return BoxDecoration(
-      color: Colors.white,
-      border: Border(
-        left: BorderSide(
-          color: borderColor,
-          width: 1,
-        ),
-        right: BorderSide(
-          color: borderColor,
-          width: 1,
-        ),
-        top: BorderSide(
-          color: borderColor,
-          width: 1,
-        ),
-      )
-    );
+          top: BorderSide(
+            color: borderColor,
+            width: 1,
+          ),
+        ));
   }
 
   static const TextStyle topLabelMiniStyle = TextStyle(

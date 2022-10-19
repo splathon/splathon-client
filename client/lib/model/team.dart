@@ -1,52 +1,163 @@
+//
+// AUTO-GENERATED FILE, DO NOT MODIFY!
+//
+// @dart=2.12
+
+// ignore_for_file: unused_element, unused_import
+// ignore_for_file: always_put_required_named_parameters_first
+// ignore_for_file: constant_identifier_names
+// ignore_for_file: lines_longer_than_80_chars
+
 part of openapi.api;
 
 class Team {
-  /* Team ID */
-  int id = null;
-  
-  String name = null;
-  /* チーム名のよみがな(ひらがな) */
-  String nameKana = null;
-  /* Team の大会にむけての意気込みコメント */
-  String shortComment = null;
-  
-  List<Member> members = [];
-  Team();
+  /// Returns a new [Team] instance.
+  Team({
+    required this.id,
+    required this.name,
+    this.nameKana,
+    this.shortComment,
+    this.members = const [],
+  });
+
+  /// Team ID
+  int id;
+
+  String name;
+
+  /// チーム名のよみがな(ひらがな)
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
+  String? nameKana;
+
+  /// Team の大会にむけての意気込みコメント
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
+  String? shortComment;
+
+  List<Member> members;
 
   @override
-  String toString() {
-    return 'Team[id=$id, name=$name, nameKana=$nameKana, shortComment=$shortComment, members=$members, ]';
-  }
+  bool operator ==(Object other) => identical(this, other) || other is Team &&
+     other.id == id &&
+     other.name == name &&
+     other.nameKana == nameKana &&
+     other.shortComment == shortComment &&
+     other.members == members;
 
-  Team.fromJson(Map<String, dynamic> json) {
-    if (json == null) return;
-    id = json['id'];
-    name = json['name'];
-    nameKana = json['name_kana'];
-    shortComment = json['short_comment'];
-    members = Member.listFromJson(json['members']);
-  }
+  @override
+  int get hashCode =>
+    // ignore: unnecessary_parenthesis
+    (id.hashCode) +
+    (name.hashCode) +
+    (nameKana == null ? 0 : nameKana!.hashCode) +
+    (shortComment == null ? 0 : shortComment!.hashCode) +
+    (members.hashCode);
+
+  @override
+  String toString() => 'Team[id=$id, name=$name, nameKana=$nameKana, shortComment=$shortComment, members=$members]';
 
   Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'name': name,
-      'name_kana': nameKana,
-      'short_comment': shortComment,
-      'members': members
-    };
+    final json = <String, dynamic>{};
+      json[r'id'] = this.id;
+      json[r'name'] = this.name;
+    if (this.nameKana != null) {
+      json[r'name_kana'] = this.nameKana;
+    } else {
+      json[r'name_kana'] = null;
+    }
+    if (this.shortComment != null) {
+      json[r'short_comment'] = this.shortComment;
+    } else {
+      json[r'short_comment'] = null;
+    }
+      json[r'members'] = this.members;
+    return json;
   }
 
-  static List<Team> listFromJson(List<dynamic> json) {
-    return json == null ? new List<Team>() : json.map((value) => new Team.fromJson(value)).toList();
+  /// Returns a new [Team] instance and imports its values from
+  /// [value] if it's a [Map], null otherwise.
+  // ignore: prefer_constructors_over_static_methods
+  static Team? fromJson(dynamic value) {
+    if (value is Map) {
+      final json = value.cast<String, dynamic>();
+
+      // Ensure that the map contains the required keys.
+      // Note 1: the values aren't checked for validity beyond being non-null.
+      // Note 2: this code is stripped in release mode!
+      assert(() {
+        requiredKeys.forEach((key) {
+          assert(json.containsKey(key), 'Required key "Team[$key]" is missing from JSON.');
+          assert(json[key] != null, 'Required key "Team[$key]" has a null value in JSON.');
+        });
+        return true;
+      }());
+
+      return Team(
+        id: mapValueOfType<int>(json, r'id')!,
+        name: mapValueOfType<String>(json, r'name')!,
+        nameKana: mapValueOfType<String>(json, r'name_kana'),
+        shortComment: mapValueOfType<String>(json, r'short_comment'),
+        members: Member.listFromJson(json[r'members']) ?? const [],
+      );
+    }
+    return null;
   }
 
-  static Map<String, Team> mapFromJson(Map<String, dynamic> json) {
-    var map = new Map<String, Team>();
-    if (json != null && json.length > 0) {
-      json.forEach((String key, dynamic value) => map[key] = new Team.fromJson(value));
+  static List<Team>? listFromJson(dynamic json, {bool growable = false,}) {
+    final result = <Team>[];
+    if (json is List && json.isNotEmpty) {
+      for (final row in json) {
+        final value = Team.fromJson(row);
+        if (value != null) {
+          result.add(value);
+        }
+      }
+    }
+    return result.toList(growable: growable);
+  }
+
+  static Map<String, Team> mapFromJson(dynamic json) {
+    final map = <String, Team>{};
+    if (json is Map && json.isNotEmpty) {
+      json = json.cast<String, dynamic>(); // ignore: parameter_assignments
+      for (final entry in json.entries) {
+        final value = Team.fromJson(entry.value);
+        if (value != null) {
+          map[entry.key] = value;
+        }
+      }
     }
     return map;
   }
+
+  // maps a json object with a list of Team-objects as value to a dart map
+  static Map<String, List<Team>> mapListFromJson(dynamic json, {bool growable = false,}) {
+    final map = <String, List<Team>>{};
+    if (json is Map && json.isNotEmpty) {
+      json = json.cast<String, dynamic>(); // ignore: parameter_assignments
+      for (final entry in json.entries) {
+        final value = Team.listFromJson(entry.value, growable: growable,);
+        if (value != null) {
+          map[entry.key] = value;
+        }
+      }
+    }
+    return map;
+  }
+
+  /// The list of required keys that must be present in a JSON.
+  static const requiredKeys = <String>{
+    'id',
+    'name',
+  };
 }
 

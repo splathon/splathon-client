@@ -1,39 +1,38 @@
 import 'package:flutter/material.dart';
-import 'package:splathon_app/styles/text.dart';
-import 'package:splathon_app/styles/color.dart';
-import 'dart:async';
 import 'package:openapi/api.dart' as API;
-import 'package:splathon_app/utils/preference.dart';
+import 'package:splathon_app/styles/color.dart';
+import 'package:splathon_app/styles/text.dart';
 import 'package:splathon_app/utils/config.dart';
+import 'package:splathon_app/utils/preference.dart';
 
 class Login extends StatefulWidget {
   @override
-  _LoginState createState() => new _LoginState();
+  _LoginState createState() => _LoginState();
 }
 
 class _LoginState extends State<Login> {
   final _userIdController = TextEditingController();
   final _passwordController = TextEditingController();
-  API.LoginRequest loginRequest = API.LoginRequest();
-  API.LoginResponse _model;
-  
+  //API.LoginRequest loginRequest = API.LoginRequest();
+  late API.LoginResponse _model;
+
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      appBar: new AppBar(
+    return Scaffold(
+      appBar: AppBar(
         title: SplaText('Splathon #11'),
         backgroundColor: splaBlueColor,
       ),
-      body: new Center(
-        child: new Form(
-          child: new SingleChildScrollView(
+      body: Center(
+        child: Form(
+          child: SingleChildScrollView(
             padding: const EdgeInsets.symmetric(horizontal: 40.0),
-            child: new Column(
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
-                new TextFormField(
+                TextFormField(
                   decoration: const InputDecoration(
-                    border: const UnderlineInputBorder(),
+                    border: UnderlineInputBorder(),
                     labelText: 'User ID',
                     labelStyle: _labelStyle,
                     hintText: 'splathon#11',
@@ -42,10 +41,10 @@ class _LoginState extends State<Login> {
                   controller: _userIdController,
                 ),
                 const SizedBox(height: 24.0),
-                new TextFormField(
+                TextFormField(
                   maxLength: 20,
-                  decoration: new InputDecoration(
-                    border: const UnderlineInputBorder(),
+                  decoration: const InputDecoration(
+                    border: UnderlineInputBorder(),
                     labelText: 'Password',
                     labelStyle: _labelStyle,
                     hintText: '2525splatoon',
@@ -54,14 +53,17 @@ class _LoginState extends State<Login> {
                   controller: _passwordController,
                 ),
                 const SizedBox(height: 60.0),
-                new Container(
+                SizedBox(
                   height: 60,
-                  child: new RaisedButton(
-                    color: splaYellowColor,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(30.0))
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: splaYellowColor,
+                      shape: const RoundedRectangleBorder(
+                          borderRadius:
+                              BorderRadius.all(Radius.circular(30.0))),
                     ),
-                    child: Text('ログイン',
+                    child: const Text(
+                      'ログイン',
                       style: TextStyle(
                         fontFamily: 'Splatfont',
                         fontSize: 26,
@@ -82,16 +84,22 @@ class _LoginState extends State<Login> {
   }
 
   void login() async {
-    var client = new API.DefaultApi();
-    loginRequest.userId = _userIdController.text;
-    loginRequest.password = _passwordController.text;
+    var client = API.DefaultApi();
+    API.LoginRequest loginRequest = API.LoginRequest(
+        userId: _userIdController.text, password: _passwordController.text);
+    // loginRequest.userId = _userIdController.text;
+    // loginRequest.password = _passwordController.text;
     var result = client.login(Config().eventNumber, loginRequest);
-    result.then(
-      (rankingObj) => setState(() {
-          this._model = rankingObj; 
-          successLogin();
-      } )
-    ).catchError((onError) {
+    result
+        .then((rankingObj) => setState(() {
+              if (rankingObj == null) {
+                // TODO: null case
+                return;
+              }
+              _model = rankingObj;
+              successLogin();
+            }))
+        .catchError((onError) {
       buildDialog(context, 'ログインに失敗しました');
     });
   }
@@ -100,8 +108,8 @@ class _LoginState extends State<Login> {
     Preference().setToken(_model.token);
     Preference().setIsAdmin(_model.isAdmin);
     if (_model.team != null) {
-      Preference().setTeamId(_model.team.id);
-      Preference().setTeamName(_model.team.name);
+      Preference().setTeamId(_model.team!.id);
+      Preference().setTeamName(_model.team!.name);
     }
 
     if (_model.isAdmin) {
@@ -116,13 +124,12 @@ class _LoginState extends State<Login> {
       context: context,
       barrierDismissible: false,
       builder: (BuildContext build) {
-        return new AlertDialog(
-          titlePadding: EdgeInsets.all(0),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10))
-          ),
+        return AlertDialog(
+          titlePadding: const EdgeInsets.all(0),
+          shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10))),
           title: Container(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(10),
                 topRight: Radius.circular(10),
@@ -130,11 +137,19 @@ class _LoginState extends State<Login> {
               color: splaBlueColor,
             ),
             padding: const EdgeInsets.all(10),
-            child: Center(child: Text('エラー', style: popupTitleStyle,),),
+            child: const Center(
+              child: Text(
+                'エラー',
+                style: popupTitleStyle,
+              ),
+            ),
           ),
-          content: Text('$message', style: popupMessageStyle,),
+          content: Text(
+            message,
+            style: popupMessageStyle,
+          ),
           actions: <Widget>[
-            FlatButton(
+            TextButton(
               child: const Text('CLOSE'),
               onPressed: () {
                 Navigator.pop(context, false);

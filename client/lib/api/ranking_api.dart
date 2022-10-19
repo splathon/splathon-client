@@ -1,60 +1,81 @@
+//
+// AUTO-GENERATED FILE, DO NOT MODIFY!
+//
+// @dart=2.12
+
+// ignore_for_file: unused_element, unused_import
+// ignore_for_file: always_put_required_named_parameters_first
+// ignore_for_file: constant_identifier_names
+// ignore_for_file: lines_longer_than_80_chars
+
 part of openapi.api;
 
 
-
 class RankingApi {
+  RankingApi([ApiClient? apiClient]) : apiClient = apiClient ?? defaultApiClient;
+
   final ApiClient apiClient;
 
-  RankingApi([ApiClient apiClient]) : apiClient = apiClient ?? defaultApiClient;
-
-  /// 
-  ///
   /// 予選ランキングを返す。
-  Future<Ranking> getRanking(int eventId) async {
-    Object postBody;
+  ///
+  /// Note: This method returns the HTTP [Response].
+  ///
+  /// Parameters:
+  ///
+  /// * [int] eventId (required):
+  ///
+  /// * [bool] latest:
+  ///   Return latest ranking if true.
+  Future<Response> getRankingWithHttpInfo(int eventId, { bool? latest, }) async {
+    // ignore: prefer_const_declarations
+    final path = r'/v{eventId}/ranking'
+      .replaceAll('{eventId}', eventId.toString());
 
-    // verify required params are set
-    if(eventId == null) {
-     throw new ApiException(400, "Missing required param: eventId");
+    // ignore: prefer_final_locals
+    Object? postBody;
+
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
+
+    if (latest != null) {
+      queryParams.addAll(_queryParams('', 'latest', latest));
     }
 
-    // create path and map variables
-    String path = "/v{eventId}/ranking".replaceAll("{format}","json").replaceAll("{" + "eventId" + "}", eventId.toString());
+    const contentTypes = <String>[];
 
-    // query params
-    List<QueryParam> queryParams = [];
-    Map<String, String> headerParams = {};
-    Map<String, String> formParams = {};
 
-    List<String> contentTypes = [];
+    return apiClient.invokeAPI(
+      path,
+      'GET',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      contentTypes.isEmpty ? null : contentTypes.first,
+    );
+  }
 
-    String contentType = contentTypes.length > 0 ? contentTypes[0] : "application/json";
-    List<String> authNames = [];
-
-    if(contentType.startsWith("multipart/form-data")) {
-      bool hasFields = false;
-      MultipartRequest mp = new MultipartRequest(null, null);
-      if(hasFields)
-        postBody = mp;
+  /// 予選ランキングを返す。
+  ///
+  /// Parameters:
+  ///
+  /// * [int] eventId (required):
+  ///
+  /// * [bool] latest:
+  ///   Return latest ranking if true.
+  Future<Ranking?> getRanking(int eventId, { bool? latest, }) async {
+    final response = await getRankingWithHttpInfo(eventId,  latest: latest, );
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
-    else {
+    // When a remote server returns no body with a status of 204, we shall not decode it.
+    // At the time of writing this, `dart:convert` will throw an "Unexpected end of input"
+    // FormatException when trying to decode an empty string.
+    if (response.body.isNotEmpty && response.statusCode != HttpStatus.noContent) {
+      return await apiClient.deserializeAsync(await _decodeBodyBytes(response), 'Ranking',) as Ranking;
+    
     }
-
-    var response = await apiClient.invokeAPI(path,
-                                             'GET',
-                                             queryParams,
-                                             postBody,
-                                             headerParams,
-                                             formParams,
-                                             contentType,
-                                             authNames);
-
-    if(response.statusCode >= 400) {
-      throw new ApiException(response.statusCode, response.body);
-    } else if(response.body != null) {
-      return apiClient.deserialize(response.body, 'Ranking') as Ranking;
-    } else {
-      return null;
-    }
+    return null;
   }
 }
