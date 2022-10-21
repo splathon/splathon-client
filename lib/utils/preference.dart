@@ -1,4 +1,5 @@
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:splathon_app/utils/config.dart';
 
 class Preference {
   static final Preference _singleton = Preference._internal();
@@ -16,11 +17,11 @@ class Preference {
   }
 
   String getToken() {
-    return prefs.getString('Token11') ?? '';
+    return prefs.getString('Token${Config.eventNumber}') ?? '';
   }
 
   setToken(String token) {
-    prefs.setString('Token11', token);
+    prefs.setString('Token${Config.eventNumber}', token);
   }
 
   bool isAdmin() {

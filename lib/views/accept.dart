@@ -12,6 +12,7 @@ class Accept extends StatefulWidget {
   _AcceptState createState() => _AcceptState();
 }
 
+// TODO: QR読み取り機能がFlutter3, Dart2アップデートに耐えられなかったので別のもので代替する
 class _AcceptState extends State<Accept> with AutomaticKeepAliveClientMixin {
   //late QRReaderController controller;
   //late List<CameraDescription> cameras;
@@ -35,7 +36,7 @@ class _AcceptState extends State<Accept> with AutomaticKeepAliveClientMixin {
     var client = API.ReceptionApi();
     String token = Preference().getToken();
     var result = client.getParticipantsDataForReception(
-        Config().eventNumber, receptionCode, token);
+        Config.eventNumber, receptionCode, token);
     result.then((resultsObj) => setState(() {
           _receptionModel = resultsObj;
         }));
@@ -69,7 +70,7 @@ class _AcceptState extends State<Accept> with AutomaticKeepAliveClientMixin {
     var client = API.ReceptionApi();
     String token = Preference().getToken();
     var result = client.getParticipantsDataForReception(
-        Config().eventNumber, value, token);
+        Config.eventNumber, value, token);
     // result.then((resultsObj) {
     //   buildConfirmDialog(context, resultsObj);
     // }).catchError((onError) {
@@ -464,7 +465,7 @@ class _AcceptState extends State<Accept> with AutomaticKeepAliveClientMixin {
                 var client = API.ReceptionApi();
                 String token = Preference().getToken();
                 var result = client.completeReception(
-                    Config().eventNumber, scannedCode, token);
+                    Config.eventNumber, scannedCode, token);
                 result.then((resultObjet) {
                   isCompleting = false;
                   Navigator.pop(context, false);

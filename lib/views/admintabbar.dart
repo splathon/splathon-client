@@ -30,7 +30,7 @@ class AdminTabbedBarState extends State<AdminTabbedBar>
   reload() {
     switch (controller.index) {
       case 0:
-        Event().bus.fire(AllResultReload());
+        Event.bus.fire(AllResultReload());
         return;
       case 1:
         return;
@@ -54,7 +54,7 @@ class AdminTabbedBarState extends State<AdminTabbedBar>
         physics: const NeverScrollableScrollPhysics(),
         controller: controller,
         children: <Widget>[
-          AllResult(),
+          const AllResult(),
           Accept(),
         ],
       ),

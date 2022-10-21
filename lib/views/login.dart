@@ -13,14 +13,13 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   final _userIdController = TextEditingController();
   final _passwordController = TextEditingController();
-  //API.LoginRequest loginRequest = API.LoginRequest();
   late API.LoginResponse _model;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: SplaText('Splathon #11'),
+        title: SplaText('Splathon #${Config.eventNumber}'),
         backgroundColor: splaBlueColor,
       ),
       body: Center(
@@ -31,11 +30,11 @@ class _LoginState extends State<Login> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
                 TextFormField(
-                  decoration: const InputDecoration(
-                    border: UnderlineInputBorder(),
+                  decoration: InputDecoration(
+                    border: const UnderlineInputBorder(),
                     labelText: 'User ID',
                     labelStyle: _labelStyle,
-                    hintText: 'splathon#11',
+                    hintText: 'splathon#${Config.eventNumber}',
                     hintStyle: _hintStyle,
                   ),
                   controller: _userIdController,
@@ -87,9 +86,7 @@ class _LoginState extends State<Login> {
     var client = API.DefaultApi();
     API.LoginRequest loginRequest = API.LoginRequest(
         userId: _userIdController.text, password: _passwordController.text);
-    // loginRequest.userId = _userIdController.text;
-    // loginRequest.password = _passwordController.text;
-    var result = client.login(Config().eventNumber, loginRequest);
+    var result = client.login(Config.eventNumber, loginRequest);
     result
         .then((rankingObj) => setState(() {
               if (rankingObj == null) {

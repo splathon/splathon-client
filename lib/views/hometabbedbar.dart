@@ -1,9 +1,9 @@
 import 'dart:io';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:splathon_app/styles/color.dart';
 import 'package:splathon_app/styles/text.dart';
-//import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:splathon_app/utils/event.dart';
 import 'package:splathon_app/views/notification.dart';
 import 'package:splathon_app/views/rankings.dart';
@@ -21,14 +21,14 @@ class HomeTabbedBar extends StatefulWidget {
 class HomeTabbedBarState extends State<HomeTabbedBar>
     with SingleTickerProviderStateMixin {
   late TabController controller;
-  //final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+  final FirebaseMessaging messaging = FirebaseMessaging.instance;
 
   @override
   void initState() {
     super.initState();
 
     controller = TabController(length: 4, vsync: this);
-    //setupFirebaseCloudMessaging(context);
+    setupFirebaseCloudMessaging(context);
   }
 
   @override
@@ -40,16 +40,16 @@ class HomeTabbedBarState extends State<HomeTabbedBar>
   reload() {
     switch (controller.index) {
       case 0:
-        Event().bus.fire(NotificationReload());
+        Event.bus.fire(NotificationReload());
         return;
       case 1:
-        Event().bus.fire(ResultReload());
+        Event.bus.fire(ResultReload());
         return;
       case 2:
-        Event().bus.fire(RankingReload());
+        Event.bus.fire(RankingReload());
         return;
       case 3:
-        Event().bus.fire(ReceptionReload());
+        Event.bus.fire(ReceptionReload());
         return;
     }
   }
@@ -70,8 +70,7 @@ class HomeTabbedBarState extends State<HomeTabbedBar>
       body: TabBarView(
         physics: const NeverScrollableScrollPhysics(),
         controller: controller,
-        // TODO: Set each Views
-        children: <Widget>[
+        children: const <Widget>[
           Notifications(),
           ResultTabbedBar(),
           Rankings(),
@@ -125,30 +124,31 @@ class HomeTabbedBarState extends State<HomeTabbedBar>
   }
 
   // TODO: 隠蔽化したい
-  // void setupFirebaseCloudMessaging(BuildContext context) {
-  //   _firebaseMessaging.configure(
-  //     onMessage: (Map<String, dynamic> message) async {
-  //       print('onMessage: $message');
-  //       buildDialog(context, message);
-  //     },
-  //     onLaunch: (Map<String, dynamic> message) async {
-  //       print('onLaunch: $message');
-  //     },
-  //     onResume: (Map<String, dynamic> message) async {
-  //       print('onResume: $message');
-  //     },
-  //   );
-  //   _firebaseMessaging.requestNotificationPermissions(
-  //     const IosNotificationSettings(sound: true, badge: true, alert: true)
-  //   );
-  //   _firebaseMessaging.onIosSettingsRegistered.listen((IosNotificationSettings settings) {
-  //     print('Settings registered: $settings');
-  //   });
-  //   _firebaseMessaging.getToken().then((String token) {
-  //     assert(token != null);
-  //     print('Push Teken: $token');
-  //   });
-  // }
+  void setupFirebaseCloudMessaging(BuildContext context) {
+    // TODO: Firebase Messaging version up に対応する
+    // _firebaseMessaging.configure(
+    //   onMessage: (Map<String, dynamic> message) async {
+    //     print('onMessage: $message');
+    //     buildDialog(context, message);
+    //   },
+    //   onLaunch: (Map<String, dynamic> message) async {
+    //     print('onLaunch: $message');
+    //   },
+    //   onResume: (Map<String, dynamic> message) async {
+    //     print('onResume: $message');
+    //   },
+    // );
+    // _firebaseMessaging.requestNotificationPermissions(
+    //   const IosNotificationSettings(sound: true, badge: true, alert: true)
+    // );
+    // _firebaseMessaging.onIosSettingsRegistered.listen((IosNotificationSettings settings) {
+    //   print('Settings registered: $settings');
+    // });
+    // _firebaseMessaging.getToken().then((String token) {
+    //   assert(token != null);
+    //   print('Push Teken: $token');
+    // });
+  }
 
   buildDialog(BuildContext context, Map<String, dynamic> message) {
     String text;

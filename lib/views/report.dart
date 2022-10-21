@@ -43,7 +43,7 @@ class _ReportState extends State<Report> {
 
   Future fetchData() async {
     var client = API.DefaultApi();
-    var result = client.getEvent(Config().eventNumber);
+    var result = client.getEvent(Config.eventNumber);
     result.then((resultsObj) => setState(() {
           if (resultsObj == null) {
             return; // TODO: null case
@@ -350,7 +350,7 @@ class _ReportState extends State<Report> {
     String token = Preference().getToken();
     print(_battle);
     var result =
-        client.updateBattle(Config().eventNumber, _match.id, token, _battle);
+        client.updateBattle(Config.eventNumber, _match.id, token, _battle);
     result
         .then((body) => setState(() {
               pop();
