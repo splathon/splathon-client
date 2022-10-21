@@ -5,7 +5,7 @@ import 'package:splathon_app/views/allresult.dart';
 import 'package:splathon_app/views/myresult.dart';
 
 class ResultTabbedBar extends StatefulWidget {
-  //const ResultTabbedBar({required Key key}) : super(key: key);
+  const ResultTabbedBar({super.key});
 
   @override
   State<StatefulWidget> createState() {
@@ -29,13 +29,13 @@ class _ResultTabbedBarState extends State<ResultTabbedBar>
   bool get wantKeepAlive => true;
 
   listenReloadEvent() async {
-    Event().bus.on<ResultReload>().listen((_) {
+    Event.bus.on<ResultReload>().listen((_) {
       switch (controller.index) {
         case 0:
-          Event().bus.fire(MyResultReload());
+          Event.bus.fire(MyResultReload());
           return;
         case 1:
-          Event().bus.fire(AllResultReload());
+          Event.bus.fire(AllResultReload());
           return;
       }
     });
@@ -54,9 +54,9 @@ class _ResultTabbedBarState extends State<ResultTabbedBar>
                 padding: const EdgeInsets.only(top: 60.0),
                 child: EachResult(),
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: 60.0),
-                child: AllResult(), //ResultDetail(),
+              const Padding(
+                padding: EdgeInsets.only(top: 60.0),
+                child: AllResult(),
               ),
             ],
           ),

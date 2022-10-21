@@ -4,7 +4,7 @@ import 'package:splathon_app/utils/event.dart';
 import 'package:splathon_app/views/enter.dart';
 
 class ReceptionTabbedBar extends StatefulWidget {
-  //const ReceptionTabbedBar({required Key key}) : super(key: key);
+  const ReceptionTabbedBar({super.key});
 
   @override
   State<StatefulWidget> createState() {
@@ -28,13 +28,13 @@ class _ReceptionTabbedBarState extends State<ReceptionTabbedBar>
   bool get wantKeepAlive => true;
 
   listenReloadEvent() async {
-    Event().bus.on<ReceptionReload>().listen((_) {
+    Event.bus.on<ReceptionReload>().listen((_) {
       switch (controller.index) {
         case 0:
-          Event().bus.fire(EnterBuildingReload());
+          Event.bus.fire(EnterBuildingReload());
           return;
         case 1:
-          Event().bus.fire(EnterSplathonReload());
+          Event.bus.fire(EnterSplathonReload());
           return;
       }
     });
@@ -48,13 +48,13 @@ class _ReceptionTabbedBarState extends State<ReceptionTabbedBar>
         children: <Widget>[
           TabBarView(
             controller: controller,
-            children: [
+            children: const [
               Padding(
-                padding: const EdgeInsets.only(top: 60.0),
+                padding: EdgeInsets.only(top: 60.0),
                 child: Enter(true),
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 60.0),
+                padding: EdgeInsets.only(top: 60.0),
                 child: Enter(false),
               ),
             ],

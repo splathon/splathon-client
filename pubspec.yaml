@@ -34,28 +34,31 @@ dependencies:
   flutter_localizations:
     sdk: flutter
 
+  hooks_riverpod:
+  state_notifier:
+
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: #^1.0.5
-  english_words: #^4.0.0
-  qr_flutter: #^4.0.0
-  cached_network_image: #^3.2.2
+  cupertino_icons:
+  english_words:
+  qr_flutter:
+  cached_network_image:
   # workaround fix https://github.com/facundomedica/fast_qr_reader_view/issues/32#issuecomment-471146441
   # 0.1.5だとandroid.supportに依存してしまっているが、masterでは修正されているので。
   # 次のversionがリリースされたら version 指定に戻すとかするべき
   #fast_qr_reader_view:
-  firebase_messaging: #^13.1.0
-  shared_preferences: #^2.0.15
-  auto_size_text: #^3.0.0
-  event_bus: #^2.0.0
-  url_launcher: #^6.1.6
+  firebase_messaging:
+  shared_preferences:
+  auto_size_text:
+  event_bus:
+  url_launcher:
   openapi:
     path: client/
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_launcher_icons: #^0.10.0
+  flutter_launcher_icons:
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -63,6 +66,12 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^2.0.1
+
+  # freezed:
+  # json_serializable:
+  # build_runner:
+  # flutter_gen:
+  # flutter_gen_runner:
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

@@ -36,7 +36,7 @@ class _EnterState extends State<Enter> with AutomaticKeepAliveClientMixin {
   Future fetchData() async {
     var client = API.ReceptionApi();
     String token = Preference().getToken();
-    var result = client.getReception(Config().eventNumber, token);
+    var result = client.getReception(Config.eventNumber, token);
     result.then((resultsObj) => setState(() {
           _model = resultsObj;
         }));
@@ -44,14 +44,14 @@ class _EnterState extends State<Enter> with AutomaticKeepAliveClientMixin {
 
   listenReloadEvent() async {
     if (_isBuilding) {
-      Event().bus.on<EnterBuildingReload>().listen((_) {
+      Event.bus.on<EnterBuildingReload>().listen((_) {
         setState(() {
           _model = null;
           fetchData();
         });
       });
     } else {
-      Event().bus.on<EnterSplathonReload>().listen((_) {
+      Event.bus.on<EnterSplathonReload>().listen((_) {
         setState(() {
           _model = null;
           fetchData();

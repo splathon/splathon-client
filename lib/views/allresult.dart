@@ -1,103 +1,56 @@
-import 'dart:async';
-
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:openapi/api.dart' as API;
+import 'package:splathon_app/domains/result_provider.dart';
 import 'package:splathon_app/styles/color.dart';
 import 'package:splathon_app/utils/config.dart';
-import 'package:splathon_app/utils/event.dart';
 import 'package:splathon_app/utils/preference.dart';
 import 'package:splathon_app/views/resultdetail.dart';
 import 'package:splathon_app/views/roundedView.dart';
 
-class AllResult extends StatefulWidget {
-  //const AllResult({Key key}) : super(key: key);
+class AllResult extends HookConsumerWidget {
+  const AllResult({super.key});
 
   @override
-  _AllResultState createState() => _AllResultState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final results = ref.watch(resultsProvider);
 
-late BuildContext sharedContext;
-
-class _AllResultState extends State<AllResult>
-    with AutomaticKeepAliveClientMixin {
-  // ViewModel
-  API.Results? _model;
-
-  @override
-  void initState() {
-    super.initState();
-    fetchData();
-    listenReloadEvent();
-  }
-
-  @override
-  bool get wantKeepAlive => true;
-
-  @override
-  Widget build(BuildContext context) {
-    super.build(context);
-
-    sharedContext = context;
-    return buildAllResult();
-  }
-
-  Future fetchData() async {
-    var client = API.ResultApi();
-    String token = Preference().getToken();
-    var result =
-        client.getResult(Config().eventNumber, X_SPLATHON_API_TOKEN: token);
-    result.then((resultsObj) => setState(() {
-          _model = resultsObj;
-        }));
-  }
-
-  listenReloadEvent() async {
-    Event().bus.on<AllResultReload>().listen((_) {
-      setState(() {
-        _model = null;
-        fetchData();
-      });
-    });
-  }
-
-  Widget buildAllResult() {
-    if (_model == null) {
-      // Loading
-      return const Center(
+    return results.when(
+      data: (results) {
+        final rounds = results.qualifiers + results.tournament;
+        if (rounds.isEmpty) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget>[
+              const Text('試合を待て！', style: tableTitleStyle),
+              Image.asset('assets/images/girl.png'),
+            ],
+          );
+        }
+        return Container(
+          color: backgroundColor,
+          child: ListView.builder(
+            itemBuilder: (BuildContext context, int index) =>
+                RoundItem(rounds[index]),
+            itemCount: rounds.length,
+          ),
+        );
+      },
+      error: (error, stackTrace) => const CircularProgressIndicator(),
+      loading: () => const Center(
         child: CircularProgressIndicator(),
-      );
-    }
-
-    final rounds = _model!.qualifiers + _model!.tournament;
-    if (rounds.isEmpty) {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: <Widget>[
-          const Text('試合を待て！', style: tableTitleStyle),
-          Image.asset('assets/images/girl.png'),
-        ],
-      );
-    }
-
-    return Container(
-      color: backgroundColor,
-      child: ListView.builder(
-        itemBuilder: (BuildContext context, int index) =>
-            RoundItem(rounds[index], fetchData),
-        itemCount: rounds.length,
       ),
     );
   }
 }
 
 class RoundItem extends StatelessWidget {
-  const RoundItem(this.round, this.popCallback);
+  const RoundItem(this.round, {super.key});
 
   final API.Round round;
-  final VoidCallback popCallback;
 
   Widget _buildRound(API.Round round, BuildContext context) {
     var roomIndexs = List.generate(round.rooms.length, (int index) => index);
@@ -113,7 +66,6 @@ class RoundItem extends StatelessWidget {
       ),
       margin: const EdgeInsets.only(top: 10, left: 20, right: 20),
       child: ExpansionTile(
-        //backgroundColor: splaBlueColor,
         key: PageStorageKey<API.Round>(round),
         title: Text(
           round.name,
@@ -126,20 +78,6 @@ class RoundItem extends StatelessWidget {
                 index == round.rooms.length - 1))
             .toList(),
       ),
-      // child: CustomView.ExpansionTile(
-      //   //backgroundColor: splaBlueColor,
-      //   key: PageStorageKey<API.Round>(round),
-      //   title: Text(
-      //     round.name,
-      //     style: roundExpandedTitleStyle,
-      //   ),
-      //   trailing: Image.asset('assets/images/arrowDownW.png'),
-      //   onExpansionChanged: (isExpanded) => {},
-      //   children: roomIndexs
-      //       .map((index) => _buildTable(round, round.rooms[index], context,
-      //           index == round.rooms.length - 1))
-      //       .toList(),
-      // ),
     );
   }
 
@@ -202,7 +140,7 @@ class _MatchItemState extends State<MatchItem> {
 
   void refetch(int matchId, API.Match match) {
     var client = API.MatchApi();
-    var result = client.getMatch(Config().eventNumber, matchId);
+    var result = client.getMatch(Config.eventNumber, matchId);
     result.then((resultsObj) {
       if (resultsObj == null) {
         // TODO: null case
@@ -247,7 +185,8 @@ class _MatchItemState extends State<MatchItem> {
             context,
             MaterialPageRoute<void>(
               settings: const RouteSettings(name: "/result"),
-              builder: (BuildContext context) => ResultDetail(match.id),
+              builder: (BuildContext context) =>
+                  ResultDetail(matchId: match.id),
             ));
         refetch(match.id, match);
       },
@@ -356,29 +295,6 @@ class _MatchItemState extends State<MatchItem> {
         // avoid lint error
         return Container();
     }
-    // if (winner != 'alpha' && winner != 'bravo') {
-    //   return Container(
-    //     child: Row(
-    //         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-    //         children: <Widget>[
-    //           accentDarwView(),
-    //         ]),
-    //   );
-    // }
-
-    // bool isWinAlpha = winner == 'alpha';
-
-    // return Container(
-    //   child: Row(
-    //       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-    //       children: <Widget>[
-    //         isWinAlpha ? accentWinView() : accentLoseView(),
-    //         const SizedBox(
-    //           width: 20.0,
-    //         ),
-    //         isWinAlpha ? accentLoseView() : accentWinView(),
-    //       ]),
-    // );
   }
 }
 

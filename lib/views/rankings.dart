@@ -1,132 +1,96 @@
-import 'dart:async';
-
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:openapi/api.dart' as API;
+import 'package:splathon_app/domains/ranking_provider.dart';
 import 'package:splathon_app/styles/color.dart';
-import 'package:splathon_app/utils/config.dart';
-import 'package:splathon_app/utils/event.dart';
 import 'package:splathon_app/views/Image.dart';
 import 'package:splathon_app/views/roundedView.dart';
 
-class Rankings extends StatefulWidget {
-  //const Rankings({required Key key}) : super(key: key);
+class Rankings extends HookConsumerWidget {
+  const Rankings({super.key});
 
   @override
-  _RankingsState createState() => _RankingsState();
-}
+  Widget build(Object context, WidgetRef ref) {
+    final ranking = ref.watch(rankingProvider);
 
-class _RankingsState extends State<Rankings>
-    with AutomaticKeepAliveClientMixin {
-  // ViewModel
-  API.Ranking? _model;
-
-  @override
-  void initState() {
-    super.initState();
-
-    fetchData();
-    listenReloadEvent();
-  }
-
-  @override
-  bool get wantKeepAlive => true;
-
-  @override
-  Widget build(BuildContext context) {
-    super.build(context);
-
-    return buildRankings();
-  }
-
-  Future fetchData() async {
-    var client = API.RankingApi();
-    var result = client.getRanking(Config().eventNumber);
-    result.then((rankingObj) => setState(() {
-          _model = rankingObj;
-        }));
-  }
-
-  listenReloadEvent() async {
-    Event().bus.on<RankingReload>().listen((_) {
-      setState(() {
-        _model = null;
-        fetchData();
-      });
-    });
-  }
-
-  Widget buildRankings() {
-    if (_model == null) {
-      // Loading
-      return const Center(
-        child: CircularProgressIndicator(),
-      );
-    }
-
-    double screenWidth = MediaQuery.of(context).size.width;
-
-    return Container(
-      color: backgroundColor,
-      child: ListView.builder(
-        itemCount: _model!.rankings.length * 2 + 1,
-        itemBuilder: (BuildContext context, i) {
-          if (i == 0) {
-            return Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(top: 2, right: 20),
-                  child: Text(_model!.rankTime ?? '',
-                      style: timeStyle), // TODO: null case
-                ),
-              ],
-            );
-          }
-
-          final index = (i - 1) ~/ 2;
-          API.Rank rank = _model!.rankings[index];
-          if (i.isOdd) {
-            return headerView(index, rank);
-          }
-
+    return ranking.when(
+      data: (ranking) {
+        final rankings = ranking.rankings;
+        return Builder(builder: (context) {
+          double screenWidth = MediaQuery.of(context).size.width;
           return Container(
-            decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10.0),
-                border: Border.all(
-                  color: borderColor,
-                  width: 1,
-                )),
-            margin: const EdgeInsets.only(left: 20, right: 20),
-            height: 75.0,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                SizedBox(
-                  height: 36.0,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
+            color: backgroundColor,
+            child: ListView.builder(
+              itemCount: rankings.length * 2 + 1,
+              itemBuilder: (BuildContext context, i) {
+                if (i == 0) {
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[
-                      memberView(getMember(rank.team.members, 0), screenWidth),
-                      memberView(getMember(rank.team.members, 1), screenWidth),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 2, right: 20),
+                        child: Text(ranking.rankTime ?? '',
+                            style: timeStyle), // TODO: null case
+                      ),
+                    ],
+                  );
+                }
+
+                final index = (i - 1) ~/ 2;
+                API.Rank rank = rankings[index];
+                if (i.isOdd) {
+                  return headerView(index, rank);
+                }
+
+                return Container(
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10.0),
+                      border: Border.all(
+                        color: borderColor,
+                        width: 1,
+                      )),
+                  margin: const EdgeInsets.only(left: 20, right: 20),
+                  height: 75.0,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      SizedBox(
+                        height: 36.0,
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          children: <Widget>[
+                            memberView(
+                                getMember(rank.team.members, 0), screenWidth),
+                            memberView(
+                                getMember(rank.team.members, 1), screenWidth),
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: 36.0,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: <Widget>[
+                            memberView(
+                                getMember(rank.team.members, 2), screenWidth),
+                            memberView(
+                                getMember(rank.team.members, 3), screenWidth),
+                          ],
+                        ),
+                      ),
                     ],
                   ),
-                ),
-                SizedBox(
-                  height: 36.0,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      memberView(getMember(rank.team.members, 2), screenWidth),
-                      memberView(getMember(rank.team.members, 3), screenWidth),
-                    ],
-                  ),
-                ),
-              ],
+                );
+              },
             ),
           );
-        },
+        });
+      },
+      error: (error, stackTrace) => const CircularProgressIndicator(),
+      loading: () => const Center(
+        child: CircularProgressIndicator(),
       ),
     );
   }
