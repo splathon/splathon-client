@@ -1,22 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:openapi/api.dart' as API;
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:splathon_app/domains/user_provider.dart';
 import 'package:splathon_app/styles/color.dart';
 import 'package:splathon_app/styles/text.dart';
 import 'package:splathon_app/utils/config.dart';
-import 'package:splathon_app/utils/preference.dart';
 
-class Login extends StatefulWidget {
-  @override
-  _LoginState createState() => _LoginState();
-}
+class Login extends HookConsumerWidget {
+  Login({super.key});
 
-class _LoginState extends State<Login> {
   final _userIdController = TextEditingController();
   final _passwordController = TextEditingController();
-  late API.LoginResponse _model;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
         title: SplaText('Splathon #${Config.eventNumber}'),
@@ -70,7 +66,7 @@ class _LoginState extends State<Login> {
                       ),
                     ),
                     onPressed: () {
-                      login();
+                      login(context, ref);
                     },
                   ),
                 ),
@@ -82,38 +78,22 @@ class _LoginState extends State<Login> {
     );
   }
 
-  void login() async {
-    var client = API.DefaultApi();
-    API.LoginRequest loginRequest = API.LoginRequest(
-        userId: _userIdController.text, password: _passwordController.text);
-    var result = client.login(Config.eventNumber, loginRequest);
-    result
-        .then((rankingObj) => setState(() {
-              if (rankingObj == null) {
-                // TODO: null case
-                return;
-              }
-              _model = rankingObj;
-              successLogin();
-            }))
-        .catchError((onError) {
+  void login(BuildContext context, WidgetRef ref) async {
+    ref
+        .read(userStateProvider.notifier)
+        .login(
+            userId: _userIdController.text, password: _passwordController.text)
+        .then(
+      (user) {
+        if (user.isAdmin) {
+          Navigator.of(context).pushReplacementNamed("/admin");
+        } else {
+          Navigator.of(context).pushReplacementNamed("/home");
+        }
+      },
+    ).catchError((error, stackTrace) {
       buildDialog(context, 'ログインに失敗しました');
     });
-  }
-
-  void successLogin() async {
-    Preference().setToken(_model.token);
-    Preference().setIsAdmin(_model.isAdmin);
-    if (_model.team != null) {
-      Preference().setTeamId(_model.team!.id);
-      Preference().setTeamName(_model.team!.name);
-    }
-
-    if (_model.isAdmin) {
-      Navigator.of(context).pushReplacementNamed("/admin");
-    } else {
-      Navigator.of(context).pushReplacementNamed("/home");
-    }
   }
 
   buildDialog(BuildContext context, String message) {
