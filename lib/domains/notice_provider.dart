@@ -47,14 +47,15 @@ class NotificationStateNotifier
   final Ref _ref;
 
   void load() {
-    int teamId = Preference().getTeamId();
+    int? teamId = Preference().getTeamId();
 
     late List<Notice> notices;
     late List<ScheduleEntry> schedules;
     late NextMatch? nextMatch;
 
-    final nextMatchTask =
-        teamId > 0 ? _fetchNextMatch(teamId: teamId) : Future.sync(() => null);
+    final nextMatchTask = teamId != null
+        ? _fetchNextMatch(teamId: teamId)
+        : Future.sync(() => null);
 
     nextMatchTask.then((resNextMatch) {
       nextMatch = resNextMatch;

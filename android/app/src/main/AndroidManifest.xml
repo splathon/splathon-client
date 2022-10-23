@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.splathon_client">
+    package="inc.splathon.client_app">
    <application
         android:label="splathon_client"
         android:name="${applicationName}"

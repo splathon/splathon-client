@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:splathon_app/styles/color.dart';
-import 'package:splathon_app/utils/event.dart';
 import 'package:splathon_app/views/allresult.dart';
 import 'package:splathon_app/views/myresult.dart';
 
@@ -22,27 +21,15 @@ class _ResultTabbedBarState extends State<ResultTabbedBar>
     super.initState();
 
     controller = TabController(length: 2, vsync: this);
-    listenReloadEvent();
   }
 
   @override
   bool get wantKeepAlive => true;
 
-  listenReloadEvent() async {
-    Event.bus.on<ResultReload>().listen((_) {
-      switch (controller.index) {
-        case 0:
-          Event.bus.fire(MyResultReload());
-          return;
-        case 1:
-          Event.bus.fire(AllResultReload());
-          return;
-      }
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
+    super.build(context);
+
     return Container(
       color: backgroundColor,
       child: Stack(

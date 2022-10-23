@@ -64,23 +64,23 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyATNem-XmVEKb9SQbrY9z-iYR5sS02Uo_o',
-    appId: '1:253080974091:ios:acc050cbfdf2909507e80e',
+    appId: '1:253080974091:ios:05cd69f46848fa56',
     messagingSenderId: '253080974091',
     projectId: 'splathon10-apps',
     databaseURL: 'https://splathon10-apps.firebaseio.com',
     storageBucket: 'splathon10-apps.appspot.com',
-    iosClientId: '253080974091-csdmn1f0867cia555jha5pchrbrckt59.apps.googleusercontent.com',
-    iosBundleId: 'com.example.splathonClient',
+    iosClientId: '253080974091-rp6b353nfbut0mgvpgppvgp959sk3pma.apps.googleusercontent.com',
+    iosBundleId: 'inc.splathon.client-app',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
     apiKey: 'AIzaSyATNem-XmVEKb9SQbrY9z-iYR5sS02Uo_o',
-    appId: '1:253080974091:ios:acc050cbfdf2909507e80e',
+    appId: '1:253080974091:ios:05cd69f46848fa56',
     messagingSenderId: '253080974091',
     projectId: 'splathon10-apps',
     databaseURL: 'https://splathon10-apps.firebaseio.com',
     storageBucket: 'splathon10-apps.appspot.com',
-    iosClientId: '253080974091-csdmn1f0867cia555jha5pchrbrckt59.apps.googleusercontent.com',
-    iosBundleId: 'com.example.splathonClient',
+    iosClientId: '253080974091-rp6b353nfbut0mgvpgppvgp959sk3pma.apps.googleusercontent.com',
+    iosBundleId: 'inc.splathon.client-app',
   );
 }

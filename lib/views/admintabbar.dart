@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:splathon_app/domains/result_provider.dart';
 import 'package:splathon_app/styles/color.dart';
 import 'package:splathon_app/styles/text.dart';
-import 'package:splathon_app/utils/event.dart';
+import 'package:splathon_app/utils/config.dart';
 import 'package:splathon_app/views/accept.dart';
 import 'package:splathon_app/views/allresult.dart';
 
-class AdminTabbedBar extends StatefulWidget {
+class AdminTabbedBar extends ConsumerStatefulWidget {
+  const AdminTabbedBar({super.key});
+
   @override
   AdminTabbedBarState createState() => AdminTabbedBarState();
 }
 
-class AdminTabbedBarState extends State<AdminTabbedBar>
+class AdminTabbedBarState extends ConsumerState<AdminTabbedBar>
     with SingleTickerProviderStateMixin {
   late TabController controller;
 
@@ -27,26 +31,24 @@ class AdminTabbedBarState extends State<AdminTabbedBar>
     super.dispose();
   }
 
-  reload() {
-    switch (controller.index) {
-      case 0:
-        Event.bus.fire(AllResultReload());
-        return;
-      case 1:
-        return;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: SplaText('Splathon #11 for Admin'),
+        title: SplaText('Splathon #${Config.eventNumber} for Admin'),
         backgroundColor: const Color.fromRGBO(11, 49, 143, 1),
         actions: <Widget>[
           IconButton(
             icon: Image.asset('assets/images/reloadIcon.png'),
-            onPressed: reload,
+            onPressed: () {
+              switch (controller.index) {
+                case 0:
+                  ref.refresh(resultsProvider);
+                  return;
+                case 1:
+                  return;
+              }
+            },
           ),
         ],
       ),

@@ -185,12 +185,9 @@ class Notifications extends HookConsumerWidget {
                                 Container(
                                   margin: const EdgeInsets.only(bottom: 5),
                                   child: notice.timestampSec * 1000 >
-                                          (alreadyReadTime ?? 0)
+                                          alreadyReadTime
                                       ? accentNewView()
                                       : Container(),
-                                  // isAlreadyRead(notice.timestampSec * 1000)
-                                  //     ? Container()
-                                  //     : accentNewView(),
                                 ),
                               ],
                             ),

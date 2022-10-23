@@ -2,9 +2,13 @@ import 'dart:io';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:splathon_app/domains/notice_provider.dart';
+import 'package:splathon_app/domains/ranking_provider.dart';
+import 'package:splathon_app/domains/reception_provider.dart';
+import 'package:splathon_app/domains/result_provider.dart';
 import 'package:splathon_app/styles/color.dart';
 import 'package:splathon_app/styles/text.dart';
-import 'package:splathon_app/utils/event.dart';
 import 'package:splathon_app/views/notification.dart';
 import 'package:splathon_app/views/rankings.dart';
 import 'package:splathon_app/views/reception.dart';
@@ -12,13 +16,15 @@ import 'package:splathon_app/views/result.dart';
 
 /// Reference
 /// https://github.com/nisrulz/flutter-examples/blob/master/using_bottom_nav_bar/lib/main.dart
-class HomeTabbedBar extends StatefulWidget {
+class HomeTabbedBar extends ConsumerStatefulWidget {
+  const HomeTabbedBar({super.key});
+
   @override
   HomeTabbedBarState createState() => HomeTabbedBarState();
 }
 
 // SingleTickerProviderStateMixin is used for animation
-class HomeTabbedBarState extends State<HomeTabbedBar>
+class HomeTabbedBarState extends ConsumerState<HomeTabbedBar>
     with SingleTickerProviderStateMixin {
   late TabController controller;
   final FirebaseMessaging messaging = FirebaseMessaging.instance;
@@ -37,21 +43,8 @@ class HomeTabbedBarState extends State<HomeTabbedBar>
     super.dispose();
   }
 
-  reload() {
-    switch (controller.index) {
-      case 0:
-        Event.bus.fire(NotificationReload());
-        return;
-      case 1:
-        Event.bus.fire(ResultReload());
-        return;
-      case 2:
-        Event.bus.fire(RankingReload());
-        return;
-      case 3:
-        Event.bus.fire(ReceptionReload());
-        return;
-    }
+  void _pressed() {
+    print('pressed');
   }
 
   @override
@@ -60,10 +53,27 @@ class HomeTabbedBarState extends State<HomeTabbedBar>
       appBar: AppBar(
         title: SplaText('Splathon #11'),
         backgroundColor: const Color.fromRGBO(11, 49, 143, 1),
-        actions: <Widget>[
+        actions: [
           IconButton(
             icon: Image.asset('assets/images/reloadIcon.png'),
-            onPressed: reload,
+            onPressed: () {
+              switch (controller.index) {
+                case 0:
+                  ref.read(notificationStateProvider.notifier).load();
+                  ref.read(noticeReadtimeProvider.notifier).refresh();
+                  return;
+                case 1:
+                  ref.read(resultProvider.notifier).load();
+                  ref.refresh(resultsProvider);
+                  return;
+                case 2:
+                  ref.refresh(rankingProvider);
+                  return;
+                case 3:
+                  ref.refresh(receptionProvider);
+                  return;
+              }
+            },
           ),
         ],
       ),
@@ -121,6 +131,8 @@ class HomeTabbedBarState extends State<HomeTabbedBar>
         ),
       ),
     );
+    //   },
+    // );
   }
 
   // TODO: 隠蔽化したい

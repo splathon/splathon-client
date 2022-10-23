@@ -1,4 +1,4 @@
-package com.example.splathon_client
+package inc.splathon.client_app
 
 import io.flutter.embedding.android.FlutterActivity
 

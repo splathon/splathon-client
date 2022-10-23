@@ -32,16 +32,16 @@ class Preference {
     prefs.setBool('isAdmin', isAdmin);
   }
 
-  int getTeamId() {
-    return prefs.getInt('TeamId') ?? 0;
+  int? getTeamId() {
+    return prefs.getInt('TeamId');
   }
 
   setTeamId(int teamId) {
     prefs.setInt('TeamId', teamId);
   }
 
-  String getTeamName() {
-    return prefs.getString('TeamName') ?? '';
+  String? getTeamName() {
+    return prefs.getString('TeamName');
   }
 
   setTeamName(String teamName) {

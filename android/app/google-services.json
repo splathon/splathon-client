@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:253080974091:android:aa0df6e938748f0707e80e",
         "android_client_info": {
-          "package_name": "com.example.splathon_client"
+          "package_name": "inc.splathon.client_app"
         }
       },
       "oauth_client": [
@@ -32,7 +32,7 @@
               "client_type": 3
             },
             {
-              "client_id": "253080974091-rp6b353nfbut0mgvpgppvgp959sk3pma.apps.googleusercontent.com",
+              "client_id": "253080974091-csdmn1f0867cia555jha5pchrbrckt59.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
                 "bundle_id": "inc.splathon.client-app"
@@ -68,7 +68,7 @@
               "client_type": 3
             },
             {
-              "client_id": "253080974091-rp6b353nfbut0mgvpgppvgp959sk3pma.apps.googleusercontent.com",
+              "client_id": "253080974091-csdmn1f0867cia555jha5pchrbrckt59.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
                 "bundle_id": "inc.splathon.client-app"

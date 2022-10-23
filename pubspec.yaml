@@ -51,7 +51,6 @@ dependencies:
   firebase_core: 1.20.0
   shared_preferences:
   auto_size_text:
-  event_bus:
   url_launcher:
   openapi:
     path: client/

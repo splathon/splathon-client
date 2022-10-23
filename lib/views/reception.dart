@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:splathon_app/styles/color.dart';
-import 'package:splathon_app/utils/event.dart';
 import 'package:splathon_app/views/enter.dart';
 
 class ReceptionTabbedBar extends StatefulWidget {
@@ -21,27 +20,15 @@ class _ReceptionTabbedBarState extends State<ReceptionTabbedBar>
     super.initState();
 
     controller = TabController(length: 2, vsync: this);
-    listenReloadEvent();
   }
 
   @override
   bool get wantKeepAlive => true;
 
-  listenReloadEvent() async {
-    Event.bus.on<ReceptionReload>().listen((_) {
-      switch (controller.index) {
-        case 0:
-          Event.bus.fire(EnterBuildingReload());
-          return;
-        case 1:
-          Event.bus.fire(EnterSplathonReload());
-          return;
-      }
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
+    super.build(context);
+
     return Container(
       color: backgroundColor,
       child: Stack(

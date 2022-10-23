@@ -35,8 +35,9 @@ class SelectTeamResultStateNotifier extends StateNotifier<AsyncValue<Results>> {
     final teamId = Preference().getTeamId();
     _fetchTeams().then((resTeams) {
       teams = resTeams;
-      final preSelectTeam =
-          teamId > 0 ? teams.firstWhere((e) => e.id == teamId) : teams.first;
+      final preSelectTeam = teamId != null
+          ? teams.firstWhere((e) => e.id == teamId)
+          : teams.first;
       _ref.read(selectTeamProvider.notifier).update((_) => preSelectTeam);
       return _fetchResult(teamId: preSelectTeam.id);
     }).then((result) {
