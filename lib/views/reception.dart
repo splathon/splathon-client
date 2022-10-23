@@ -51,11 +51,11 @@ class _ReceptionTabbedBarState extends State<ReceptionTabbedBar>
             children: const [
               Padding(
                 padding: EdgeInsets.only(top: 60.0),
-                child: Enter(true),
+                child: Enter(isBuilding: true),
               ),
               Padding(
                 padding: EdgeInsets.only(top: 60.0),
-                child: Enter(false),
+                child: Enter(isBuilding: false),
               ),
             ],
           ),

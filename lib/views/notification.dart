@@ -3,8 +3,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import "package:intl/intl.dart";
 import 'package:splathon_app/domains/notice_provider.dart';
+import 'package:splathon_app/domains/user_provider.dart';
 import 'package:splathon_app/styles/color.dart';
-import 'package:splathon_app/utils/preference.dart';
 import 'package:splathon_app/views/roundedView.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -14,13 +14,16 @@ class Notifications extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final notification = ref.watch(notificationStateProvider);
-    final hasTeam = Preference().getTeamId() > 0;
-    final teamName = Preference().getTeamName();
-    final int alreadyReadTime = Preference().getNoticeReadTime();
+    final user = ref.watch(userStateProvider);
+    final teamId = user?.teamId;
+    final teamName = user?.teamName ?? '';
+    final hasTeam = teamId != null;
+    final int alreadyReadTime = ref.watch(noticeReadtimeProvider);
 
     return notification.when(
       data: ((data) {
-        updateReadTime();
+        // SPEC: Stateを更新すると一瞬で新着マークが外れるため、更新ボタンを押すまで意図的にStateを更新しない
+        ref.read(noticeReadtimeProvider.notifier).read(refreshState: false);
         return Container(
           color: backgroundColor,
           child: ListView.builder(
@@ -312,11 +315,6 @@ class Notifications extends HookConsumerWidget {
         child: CircularProgressIndicator(),
       ),
     );
-  }
-
-  void updateReadTime() {
-    final secounds = DateTime.now().millisecondsSinceEpoch;
-    Preference().setNoticeReadTime(secounds);
   }
 
   String dateString(int timeMillisecondsSince1970) {

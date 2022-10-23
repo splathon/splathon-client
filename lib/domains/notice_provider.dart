@@ -4,37 +4,35 @@ import 'package:splathon_app/domains/notification_view_model.dart';
 import 'package:splathon_app/utils/config.dart';
 import 'package:splathon_app/utils/preference.dart';
 
-final noticeProvider = FutureProvider.autoDispose<List<Notice>>((ref) async {
-  var client = DefaultApi();
-  String token = Preference().getToken();
-  var result = await client.listNotices(Config.eventNumber, token);
-  if (result == null) {
-    throw Exception();
-  }
-  return result.notices;
+final noticeReadtimeProvider =
+    StateNotifierProvider<NoticeReadtimeStateNotifier, int>((ref) {
+  return NoticeReadtimeStateNotifier(ref);
 });
 
-final nextMatchProvider =
-    FutureProvider.autoDispose.family<NextMatch?, int>((ref, teamId) async {
-  var client = MatchApi();
-  String token = Preference().getToken();
-  var result =
-      await client.getNextMatch(Config.eventNumber, token, teamId: teamId);
-  if (result == null) {
-    throw Exception();
+class NoticeReadtimeStateNotifier extends StateNotifier<int> {
+  NoticeReadtimeStateNotifier(this._ref) : super(0) {
+    load();
   }
-  return result.nextMatch;
-});
+  final Ref _ref;
 
-final scheduleProvider =
-    FutureProvider.autoDispose<List<ScheduleEntry>>((ref) async {
-  var client = DefaultApi();
-  var result = await client.getSchedule(Config.eventNumber);
-  if (result == null) {
-    throw Exception();
+  void load() {
+    final readtime = Preference().getNoticeReadTime();
+    state = readtime;
   }
-  return result.entries;
-});
+
+  void read({bool refreshState = false}) {
+    final secounds = DateTime.now().millisecondsSinceEpoch;
+    Preference().setNoticeReadTime(secounds);
+
+    if (refreshState) {
+      state = secounds;
+    }
+  }
+
+  void refresh() {
+    load();
+  }
+}
 
 final notificationStateProvider = StateNotifierProvider<
     NotificationStateNotifier, AsyncValue<NotificationViewModel>>((ref) {

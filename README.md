@@ -29,6 +29,10 @@ https://docs.flutter.dev/get-started/install/macos
 $ openapi-generator generate -i swagger.yaml -g dart -o client
 ```
 
+### Setup Firebase 
+
+https://firebase.google.com/docs/flutter/setup
+
 ## Specs
 
 - [Google Drive - Splathon#10 App develop](https://drive.google.com/drive/folders/1IkOe2ItR_ZYUKULYlUSvZwqRhMjebM7z)
