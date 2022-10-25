@@ -7,7 +7,7 @@ import 'package:splathon_app/utils/preference.dart';
 
 final resultsProvider = FutureProvider.autoDispose<Results>((ref) async {
   var client = ResultApi();
-  String token = Preference().getToken();
+  String token = Preference.getToken();
   var result =
       await client.getResult(Config.eventNumber, X_SPLATHON_API_TOKEN: token);
   if (result == null) {
@@ -25,20 +25,20 @@ final resultProvider =
 });
 
 class SelectTeamResultStateNotifier extends StateNotifier<AsyncValue<Results>> {
-  SelectTeamResultStateNotifier(this._ref) : super(const AsyncLoading()) {
+  SelectTeamResultStateNotifier(this.ref) : super(const AsyncLoading()) {
     load();
   }
-  final Ref _ref;
+  final Ref ref;
   late List<Team> teams;
 
   void load() async {
-    final teamId = Preference().getTeamId();
+    final teamId = Preference.getTeamId();
     _fetchTeams().then((resTeams) {
       teams = resTeams;
       final preSelectTeam = teamId != null
           ? teams.firstWhere((e) => e.id == teamId)
           : teams.first;
-      _ref.read(selectTeamProvider.notifier).update((_) => preSelectTeam);
+      ref.read(selectTeamProvider.notifier).update((_) => preSelectTeam);
       return _fetchResult(teamId: preSelectTeam.id);
     }).then((result) {
       state = AsyncData(result);
@@ -58,7 +58,7 @@ class SelectTeamResultStateNotifier extends StateNotifier<AsyncValue<Results>> {
 
   Future<Results> _fetchResult({required int teamId}) async {
     var client = ResultApi();
-    String token = Preference().getToken();
+    String token = Preference.getToken();
     var result = await client.getResult(Config.eventNumber,
         X_SPLATHON_API_TOKEN: token, teamId: teamId);
     if (result == null) {
@@ -69,7 +69,7 @@ class SelectTeamResultStateNotifier extends StateNotifier<AsyncValue<Results>> {
 
   void select(String teamName) {
     final team = teams.firstWhere((e) => e.name == teamName);
-    _ref.read(selectTeamProvider.notifier).update((_) => team);
+    ref.read(selectTeamProvider.notifier).update((_) => team);
     _fetchResult(teamId: team.id).then((result) {
       state = AsyncData(result);
     }).catchError((error, stackTrace) {

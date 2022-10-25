@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:openapi/api.dart' as API;
 import 'package:splathon_app/styles/color.dart';
 import 'package:splathon_app/styles/text.dart';
+import 'package:splathon_app/styles/text_style.dart';
 import 'package:splathon_app/utils/config.dart';
 import 'package:splathon_app/utils/preference.dart';
 
@@ -78,7 +79,7 @@ class _ReportState extends State<Report> {
       // Loading
       return Scaffold(
         appBar: AppBar(
-          title: SplaText('リザルト'),
+          title: const SplaText('リザルト'),
           backgroundColor: const Color.fromRGBO(11, 49, 143, 1),
         ),
         body: const Center(
@@ -100,7 +101,7 @@ class _ReportState extends State<Report> {
 
     return Scaffold(
       appBar: AppBar(
-        title: SplaText('リザルト'),
+        title: const SplaText('リザルト'),
         backgroundColor: const Color.fromRGBO(11, 49, 143, 1),
       ),
       body: ListView.builder(
@@ -325,11 +326,7 @@ class _ReportState extends State<Report> {
                 ),
                 child: const Text(
                   '試合結果を送信する',
-                  style: TextStyle(
-                    fontFamily: 'Splatfont',
-                    fontSize: 26,
-                    color: Colors.white,
-                  ),
+                  style: actionButtonStyle,
                 ),
                 onPressed: () {
                   submit();
@@ -347,7 +344,7 @@ class _ReportState extends State<Report> {
 
   submit() {
     var client = API.AdminApi();
-    String token = Preference().getToken();
+    String token = Preference.getToken();
     print(_battle);
     var result =
         client.updateBattle(Config.eventNumber, _match.id, token, _battle);
@@ -405,34 +402,4 @@ class _ReportState extends State<Report> {
   pop() {
     Navigator.of(context).pop();
   }
-
-  static const TextStyle headerStyle = TextStyle(
-    fontFamily: 'Splatfont',
-    color: blackColor,
-    fontSize: 18.0,
-  );
-
-  static const TextStyle topNameStyle = TextStyle(
-    fontFamily: 'Splatfont',
-    color: blackColor,
-    fontSize: 22.0,
-  );
-
-  static const TextStyle resultNameStyle = TextStyle(
-    fontFamily: 'Splatfont',
-    color: blackColor,
-    fontSize: 20.0,
-  );
-
-  static const TextStyle popupTitleStyle = TextStyle(
-    fontFamily: 'Splatfont',
-    color: Colors.white,
-    fontSize: 20.0,
-  );
-
-  static const TextStyle popupMessageStyle = TextStyle(
-    fontFamily: 'Splatfont',
-    color: blackColor,
-    fontSize: 16.0,
-  );
 }

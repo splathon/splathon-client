@@ -5,6 +5,7 @@ import 'package:openapi/api.dart' as API;
 import 'package:splathon_app/domains/result_provider.dart';
 import 'package:splathon_app/domains/teams_provider.dart';
 import 'package:splathon_app/styles/color.dart';
+import 'package:splathon_app/styles/text_style.dart';
 import 'package:splathon_app/utils/async_value_list_extension.dart';
 import 'package:splathon_app/views/resultdetail.dart';
 import 'package:splathon_app/views/roundedView.dart';
@@ -230,34 +231,4 @@ class EachResult extends HookConsumerWidget {
         return Container();
     }
   }
-
-  static const TextStyle topNameStyle = TextStyle(
-    fontFamily: 'Splatfont',
-    color: blackColor,
-    fontSize: 22.0,
-  );
-
-  static const TextStyle resultTitleStyle = TextStyle(
-    fontFamily: 'Splatfont',
-    color: grayColor,
-    fontSize: 14.0,
-  );
-
-  static const TextStyle resultNameStyle = TextStyle(
-    fontFamily: 'Splatfont',
-    color: blackColor,
-    fontSize: 20.0,
-  );
-
-  static const TextStyle resultResultStyle = TextStyle(
-    fontFamily: 'Splatfont',
-    color: Colors.white,
-    fontSize: 11.0,
-  );
-
-  static const TextStyle noResultTextStyle = TextStyle(
-    fontFamily: 'Splatfont',
-    color: blackColor,
-    fontSize: 26.0,
-  );
 }

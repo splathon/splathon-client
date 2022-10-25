@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:splathon_app/styles/color.dart';
+import 'package:splathon_app/styles/text_style.dart';
 import 'package:splathon_app/views/allresult.dart';
 import 'package:splathon_app/views/myresult.dart';
 
@@ -53,7 +54,7 @@ class _ResultTabbedBarState extends State<ResultTabbedBar>
               isScrollable: false,
               indicatorColor: splaBlueColor,
               labelColor: splaBlueColor,
-              labelStyle: tabStyle,
+              labelStyle: upperTabTextStyle,
               tabs: choices.map((TabView tabView) {
                 return SizedBox(
                   height: 40.0,
@@ -69,12 +70,6 @@ class _ResultTabbedBarState extends State<ResultTabbedBar>
       ),
     );
   }
-
-  static const TextStyle tabStyle = TextStyle(
-    fontFamily: 'Splatfont',
-    color: splaBlueColor,
-    fontSize: 18.0,
-  );
 }
 
 class TabView {

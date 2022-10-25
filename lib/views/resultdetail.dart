@@ -5,6 +5,7 @@ import 'package:openapi/api.dart' as API;
 import 'package:splathon_app/domains/match_provider.dart';
 import 'package:splathon_app/styles/color.dart';
 import 'package:splathon_app/styles/text.dart';
+import 'package:splathon_app/styles/text_style.dart';
 import 'package:splathon_app/utils/preference.dart';
 import 'package:splathon_app/views/Image.dart';
 import 'package:splathon_app/views/report.dart';
@@ -17,11 +18,11 @@ class ResultDetail extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final match = ref.watch(matchProvider(matchId));
-    final bool isAdmin = Preference().isAdmin();
+    final bool isAdmin = Preference.isAdmin();
 
     return Scaffold(
       appBar: AppBar(
-        title: SplaText('リザルト'),
+        title: const SplaText('リザルト'),
         backgroundColor: const Color.fromRGBO(11, 49, 143, 1),
       ),
       body: match.when(
@@ -117,11 +118,7 @@ class ResultDetail extends HookConsumerWidget {
                                 ),
                                 child: const Text(
                                   '結果を報告する',
-                                  style: TextStyle(
-                                    fontFamily: 'Splatfont',
-                                    fontSize: 26,
-                                    color: Colors.white,
-                                  ),
+                                  style: actionButtonStyle,
                                 ),
                                 onPressed: () async {
                                   await Navigator.push(
@@ -465,63 +462,14 @@ class ResultDetail extends HookConsumerWidget {
     );
   }
 
-  static const TextStyle resultWinStyle = TextStyle(
-    fontFamily: 'Splatfont',
-    color: winColor,
-    fontSize: 40.0,
-  );
-
-  static const TextStyle resultLoseStyle = TextStyle(
-    fontFamily: 'Splatfont',
-    color: loseColor,
-    fontSize: 40.0,
-  );
-
-  static const TextStyle resultDrawStyle = TextStyle(
-    fontFamily: 'Splatfont',
-    color: drawColor,
-    fontSize: 40.0,
-  );
-
-  static const TextStyle resultUpcomingStyle = TextStyle(
-    fontFamily: 'Splatfont',
-    color: splaYellowColor,
-    fontSize: 40.0,
-  );
-
-  static const TextStyle resultTopTeamNameStyle = TextStyle(
-    fontFamily: 'Splatfont',
-    color: blackColor,
-    fontSize: 20.0,
-  );
-
-  static const TextStyle resultPlayerNameStyle = TextStyle(
-    fontFamily: 'Splatfont',
-    color: blackColor,
-    fontSize: 14.0,
-  );
-
-  static const TextStyle resultDetailTeamNameStyle = TextStyle(
-    fontFamily: 'Splatfont',
-    color: blackColor,
-    fontSize: 16.0,
-  );
-
-  static const TextStyle roundStyle = TextStyle(
-    fontFamily: 'Splatfont',
-    color: splaBlueColor,
-    fontSize: 18.0,
-  );
-
-  static const TextStyle ruleStageStyle = TextStyle(
-    fontFamily: 'Splatfont',
-    color: grayColor,
-    fontSize: 16.0,
-  );
-
-  static const TextStyle resultResultStyle = TextStyle(
-    fontFamily: 'Splatfont',
-    color: Colors.white,
-    fontSize: 11.0,
-  );
+  static const resultWinStyle = WinColorSplatfontStyle(fontSize: 40.0);
+  static const resultLoseStyle = LoseColorSplatfontStyle(fontSize: 40.0);
+  static const resultDrawStyle = DrawColorSplatfontStyle(fontSize: 40.0);
+  static const resultUpcomingStyle = YellowSplatfontStyle(fontSize: 40.0);
+  static const resultTopTeamNameStyle = BlackSplatfontStyle(fontSize: 20.0);
+  static const resultPlayerNameStyle = BlackSplatfontStyle(fontSize: 14.0);
+  static const resultDetailTeamNameStyle = BlackSplatfontStyle(fontSize: 16.0);
+  static const roundStyle = BlueSplatfontStyle(fontSize: 18.0);
+  static const ruleStageStyle = GraySplatfontStyle(fontSize: 16.0);
+  static const resultResultStyle = WhiteSplatfontStyle(fontSize: 11.0);
 }

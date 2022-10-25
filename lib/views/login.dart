@@ -3,6 +3,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:splathon_app/domains/user_provider.dart';
 import 'package:splathon_app/styles/color.dart';
 import 'package:splathon_app/styles/text.dart';
+import 'package:splathon_app/styles/text_style.dart';
 import 'package:splathon_app/utils/config.dart';
 
 class Login extends HookConsumerWidget {
@@ -29,9 +30,9 @@ class Login extends HookConsumerWidget {
                   decoration: InputDecoration(
                     border: const UnderlineInputBorder(),
                     labelText: 'User ID',
-                    labelStyle: _labelStyle,
+                    labelStyle: formLabelStyle,
                     hintText: 'splathon#${Config.eventNumber}',
-                    hintStyle: _hintStyle,
+                    hintStyle: formHintStyle,
                   ),
                   controller: _userIdController,
                 ),
@@ -41,9 +42,9 @@ class Login extends HookConsumerWidget {
                   decoration: const InputDecoration(
                     border: UnderlineInputBorder(),
                     labelText: 'Password',
-                    labelStyle: _labelStyle,
+                    labelStyle: formLabelStyle,
                     hintText: '2525splatoon',
-                    hintStyle: _hintStyle,
+                    hintStyle: formHintStyle,
                   ),
                   controller: _passwordController,
                 ),
@@ -59,11 +60,7 @@ class Login extends HookConsumerWidget {
                     ),
                     child: const Text(
                       'ログイン',
-                      style: TextStyle(
-                        fontFamily: 'Splatfont',
-                        fontSize: 26,
-                        color: Colors.white,
-                      ),
+                      style: actionButtonStyle,
                     ),
                     onPressed: () {
                       login(context, ref);
@@ -137,24 +134,4 @@ class Login extends HookConsumerWidget {
       },
     );
   }
-
-  static const TextStyle _labelStyle = TextStyle(
-    fontFamily: 'Splatfont',
-  );
-  static const TextStyle _hintStyle = TextStyle(
-    fontFamily: 'Splatfont',
-    color: Color.fromRGBO(211, 211, 211, 1),
-  );
-
-  static const TextStyle popupTitleStyle = TextStyle(
-    fontFamily: 'Splatfont',
-    color: Colors.white,
-    fontSize: 20.0,
-  );
-
-  static const TextStyle popupMessageStyle = TextStyle(
-    fontFamily: 'Splatfont',
-    color: blackColor,
-    fontSize: 16.0,
-  );
 }

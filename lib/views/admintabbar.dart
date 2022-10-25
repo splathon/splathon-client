@@ -3,6 +3,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:splathon_app/domains/result_provider.dart';
 import 'package:splathon_app/styles/color.dart';
 import 'package:splathon_app/styles/text.dart';
+import 'package:splathon_app/styles/text_style.dart';
 import 'package:splathon_app/utils/config.dart';
 import 'package:splathon_app/views/accept.dart';
 import 'package:splathon_app/views/allresult.dart';
@@ -70,14 +71,14 @@ class AdminTabbedBarState extends ConsumerState<AdminTabbedBar>
                 icon: Image.asset('assets/images/icon_result.png'),
                 child: const Text(
                   'レポート',
-                  style: tabTextStyle,
+                  style: bottomTabTextStyle,
                 ),
               ),
               Tab(
                 icon: Image.asset('assets/images/icon_reception.png'),
                 child: const Text(
                   'QR受付',
-                  style: tabTextStyle,
+                  style: bottomTabTextStyle,
                 ),
               ),
             ],
@@ -87,22 +88,4 @@ class AdminTabbedBarState extends ConsumerState<AdminTabbedBar>
       ),
     );
   }
-
-  static const TextStyle popupTitleStyle = TextStyle(
-    fontFamily: 'Splatfont',
-    color: Colors.white,
-    fontSize: 20.0,
-  );
-
-  static const TextStyle popupMessageStyle = TextStyle(
-    fontFamily: 'Splatfont',
-    color: blackColor,
-    fontSize: 16.0,
-  );
-
-  static const TextStyle tabTextStyle = TextStyle(
-    fontFamily: 'Splatfont',
-    color: Colors.white,
-    fontSize: 15.0,
-  );
 }

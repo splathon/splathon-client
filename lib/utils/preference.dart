@@ -3,56 +3,51 @@ import 'package:splathon_app/utils/config.dart';
 
 class Preference {
   static final Preference _singleton = Preference._internal();
-  // Private constractor
-  Preference._internal() {
-    setup();
-  }
-  factory Preference() {
-    return _singleton;
-  }
-  late SharedPreferences prefs;
+  Preference._internal();
 
-  setup() async {
-    prefs = await SharedPreferences.getInstance();
+  late SharedPreferences _prefs;
+
+  static setup() async {
+    _singleton._prefs = await SharedPreferences.getInstance();
   }
 
-  String getToken() {
-    return prefs.getString('Token${Config.eventNumber}') ?? '';
+  static String getToken() {
+    return _singleton._prefs.getString('Token${Config.eventNumber}') ?? '';
   }
 
-  setToken(String token) {
-    prefs.setString('Token${Config.eventNumber}', token);
+  static setToken(String token) {
+    _singleton._prefs.setString('Token${Config.eventNumber}', token);
   }
 
-  bool isAdmin() {
-    return prefs.getBool('isAdmin') ?? false;
+  static bool isAdmin() {
+    return _singleton._prefs.getBool('isAdmin') ?? false;
   }
 
-  setIsAdmin(bool isAdmin) {
-    prefs.setBool('isAdmin', isAdmin);
+  static setIsAdmin(bool isAdmin) {
+    _singleton._prefs.setBool('isAdmin', isAdmin);
   }
 
-  int? getTeamId() {
-    return prefs.getInt('TeamId');
+  static int? getTeamId() {
+    return _singleton._prefs.getInt('TeamId');
   }
 
-  setTeamId(int teamId) {
-    prefs.setInt('TeamId', teamId);
+  static setTeamId(int teamId) {
+    _singleton._prefs.setInt('TeamId', teamId);
   }
 
-  String? getTeamName() {
-    return prefs.getString('TeamName');
+  static String? getTeamName() {
+    return _singleton._prefs.getString('TeamName');
   }
 
-  setTeamName(String teamName) {
-    prefs.setString('TeamName', teamName);
+  static setTeamName(String teamName) {
+    _singleton._prefs.setString('TeamName', teamName);
   }
 
-  int getNoticeReadTime() {
-    return prefs.getInt('NoticeReadTime') ?? 0;
+  static int getNoticeReadTime() {
+    return _singleton._prefs.getInt('NoticeReadTime') ?? 0;
   }
 
-  setNoticeReadTime(int unixTime) {
-    prefs.setInt('NoticeReadTime', unixTime);
+  static setNoticeReadTime(int unixTime) {
+    _singleton._prefs.setInt('NoticeReadTime', unixTime);
   }
 }

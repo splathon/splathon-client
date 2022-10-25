@@ -4,6 +4,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:openapi/api.dart' as API;
 import 'package:splathon_app/styles/color.dart';
+import 'package:splathon_app/styles/text_style.dart';
 import 'package:splathon_app/utils/config.dart';
 import 'package:splathon_app/utils/preference.dart';
 
@@ -34,7 +35,7 @@ class _AcceptState extends State<Accept> with AutomaticKeepAliveClientMixin {
 
   Future fetchReceptionData(String receptionCode) async {
     var client = API.ReceptionApi();
-    String token = Preference().getToken();
+    String token = Preference.getToken();
     var result = client.getParticipantsDataForReception(
         Config.eventNumber, receptionCode, token);
     result.then((resultsObj) => setState(() {
@@ -68,7 +69,7 @@ class _AcceptState extends State<Accept> with AutomaticKeepAliveClientMixin {
     isCompleting = true;
 
     var client = API.ReceptionApi();
-    String token = Preference().getToken();
+    String token = Preference.getToken();
     var result = client.getParticipantsDataForReception(
         Config.eventNumber, value, token);
     // result.then((resultsObj) {
@@ -433,11 +434,7 @@ class _AcceptState extends State<Accept> with AutomaticKeepAliveClientMixin {
               ),
               child: const Text(
                 'キャンセル',
-                style: TextStyle(
-                  fontFamily: 'Splatfont',
-                  fontSize: 26,
-                  color: Colors.white,
-                ),
+                style: actionButtonStyle,
               ),
               onPressed: () {
                 isCompleting = false;
@@ -455,15 +452,11 @@ class _AcceptState extends State<Accept> with AutomaticKeepAliveClientMixin {
               ),
               child: const Text(
                 '受付する',
-                style: TextStyle(
-                  fontFamily: 'Splatfont',
-                  fontSize: 26,
-                  color: Colors.white,
-                ),
+                style: actionButtonStyle,
               ),
               onPressed: () {
                 var client = API.ReceptionApi();
-                String token = Preference().getToken();
+                String token = Preference.getToken();
                 var result = client.completeReception(
                     Config.eventNumber, scannedCode, token);
                 result.then((resultObjet) {
@@ -531,28 +524,4 @@ class _AcceptState extends State<Accept> with AutomaticKeepAliveClientMixin {
     }
     return '観戦';
   }
-
-  static const TextStyle popupTitleStyle = TextStyle(
-    fontFamily: 'Splatfont',
-    color: Colors.white,
-    fontSize: 20.0,
-  );
-
-  static const TextStyle popupMessageStyle = TextStyle(
-    fontFamily: 'Splatfont',
-    color: blackColor,
-    fontSize: 16.0,
-  );
-
-  static const TextStyle headerStyle = TextStyle(
-    fontFamily: 'Splatfont',
-    color: blackColor,
-    fontSize: 18.0,
-  );
-
-  static const TextStyle hasCompanionStyle = TextStyle(
-    fontFamily: 'Splatfont',
-    color: Colors.red,
-    fontSize: 18.0,
-  );
 }

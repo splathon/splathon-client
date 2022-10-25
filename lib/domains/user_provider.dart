@@ -27,14 +27,14 @@ class UserStateNotifier extends StateNotifier<User?> {
   }
 
   void load() {
-    final token = Preference().getToken();
+    final token = Preference.getToken();
     if (token.isEmpty) {
       state = null;
       return;
     }
-    final isAdmin = Preference().isAdmin();
-    final teamId = Preference().getTeamId();
-    final teamName = Preference().getTeamName();
+    final isAdmin = Preference.isAdmin();
+    final teamId = Preference.getTeamId();
+    final teamName = Preference.getTeamName();
     state = User(
       token: token,
       isAdmin: isAdmin,
@@ -70,12 +70,12 @@ class UserStateNotifier extends StateNotifier<User?> {
     int? teamId,
     String? teamName,
   }) {
-    Preference().setToken(token);
-    Preference().setIsAdmin(isAdmin);
+    Preference.setToken(token);
+    Preference.setIsAdmin(isAdmin);
 
     if (teamId != null && teamName != null) {
-      Preference().setTeamId(teamId);
-      Preference().setTeamName(teamName);
+      Preference.setTeamId(teamId);
+      Preference.setTeamName(teamName);
     }
 
     state = User(

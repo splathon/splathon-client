@@ -4,6 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:openapi/api.dart' as API;
 import 'package:splathon_app/domains/ranking_provider.dart';
 import 'package:splathon_app/styles/color.dart';
+import 'package:splathon_app/styles/text_style.dart';
 import 'package:splathon_app/views/Image.dart';
 import 'package:splathon_app/views/roundedView.dart';
 
@@ -166,21 +167,9 @@ class Rankings extends HookConsumerWidget {
     );
   }
 
-  static const TextStyle pointStyle = TextStyle(
-    fontFamily: 'Splatfont',
-    color: splaBlueColor,
-    fontSize: 13.0,
-  );
-  static const TextStyle nameStyle = TextStyle(
-    fontFamily: 'Splatfont',
-    color: blackColor,
-    fontSize: 14.0,
-  );
-  static const TextStyle timeStyle = TextStyle(
-    fontFamily: 'Splatfont',
-    color: grayColor,
-    fontSize: 14.0,
-  );
+  static const pointStyle = BlueSplatfontStyle(fontSize: 13.0);
+  static const nameStyle = BlackSplatfontStyle(fontSize: 14.0);
+  static const timeStyle = GraySplatfontStyle(fontSize: 14.0);
 
   TextStyle rankTextStyle(int index) {
     return TextStyle(

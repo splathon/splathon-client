@@ -5,6 +5,7 @@ import "package:intl/intl.dart";
 import 'package:splathon_app/domains/notice_provider.dart';
 import 'package:splathon_app/domains/user_provider.dart';
 import 'package:splathon_app/styles/color.dart';
+import 'package:splathon_app/styles/text_style.dart';
 import 'package:splathon_app/views/roundedView.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -403,39 +404,10 @@ class Notifications extends HookConsumerWidget {
         ));
   }
 
-  static const TextStyle topLabelMiniStyle = TextStyle(
-    fontFamily: 'Splatfont',
-    color: blackColor,
-    fontSize: 14.0,
-  );
-
-  static const TextStyle titleStyle = TextStyle(
-    fontFamily: 'Splatfont',
-    color: blackColor,
-    fontSize: 18.0,
-  );
-
-  static const TextStyle notificationStyle = TextStyle(
-    fontFamily: 'Splatfont',
-    color: blackColor,
-    fontSize: 13.0,
-  );
-
-  static const TextStyle nextMatchTitleStyle = TextStyle(
-    fontFamily: 'Splatfont',
-    color: grayColor,
-    fontSize: 14.0,
-  );
-
-  static const TextStyle nextMatchNameStyle = TextStyle(
-    fontFamily: 'Splatfont',
-    color: blackColor,
-    fontSize: 20.0,
-  );
-
-  static const TextStyle newStyle = TextStyle(
-    fontFamily: 'Splatfont',
-    color: Colors.white,
-    fontSize: 11.0,
-  );
+  static const topLabelMiniStyle = BlackSplatfontStyle(fontSize: 14.0);
+  static const titleStyle = BlackSplatfontStyle(fontSize: 18.0);
+  static const notificationStyle = BlackSplatfontStyle(fontSize: 13.0);
+  static const nextMatchTitleStyle = GraySplatfontStyle(fontSize: 14.0);
+  static const nextMatchNameStyle = BlackSplatfontStyle(fontSize: 20.0);
+  static const newStyle = WhiteSplatfontStyle(fontSize: 11.0);
 }

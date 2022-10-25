@@ -16,13 +16,13 @@ class NoticeReadtimeStateNotifier extends StateNotifier<int> {
   final Ref _ref;
 
   void load() {
-    final readtime = Preference().getNoticeReadTime();
+    final readtime = Preference.getNoticeReadTime();
     state = readtime;
   }
 
   void read({bool refreshState = false}) {
     final secounds = DateTime.now().millisecondsSinceEpoch;
-    Preference().setNoticeReadTime(secounds);
+    Preference.setNoticeReadTime(secounds);
 
     if (refreshState) {
       state = secounds;
@@ -47,7 +47,7 @@ class NotificationStateNotifier
   final Ref _ref;
 
   void load() {
-    int? teamId = Preference().getTeamId();
+    int? teamId = Preference.getTeamId();
 
     late List<Notice> notices;
     late List<ScheduleEntry> schedules;
@@ -77,7 +77,7 @@ class NotificationStateNotifier
 
   Future<List<Notice>> _fetchNotices() async {
     var client = DefaultApi();
-    String token = Preference().getToken();
+    String token = Preference.getToken();
     var result = await client.listNotices(Config.eventNumber, token);
     if (result == null) {
       throw Exception();
@@ -96,7 +96,7 @@ class NotificationStateNotifier
 
   Future<NextMatch?> _fetchNextMatch({required int teamId}) async {
     var client = MatchApi();
-    String token = Preference().getToken();
+    String token = Preference.getToken();
     var result =
         await client.getNextMatch(Config.eventNumber, token, teamId: teamId);
     if (result == null) {

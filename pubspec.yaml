@@ -80,7 +80,7 @@ flutter_icons:
   image_path: "assets/images/boys.png"
 
 flutter_native_splash:
-  color: "#FFFFFF" #"#0B318F"
+  color: "#0B318F"
   image: "assets/images/boys.png"
   android: true
   ios: true

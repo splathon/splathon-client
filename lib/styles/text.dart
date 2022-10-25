@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 
-const splatStyle = const TextStyle(
+const splatStyle = TextStyle(
   fontFamily: 'Splatfont',
 );
 
 class SplaText extends Text {
-  String text;
-  SplaText(this.text) : super('');
+  final String text;
+  const SplaText(this.text, {super.key}) : super('');
 
-  @override 
+  @override
   Widget build(BuildContext context) {
-    return Text(text, style: splatStyle,);
+    return Text(
+      text,
+      style: splatStyle,
+    );
   }
 }

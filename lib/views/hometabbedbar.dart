@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -9,6 +7,8 @@ import 'package:splathon_app/domains/reception_provider.dart';
 import 'package:splathon_app/domains/result_provider.dart';
 import 'package:splathon_app/styles/color.dart';
 import 'package:splathon_app/styles/text.dart';
+import 'package:splathon_app/styles/text_style.dart';
+import 'package:splathon_app/utils/config.dart';
 import 'package:splathon_app/views/notification.dart';
 import 'package:splathon_app/views/rankings.dart';
 import 'package:splathon_app/views/reception.dart';
@@ -43,15 +43,11 @@ class HomeTabbedBarState extends ConsumerState<HomeTabbedBar>
     super.dispose();
   }
 
-  void _pressed() {
-    print('pressed');
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: SplaText('Splathon #11'),
+        title: SplaText('Splathon #${Config.eventNumber}'),
         backgroundColor: const Color.fromRGBO(11, 49, 143, 1),
         actions: [
           IconButton(
@@ -98,7 +94,7 @@ class HomeTabbedBarState extends ConsumerState<HomeTabbedBar>
                 iconMargin: const EdgeInsets.only(bottom: 0),
                 child: const Text(
                   'お知らせ',
-                  style: tabTextStyle,
+                  style: bottomTabTextStyle,
                 ),
               ),
               Tab(
@@ -106,7 +102,7 @@ class HomeTabbedBarState extends ConsumerState<HomeTabbedBar>
                 iconMargin: const EdgeInsets.only(bottom: 0),
                 child: const Text(
                   'リザルト',
-                  style: tabTextStyle,
+                  style: bottomTabTextStyle,
                 ),
               ),
               Tab(
@@ -114,7 +110,7 @@ class HomeTabbedBarState extends ConsumerState<HomeTabbedBar>
                 iconMargin: const EdgeInsets.only(bottom: 0),
                 child: const Text(
                   'ランキング',
-                  style: tabTextStyle,
+                  style: bottomTabTextStyle,
                 ),
               ),
               Tab(
@@ -122,7 +118,7 @@ class HomeTabbedBarState extends ConsumerState<HomeTabbedBar>
                 iconMargin: const EdgeInsets.only(bottom: 0),
                 child: const Text(
                   '受付コード',
-                  style: tabTextStyle,
+                  style: bottomTabTextStyle,
                 ),
               ),
             ],
@@ -137,41 +133,26 @@ class HomeTabbedBarState extends ConsumerState<HomeTabbedBar>
 
   // TODO: 隠蔽化したい
   void setupFirebaseCloudMessaging(BuildContext context) {
-    // TODO: Firebase Messaging version up に対応する
-    // _firebaseMessaging.configure(
-    //   onMessage: (Map<String, dynamic> message) async {
-    //     print('onMessage: $message');
-    //     buildDialog(context, message);
-    //   },
-    //   onLaunch: (Map<String, dynamic> message) async {
-    //     print('onLaunch: $message');
-    //   },
-    //   onResume: (Map<String, dynamic> message) async {
-    //     print('onResume: $message');
-    //   },
-    // );
-    // _firebaseMessaging.requestNotificationPermissions(
-    //   const IosNotificationSettings(sound: true, badge: true, alert: true)
-    // );
-    // _firebaseMessaging.onIosSettingsRegistered.listen((IosNotificationSettings settings) {
-    //   print('Settings registered: $settings');
-    // });
-    // _firebaseMessaging.getToken().then((String token) {
-    //   assert(token != null);
-    //   print('Push Teken: $token');
-    // });
+    FirebaseMessaging.onMessage.listen((message) {
+      RemoteNotification? notification = message.notification;
+      if (notification != null) {
+        buildDialog(context, notification);
+      }
+    });
+    messaging.requestPermission(
+      alert: true,
+      badge: true,
+      sound: true,
+    );
+    messaging.getAPNSToken().then((String? token) => {});
+    messaging.getToken().then((String? token) => {});
   }
 
-  buildDialog(BuildContext context, Map<String, dynamic> message) {
-    String text;
-    if (Platform.isIOS) {
-      // iOS APNs
-      text = '${message['aps']['alert']['body']}';
-    } else if (Platform.isAndroid) {
-      // Android FCM
-      text = '${message['notification']['body']}';
-    } else {
-      // Other platform
+  buildDialog(BuildContext context, RemoteNotification notification) {
+    String? title = notification.title;
+    String? body = notification.body;
+
+    if (title == null && body == null) {
       return;
     }
 
@@ -192,9 +173,9 @@ class HomeTabbedBarState extends ConsumerState<HomeTabbedBar>
               color: splaBlueColor,
             ),
             padding: const EdgeInsets.all(10),
-            child: const Center(
+            child: Center(
               child: Text(
-                'お知らせ',
+                title ?? 'お知らせ',
                 style: popupTitleStyle,
               ),
             ),
@@ -202,7 +183,7 @@ class HomeTabbedBarState extends ConsumerState<HomeTabbedBar>
           content: ConstrainedBox(
             constraints: const BoxConstraints(minHeight: 100),
             child: Text(
-              text,
+              body ?? '',
               style: popupMessageStyle,
             ),
           ),
@@ -218,22 +199,4 @@ class HomeTabbedBarState extends ConsumerState<HomeTabbedBar>
       },
     );
   }
-
-  static const TextStyle popupTitleStyle = TextStyle(
-    fontFamily: 'Splatfont',
-    color: Colors.white,
-    fontSize: 20.0,
-  );
-
-  static const TextStyle popupMessageStyle = TextStyle(
-    fontFamily: 'Splatfont',
-    color: blackColor,
-    fontSize: 16.0,
-  );
-
-  static const TextStyle tabTextStyle = TextStyle(
-    fontFamily: 'Splatfont',
-    color: Colors.white,
-    fontSize: 15.0,
-  );
 }

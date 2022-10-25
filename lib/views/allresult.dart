@@ -4,7 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:openapi/api.dart' as API;
 import 'package:splathon_app/domains/result_provider.dart';
 import 'package:splathon_app/styles/color.dart';
-import 'package:splathon_app/utils/config.dart';
+import 'package:splathon_app/styles/text_style.dart';
 import 'package:splathon_app/utils/preference.dart';
 import 'package:splathon_app/views/resultdetail.dart';
 import 'package:splathon_app/views/roundedView.dart';
@@ -25,7 +25,7 @@ class AllResult extends HookConsumerWidget {
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
-              const Text('試合を待て！', style: tableTitleStyle),
+              const Text('試合を待て！', style: largeBlackTextStyle),
               Image.asset('assets/images/girl.png'),
             ],
           );
@@ -47,10 +47,19 @@ class AllResult extends HookConsumerWidget {
   }
 }
 
-class RoundItem extends StatelessWidget {
+class RoundItem extends StatefulWidget {
   const RoundItem(this.round, {super.key});
+  final API.Round round;
+
+  @override
+  _RoundItemState createState() => _RoundItemState(round);
+}
+
+class _RoundItemState extends State<RoundItem> {
+  _RoundItemState(this.round);
 
   final API.Round round;
+  bool tileExpanded = false;
 
   Widget _buildRound(API.Round round, BuildContext context) {
     var roomIndexs = List.generate(round.rooms.length, (int index) => index);
@@ -69,10 +78,16 @@ class RoundItem extends StatelessWidget {
         key: PageStorageKey<API.Round>(round),
         title: Text(
           round.name,
-          style: roundExpandedTitleStyle,
+          style: largeWhiteTextStyle,
         ),
-        trailing: Image.asset('assets/images/arrowDownW.png'),
-        onExpansionChanged: (isExpanded) => {},
+        trailing: AnimatedRotation(
+          turns: tileExpanded ? 0.5 : 0,
+          duration: const Duration(milliseconds: 200),
+          child: Image.asset('assets/images/arrowDownW.png'),
+        ),
+        onExpansionChanged: (isExpanded) {
+          setState(() => tileExpanded = isExpanded);
+        },
         children: roomIndexs
             .map((index) => _buildTable(round, round.rooms[index], context,
                 index == round.rooms.length - 1))
@@ -99,11 +114,15 @@ class RoundItem extends StatelessWidget {
         key: PageStorageKey<API.Room>(room),
         title: Text(
           room.name,
-          style: roundClosedTitleStyle,
+          style: largeBlackTextStyle,
         ),
         children: matchIndexs
-            .map((index) => MatchItem(round, room, room.matches[index],
-                isLast && index == room.matches.length - 1))
+            .map((index) => MatchItem(
+                  round: round,
+                  room: room,
+                  match: room.matches[index],
+                  isLast: isLast && index == room.matches.length - 1,
+                ))
             .toList(),
       ),
     );
@@ -115,45 +134,20 @@ class RoundItem extends StatelessWidget {
   }
 }
 
-class MatchItem extends StatefulWidget {
-  API.Round round;
-  API.Room room;
-  API.Match match;
-  bool isLast;
-  MatchItem(this.round, this.room, this.match, this.isLast);
+class MatchItem extends HookConsumerWidget {
+  final API.Round round;
+  final API.Room room;
+  final API.Match match;
+  final bool isLast;
+  const MatchItem(
+      {super.key,
+      required this.round,
+      required this.room,
+      required this.match,
+      required this.isLast});
 
   @override
-  _MatchItemState createState() => _MatchItemState(round, room, match, isLast);
-}
-
-class _MatchItemState extends State<MatchItem> {
-  API.Round round;
-  API.Room room;
-  API.Match match;
-  bool isLast;
-  _MatchItemState(this.round, this.room, this.match, this.isLast);
-
-  @override
-  Widget build(BuildContext context) {
-    return _buildResult(round, room, match, context, isLast);
-  }
-
-  void refetch(int matchId, API.Match match) {
-    var client = API.MatchApi();
-    var result = client.getMatch(Config.eventNumber, matchId);
-    result.then((resultsObj) {
-      if (resultsObj == null) {
-        // TODO: null case
-        return;
-      }
-      setState(() {
-        this.match = resultsObj;
-      });
-    });
-  }
-
-  Widget _buildResult(API.Round round, API.Room room, API.Match match,
-      BuildContext context, bool isLast) {
+  Widget build(BuildContext context, WidgetRef ref) {
     double screenWidth = MediaQuery.of(context).size.width;
     int order = match.order ?? 0; // TODO: null case
     var boxDecoration = isLast
@@ -173,7 +167,7 @@ class _MatchItemState extends State<MatchItem> {
             ),
           );
 
-    final bool isAdmin = Preference().isAdmin();
+    final bool isAdmin = Preference.isAdmin();
 
     return GestureDetector(
       onTap: () async {
@@ -181,14 +175,14 @@ class _MatchItemState extends State<MatchItem> {
           // Normal user can't show upcoming detail result
           return;
         }
-        Navigator.push(
+        final result = await Navigator.push(
             context,
             MaterialPageRoute<void>(
               settings: const RouteSettings(name: "/result"),
               builder: (BuildContext context) =>
                   ResultDetail(matchId: match.id),
             ));
-        refetch(match.id, match);
+        // TODO: 個別Refresh対応するならここに実装
       },
       child: Container(
         decoration: boxDecoration,
@@ -297,40 +291,3 @@ class _MatchItemState extends State<MatchItem> {
     }
   }
 }
-
-const TextStyle roundClosedTitleStyle = TextStyle(
-  fontFamily: 'Splatfont',
-  color: blackColor,
-  fontSize: 26.0,
-);
-
-const TextStyle roundExpandedTitleStyle = TextStyle(
-  fontFamily: 'Splatfont',
-  color: Colors.white,
-  fontSize: 26.0,
-);
-
-const TextStyle tableTitleStyle = TextStyle(
-  fontFamily: 'Splatfont',
-  color: blackColor,
-  fontSize: 26.0,
-);
-
-// Copy
-const TextStyle resultTitleStyle = TextStyle(
-  fontFamily: 'Splatfont',
-  color: grayColor,
-  fontSize: 14.0,
-);
-
-const TextStyle resultNameStyle = TextStyle(
-  fontFamily: 'Splatfont',
-  color: blackColor,
-  fontSize: 20.0,
-);
-
-const TextStyle resultResultStyle = TextStyle(
-  fontFamily: 'Splatfont',
-  color: Colors.white,
-  fontSize: 11.0,
-);
