@@ -1,15 +1,16 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+// ignore: library_prefixes
 import 'package:openapi/api.dart' as API;
 import 'package:splathon_app/domains/match_provider.dart';
 import 'package:splathon_app/styles/color.dart';
 import 'package:splathon_app/styles/text.dart';
 import 'package:splathon_app/styles/text_style.dart';
 import 'package:splathon_app/utils/preference.dart';
-import 'package:splathon_app/views/Image.dart';
+import 'package:splathon_app/views/components/image.dart';
+import 'package:splathon_app/views/components/rounded_view.dart';
 import 'package:splathon_app/views/report.dart';
-import 'package:splathon_app/views/roundedView.dart';
 
 class ResultDetail extends HookConsumerWidget {
   const ResultDetail({super.key, required this.matchId});
@@ -208,8 +209,8 @@ class ResultDetail extends HookConsumerWidget {
                                   ),
                                   width: 50,
                                   child: isWinAlpha
-                                      ? accentWinView()
-                                      : accentLoseView(),
+                                      ? RoundedView.accentWinView()
+                                      : RoundedView.accentLoseView(),
                                 ),
                                 const SizedBox(
                                   width: 8,
@@ -229,8 +230,8 @@ class ResultDetail extends HookConsumerWidget {
                                   ),
                                   width: 50,
                                   child: isWinAlpha
-                                      ? accentLoseView()
-                                      : accentWinView(),
+                                      ? RoundedView.accentLoseView()
+                                      : RoundedView.accentWinView(),
                                 ),
                                 const SizedBox(
                                   width: 8,
@@ -319,7 +320,7 @@ class ResultDetail extends HookConsumerWidget {
             ),
             Row(
               children: <Widget>[
-                CharactorImage(
+                charactorImage(
                     match.teamAlpha.members[0].icon ?? ''), // TODO: null case
                 const SizedBox(
                   width: 5,
@@ -330,7 +331,7 @@ class ResultDetail extends HookConsumerWidget {
             ),
             Row(
               children: <Widget>[
-                CharactorImage(
+                charactorImage(
                     match.teamAlpha.members[1].icon ?? ''), // TODO: null case
                 const SizedBox(
                   width: 5,
@@ -341,7 +342,7 @@ class ResultDetail extends HookConsumerWidget {
             ),
             Row(
               children: <Widget>[
-                CharactorImage(
+                charactorImage(
                     match.teamAlpha.members[2].icon ?? ''), // TODO: null case
                 const SizedBox(
                   width: 5,
@@ -352,7 +353,7 @@ class ResultDetail extends HookConsumerWidget {
             ),
             Row(
               children: <Widget>[
-                CharactorImage(
+                charactorImage(
                     match.teamAlpha.members[3].icon ?? ''), // TODO: null case
                 const SizedBox(
                   width: 5,
@@ -388,7 +389,7 @@ class ResultDetail extends HookConsumerWidget {
             ),
             Row(
               children: <Widget>[
-                CharactorImage(
+                charactorImage(
                     match.teamBravo.members[0].icon ?? ''), // TODO: null case
                 const SizedBox(
                   width: 5,
@@ -399,7 +400,7 @@ class ResultDetail extends HookConsumerWidget {
             ),
             Row(
               children: <Widget>[
-                CharactorImage(
+                charactorImage(
                     match.teamBravo.members[1].icon ?? ''), // TODO: null case
                 const SizedBox(
                   width: 5,
@@ -410,7 +411,7 @@ class ResultDetail extends HookConsumerWidget {
             ),
             Row(
               children: <Widget>[
-                CharactorImage(
+                charactorImage(
                     match.teamBravo.members[2].icon ?? ''), // TODO: null case
                 const SizedBox(
                   width: 5,
@@ -421,7 +422,7 @@ class ResultDetail extends HookConsumerWidget {
             ),
             Row(
               children: <Widget>[
-                CharactorImage(
+                charactorImage(
                     match.teamBravo.members[3].icon ?? ''), // TODO: null case
                 const SizedBox(
                   width: 5,

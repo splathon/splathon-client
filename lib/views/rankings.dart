@@ -1,12 +1,13 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+// ignore: library_prefixes
 import 'package:openapi/api.dart' as API;
 import 'package:splathon_app/domains/ranking_provider.dart';
 import 'package:splathon_app/styles/color.dart';
 import 'package:splathon_app/styles/text_style.dart';
-import 'package:splathon_app/views/Image.dart';
-import 'package:splathon_app/views/roundedView.dart';
+import 'package:splathon_app/views/components/image.dart';
+import 'package:splathon_app/views/components/rounded_view.dart';
 
 class Rankings extends HookConsumerWidget {
   const Rankings({super.key});
@@ -96,7 +97,7 @@ class Rankings extends HookConsumerWidget {
     );
   }
 
-  getMember(List<API.Member> members, int index) {
+  API.Member? getMember(List<API.Member> members, int index) {
     if (members.length > index) {
       return members[index];
     }
@@ -129,14 +130,14 @@ class Rankings extends HookConsumerWidget {
           ),
           Container(
             margin: const EdgeInsets.only(left: 6.0, bottom: 1),
-            child: pointLabelView(rank.point),
+            child: RoundedView.pointLabelView(rank.point),
           ),
         ],
       ),
     );
   }
 
-  Widget memberView(API.Member member, double screenWidth) {
+  Widget memberView(API.Member? member, double screenWidth) {
     if (member == null) {
       return Expanded(flex: 1, child: Container());
     }
@@ -149,7 +150,7 @@ class Rankings extends HookConsumerWidget {
         padding: const EdgeInsets.only(left: 8, right: 8),
         child: Row(
           children: <Widget>[
-            CharactorImage(member.icon ?? ''), // TODO: null case
+            charactorImage(member.icon ?? ''), // TODO: null case
             const SizedBox(
               width: 5,
             ),

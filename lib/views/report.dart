@@ -11,18 +11,16 @@ import 'package:splathon_app/utils/preference.dart';
 class Report extends StatefulWidget {
   final API.Match _match;
   final API.Battle _battle;
-  const Report(this._match, this._battle);
+  const Report(this._match, this._battle, {super.key});
 
   @override
-  _ReportState createState() => _ReportState(_match, _battle);
+  ReportState createState() => ReportState();
 }
 
 late BuildContext sharedContext;
 
-class _ReportState extends State<Report> {
-  late final API.Match _match;
-  late final API.Battle _battle;
-  _ReportState(this._match, this._battle);
+class ReportState extends State<Report> {
+  ReportState();
   late String dropdownStageValue;
   late String dropdownRuleValue;
   late String dropdownTeamValue;
@@ -55,21 +53,21 @@ class _ReportState extends State<Report> {
 
   void changedRule(String ruleName) {
     for (var rule in _model.rules) {
-      rule.name == ruleName ? _battle.rule = rule : {};
+      rule.name == ruleName ? widget._battle.rule = rule : {};
     }
   }
 
   void changedStage(String stageName) {
     for (var stage in _model.stages) {
-      stage.name == stageName ? _battle.stage = stage : {};
+      stage.name == stageName ? widget._battle.stage = stage : {};
     }
   }
 
   void changedTeam(String winner) {
     if (winner == API.BattleWinnerEnum.alpha.value) {
-      _battle.winner = API.BattleWinnerEnum.alpha;
+      widget._battle.winner = API.BattleWinnerEnum.alpha;
     } else {
-      _battle.winner = API.BattleWinnerEnum.bravo;
+      widget._battle.winner = API.BattleWinnerEnum.bravo;
     }
     //_battle.winner = winner;
   }
@@ -88,16 +86,16 @@ class _ReportState extends State<Report> {
       );
     }
 
-    _battle.rule ??= _model.rules.first;
-    dropdownRuleValue = _battle.rule!.name ?? ''; // TODO: null case
-    _battle.stage ??= _model.stages.first;
-    dropdownStageValue = _battle.stage?.name ?? ''; // TODO: null case
-    dropdownRuleValue = _battle.rule?.name ?? ''; // TODO: null case
-    dropdownStageValue = _battle.stage?.name ?? ''; // TODO: null case
-    dropdownTeamValue = _battle.winner?.value ?? ''; // TODO: null case
+    widget._battle.rule ??= _model.rules.first;
+    dropdownRuleValue = widget._battle.rule!.name ?? ''; // TODO: null case
+    widget._battle.stage ??= _model.stages.first;
+    dropdownStageValue = widget._battle.stage?.name ?? ''; // TODO: null case
+    dropdownRuleValue = widget._battle.rule?.name ?? ''; // TODO: null case
+    dropdownStageValue = widget._battle.stage?.name ?? ''; // TODO: null case
+    dropdownTeamValue = widget._battle.winner?.value ?? ''; // TODO: null case
 
     double screenWidth = MediaQuery.of(context).size.width;
-    final order = _battle.order;
+    final order = widget._battle.order;
 
     return Scaffold(
       appBar: AppBar(
@@ -131,7 +129,7 @@ class _ReportState extends State<Report> {
                   SizedBox(
                     width: screenWidth * 0.35,
                     child: Text(
-                      _match.teamAlpha.name,
+                      widget._match.teamAlpha.name,
                       style: resultNameStyle,
                       maxLines: 1,
                     ),
@@ -140,7 +138,7 @@ class _ReportState extends State<Report> {
                   SizedBox(
                     width: screenWidth * 0.35,
                     child: Text(
-                      _match.teamBravo.name,
+                      widget._match.teamBravo.name,
                       style: resultNameStyle,
                       maxLines: 1,
                     ),
@@ -298,11 +296,13 @@ class _ReportState extends State<Report> {
                     items: [
                       DropdownMenuItem<String>(
                         value: 'alpha', //_match.teamAlpha.name,
-                        child: Text(_match.teamAlpha.name, style: topNameStyle),
+                        child: Text(widget._match.teamAlpha.name,
+                            style: topNameStyle),
                       ),
                       DropdownMenuItem<String>(
                         value: 'bravo', //_match.teamBravo.name,
-                        child: Text(_match.teamBravo.name, style: topNameStyle),
+                        child: Text(widget._match.teamBravo.name,
+                            style: topNameStyle),
                       ),
                       const DropdownMenuItem<String>(
                         value: null, //_match.teamBravo.name,
@@ -345,9 +345,9 @@ class _ReportState extends State<Report> {
   submit() {
     var client = API.AdminApi();
     String token = Preference.getToken();
-    print(_battle);
-    var result =
-        client.updateBattle(Config.eventNumber, _match.id, token, _battle);
+    print(widget._battle);
+    var result = client.updateBattle(
+        Config.eventNumber, widget._match.id, token, widget._battle);
     result
         .then((body) => setState(() {
               pop();

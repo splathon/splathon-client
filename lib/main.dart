@@ -4,17 +4,17 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:splathon_app/firebase_options.dart';
 import 'package:splathon_app/utils/preference.dart';
 import 'package:splathon_app/views/admintabbar.dart';
-import 'package:splathon_app/views/hometabbedbar.dart';
+import 'package:splathon_app/views/home_tabbed_bar.dart';
 import 'package:splathon_app/views/login.dart';
 import 'package:splathon_app/views/splash.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Firebase.initializeApp(
+  await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
   // Initialize preference
-  Preference();
+  await Preference.setup();
 
   runApp(
     ProviderScope(
@@ -23,8 +23,8 @@ void main() {
         routes: <String, WidgetBuilder>{
           '/': (_) => const Splash(),
           '/login': (_) => Login(),
-          '/home': (_) => HomeTabbedBar(),
-          '/admin': (_) => AdminTabbedBar(),
+          '/home': (_) => const HomeTabbedBar(),
+          '/admin': (_) => const AdminTabbedBar(),
         },
       ),
     ),

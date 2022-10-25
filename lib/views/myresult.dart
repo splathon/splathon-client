@@ -1,16 +1,19 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+// ignore: library_prefixes
 import 'package:openapi/api.dart' as API;
 import 'package:splathon_app/domains/result_provider.dart';
 import 'package:splathon_app/domains/teams_provider.dart';
 import 'package:splathon_app/styles/color.dart';
 import 'package:splathon_app/styles/text_style.dart';
 import 'package:splathon_app/utils/async_value_list_extension.dart';
-import 'package:splathon_app/views/resultdetail.dart';
-import 'package:splathon_app/views/roundedView.dart';
+import 'package:splathon_app/views/components/view.dart';
+import 'package:splathon_app/views/result_detail.dart';
 
 class EachResult extends HookConsumerWidget {
+  const EachResult({super.key});
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final asyncResults = ref.watch(resultProvider);
@@ -187,48 +190,5 @@ class EachResult extends HookConsumerWidget {
         child: CircularProgressIndicator(),
       ),
     );
-  }
-
-  Widget winloseView(API.MatchWinnerEnum? winner) {
-    if (winner == null) {
-      return Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            unreportedLabelView(),
-          ]);
-    }
-
-    switch (winner) {
-      case API.MatchWinnerEnum.alpha:
-        return Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              accentWinView(),
-              const SizedBox(
-                width: 20.0,
-              ),
-              accentLoseView(),
-            ]);
-
-      case API.MatchWinnerEnum.bravo:
-        return Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              accentLoseView(),
-              const SizedBox(
-                width: 20.0,
-              ),
-              accentWinView(),
-            ]);
-      case API.MatchWinnerEnum.draw:
-        return Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              accentDarwView(),
-            ]);
-      default:
-        // avoid lint error
-        return Container();
-    }
   }
 }

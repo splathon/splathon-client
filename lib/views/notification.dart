@@ -6,8 +6,8 @@ import 'package:splathon_app/domains/notice_provider.dart';
 import 'package:splathon_app/domains/user_provider.dart';
 import 'package:splathon_app/styles/color.dart';
 import 'package:splathon_app/styles/text_style.dart';
-import 'package:splathon_app/views/roundedView.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:splathon_app/views/components/rounded_view.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class Notifications extends HookConsumerWidget {
   const Notifications({super.key});
@@ -187,7 +187,7 @@ class Notifications extends HookConsumerWidget {
                                   margin: const EdgeInsets.only(bottom: 5),
                                   child: notice.timestampSec * 1000 >
                                           alreadyReadTime
-                                      ? accentNewView()
+                                      ? RoundedView.accentNewView()
                                       : Container(),
                                 ),
                               ],
@@ -208,9 +208,7 @@ class Notifications extends HookConsumerWidget {
                                     if (url == null) {
                                       return;
                                     }
-                                    if (await canLaunch(url)) {
-                                      await launch(url);
-                                    }
+                                    await launchUrlString(url);
                                   },
                                 )),
                           ),

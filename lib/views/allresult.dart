@@ -1,13 +1,14 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+// ignore: library_prefixes
 import 'package:openapi/api.dart' as API;
 import 'package:splathon_app/domains/result_provider.dart';
 import 'package:splathon_app/styles/color.dart';
 import 'package:splathon_app/styles/text_style.dart';
 import 'package:splathon_app/utils/preference.dart';
-import 'package:splathon_app/views/resultdetail.dart';
-import 'package:splathon_app/views/roundedView.dart';
+import 'package:splathon_app/views/components/view.dart';
+import 'package:splathon_app/views/result_detail.dart';
 
 class AllResult extends HookConsumerWidget {
   const AllResult({super.key});
@@ -34,7 +35,7 @@ class AllResult extends HookConsumerWidget {
           color: backgroundColor,
           child: ListView.builder(
             itemBuilder: (BuildContext context, int index) =>
-                RoundItem(rounds[index]),
+                RoundItem(rounds[index], index == rounds.length - 1),
             itemCount: rounds.length,
           ),
         );
@@ -48,17 +49,17 @@ class AllResult extends HookConsumerWidget {
 }
 
 class RoundItem extends StatefulWidget {
-  const RoundItem(this.round, {super.key});
+  const RoundItem(this.round, this.isLast, {super.key});
   final API.Round round;
+  final bool isLast;
 
   @override
-  _RoundItemState createState() => _RoundItemState(round);
+  RoundItemState createState() => RoundItemState();
 }
 
-class _RoundItemState extends State<RoundItem> {
-  _RoundItemState(this.round);
+class RoundItemState extends State<RoundItem> {
+  RoundItemState();
 
-  final API.Round round;
   bool tileExpanded = false;
 
   Widget _buildRound(API.Round round, BuildContext context) {
@@ -73,7 +74,8 @@ class _RoundItemState extends State<RoundItem> {
         ),
         color: splaBlueColor,
       ),
-      margin: const EdgeInsets.only(top: 10, left: 20, right: 20),
+      margin: EdgeInsets.only(
+          top: 10, left: 20, right: 20, bottom: widget.isLast ? 10 : 0),
       child: ExpansionTile(
         key: PageStorageKey<API.Round>(round),
         title: Text(
@@ -130,7 +132,7 @@ class _RoundItemState extends State<RoundItem> {
 
   @override
   Widget build(BuildContext context) {
-    return _buildRound(round, context);
+    return _buildRound(widget.round, context);
   }
 }
 
@@ -175,7 +177,7 @@ class MatchItem extends HookConsumerWidget {
           // Normal user can't show upcoming detail result
           return;
         }
-        final result = await Navigator.push(
+        await Navigator.push(
             context,
             MaterialPageRoute<void>(
               settings: const RouteSettings(name: "/result"),
@@ -228,7 +230,7 @@ class MatchItem extends HookConsumerWidget {
                       ],
                     ),
                   ),
-                  winloseView(match),
+                  winloseView(match.winner),
                   Container(
                     height: 5.0,
                   ),
@@ -244,50 +246,5 @@ class MatchItem extends HookConsumerWidget {
         ),
       ),
     );
-  }
-
-  Widget winloseView(API.Match match) {
-    if (match.winner == null) {
-      return Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            unreportedLabelView(),
-          ]);
-    }
-
-    API.MatchWinnerEnum winner = match.winner!;
-    switch (winner) {
-      case API.MatchWinnerEnum.alpha:
-        return Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              accentWinView(),
-              const SizedBox(
-                width: 20.0,
-              ),
-              accentLoseView(),
-            ]);
-
-      case API.MatchWinnerEnum.bravo:
-        // TODO: Handle this case.
-        return Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              accentLoseView(),
-              const SizedBox(
-                width: 20.0,
-              ),
-              accentWinView(),
-            ]);
-      case API.MatchWinnerEnum.draw:
-        return Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              accentDarwView(),
-            ]);
-      default:
-        // avoid lint error
-        return Container();
-    }
   }
 }

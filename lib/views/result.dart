@@ -37,12 +37,12 @@ class _ResultTabbedBarState extends State<ResultTabbedBar>
         children: <Widget>[
           TabBarView(
             controller: controller,
-            children: [
+            children: const [
               Padding(
-                padding: const EdgeInsets.only(top: 60.0),
+                padding: EdgeInsets.only(top: 60.0),
                 child: EachResult(),
               ),
-              const Padding(
+              Padding(
                 padding: EdgeInsets.only(top: 60.0),
                 child: AllResult(),
               ),

@@ -6,14 +6,13 @@ import 'package:splathon_app/utils/preference.dart';
 
 final noticeReadtimeProvider =
     StateNotifierProvider<NoticeReadtimeStateNotifier, int>((ref) {
-  return NoticeReadtimeStateNotifier(ref);
+  return NoticeReadtimeStateNotifier();
 });
 
 class NoticeReadtimeStateNotifier extends StateNotifier<int> {
-  NoticeReadtimeStateNotifier(this._ref) : super(0) {
+  NoticeReadtimeStateNotifier() : super(0) {
     load();
   }
-  final Ref _ref;
 
   void load() {
     final readtime = Preference.getNoticeReadTime();
@@ -36,16 +35,14 @@ class NoticeReadtimeStateNotifier extends StateNotifier<int> {
 
 final notificationStateProvider = StateNotifierProvider<
     NotificationStateNotifier, AsyncValue<NotificationViewModel>>((ref) {
-  return NotificationStateNotifier(ref);
+  return NotificationStateNotifier();
 });
 
 class NotificationStateNotifier
     extends StateNotifier<AsyncValue<NotificationViewModel>> {
-  NotificationStateNotifier(this._ref) : super(const AsyncLoading()) {
+  NotificationStateNotifier() : super(const AsyncLoading()) {
     load();
   }
-  final Ref _ref;
-
   void load() {
     int? teamId = Preference.getTeamId();
 

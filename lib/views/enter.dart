@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:openapi/api.dart' as API;
+import 'package:openapi/api.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:splathon_app/domains/reception_provider.dart';
 import 'package:splathon_app/styles/color.dart';
@@ -16,8 +16,7 @@ class Enter extends HookConsumerWidget {
 
     return result.when(
       data: (data) {
-        API.ReceptionCode? reception =
-            isBuilding ? data.building : data.splathon;
+        ReceptionCode? reception = isBuilding ? data.building : data.splathon;
         if (reception == null) {
           return const CircularProgressIndicator();
         }
