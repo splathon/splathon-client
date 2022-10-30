@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:collection/collection.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:openapi/api.dart';
 import 'package:splathon_app/utils/config.dart';
@@ -75,5 +76,71 @@ class SelectTeamResultStateNotifier extends StateNotifier<AsyncValue<Results>> {
     }).catchError((error, stackTrace) {
       throw error;
     });
+  }
+}
+
+class ExpandParams {
+  ExpandParams({
+    required this.roundName,
+    this.roomName,
+  });
+  String roundName;
+  String? roomName;
+}
+
+class ExpandResultModel {
+  ExpandResultModel({
+    required this.roundName,
+    required this.roomName,
+    required this.isExpanded,
+  });
+  String roundName;
+  String? roomName;
+  bool isExpanded;
+}
+
+final expandResultProvider = Provider.family<bool, ExpandParams>(
+  (ref, params) =>
+      ref
+          .watch(expandsResultProvider)
+          .firstWhereOrNull((element) =>
+              element.roundName == params.roundName &&
+              element.roomName == params.roomName)
+          ?.isExpanded ??
+      false,
+);
+
+final StateNotifierProvider<ExpandResultStateNotifier, Set<ExpandResultModel>>
+    expandsResultProvider =
+    StateNotifierProvider<ExpandResultStateNotifier, Set<ExpandResultModel>>(
+        (ref) {
+  return ExpandResultStateNotifier(ref);
+});
+
+class ExpandResultStateNotifier extends StateNotifier<Set<ExpandResultModel>> {
+  ExpandResultStateNotifier(this.ref) : super({}) {
+    load();
+  }
+  final Ref ref;
+  late List<Team> teams;
+
+  void load() async {}
+
+  void changed(
+      {required String roundName, String? roomName, required bool isExpanded}) {
+    final currentState = state;
+    currentState.removeWhere((element) =>
+        element.roundName == roundName && element.roomName == roomName);
+    state = {
+      ...currentState,
+      ExpandResultModel(
+          roundName: roundName, roomName: roomName, isExpanded: isExpanded)
+    };
+  }
+
+  bool isExpanded({required String roundName, String? roomName}) {
+    final expandResult = state.firstWhereOrNull((element) =>
+        element.roundName == roundName && element.roomName == roomName);
+    return expandResult?.isExpanded ?? false;
   }
 }

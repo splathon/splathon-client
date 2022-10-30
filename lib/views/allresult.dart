@@ -48,7 +48,7 @@ class AllResult extends HookConsumerWidget {
   }
 }
 
-class RoundItem extends StatefulWidget {
+class RoundItem extends ConsumerStatefulWidget {
   const RoundItem(this.round, this.isLast, {super.key});
   final API.Round round;
   final bool isLast;
@@ -57,13 +57,13 @@ class RoundItem extends StatefulWidget {
   RoundItemState createState() => RoundItemState();
 }
 
-class RoundItemState extends State<RoundItem> {
+class RoundItemState extends ConsumerState<RoundItem> {
   RoundItemState();
-
-  bool tileExpanded = false;
 
   Widget _buildRound(API.Round round, BuildContext context) {
     var roomIndexs = List.generate(round.rooms.length, (int index) => index);
+    final isExpanded =
+        ref.watch(expandResultProvider(ExpandParams(roundName: round.name)));
 
     return Container(
       decoration: BoxDecoration(
@@ -83,12 +83,16 @@ class RoundItemState extends State<RoundItem> {
           style: largeWhiteTextStyle,
         ),
         trailing: AnimatedRotation(
-          turns: tileExpanded ? 0.5 : 0,
+          turns: isExpanded ? 0.5 : 0,
           duration: const Duration(milliseconds: 200),
           child: Image.asset('assets/images/arrowDownW.png'),
         ),
+        initiallyExpanded: isExpanded,
         onExpansionChanged: (isExpanded) {
-          setState(() => tileExpanded = isExpanded);
+          ref.read(expandsResultProvider.notifier).changed(
+                roundName: round.name,
+                isExpanded: isExpanded,
+              );
         },
         children: roomIndexs
             .map((index) => _buildTable(round, round.rooms[index], context,
@@ -101,6 +105,13 @@ class RoundItemState extends State<RoundItem> {
   Widget _buildTable(
       API.Round round, API.Room room, BuildContext context, bool isLast) {
     var matchIndexs = List.generate(room.matches.length, (int index) => index);
+    final isExpanded = ref.watch(expandResultProvider(
+      ExpandParams(
+        roundName: round.name,
+        roomName: room.name,
+      ),
+    ));
+
     var boxDecoration = isLast
         ? const BoxDecoration(
             color: backgroundBlueColor,
@@ -109,7 +120,6 @@ class RoundItemState extends State<RoundItem> {
                 bottomRight: Radius.circular(8.0)),
           )
         : const BoxDecoration(color: backgroundBlueColor);
-
     return Container(
       decoration: boxDecoration,
       child: ExpansionTile(
@@ -118,6 +128,14 @@ class RoundItemState extends State<RoundItem> {
           room.name,
           style: largeBlackTextStyle,
         ),
+        initiallyExpanded: isExpanded,
+        onExpansionChanged: (isExpanded) {
+          ref.read(expandsResultProvider.notifier).changed(
+                roundName: round.name,
+                roomName: room.name,
+                isExpanded: isExpanded,
+              );
+        },
         children: matchIndexs
             .map((index) => MatchItem(
                   round: round,
