@@ -198,7 +198,10 @@ class Notifications extends HookConsumerWidget {
                           ),
                           Expanded(
                             child: Padding(
-                                padding: const EdgeInsets.only(right: 10),
+                                padding: const EdgeInsets.only(
+                                  top: 3, // text style 微修正による調整
+                                  right: 10,
+                                ),
                                 child: InkWell(
                                   child: Text(
                                     notice.text,
@@ -290,7 +293,10 @@ class Notifications extends HookConsumerWidget {
                           ),
                           Expanded(
                             child: Padding(
-                                padding: const EdgeInsets.only(right: 10),
+                                padding: const EdgeInsets.only(
+                                  top: 3, // text style 微修正による調整
+                                  right: 10,
+                                ),
                                 child: InkWell(
                                   child: Text(
                                     schedule.title ?? '', // TODO: null case
@@ -404,7 +410,8 @@ class Notifications extends HookConsumerWidget {
 
   static const topLabelMiniStyle = BlackSplatfontStyle(fontSize: 14.0);
   static const titleStyle = BlackSplatfontStyle(fontSize: 18.0);
-  static const notificationStyle = BlackSplatfontStyle(fontSize: 13.0);
+  static const notificationStyle =
+      BlackSplatfontMultipleLinesStyle(fontSize: 13.0);
   static const nextMatchTitleStyle = GraySplatfontStyle(fontSize: 14.0);
   static const nextMatchNameStyle = BlackSplatfontStyle(fontSize: 20.0);
   static const newStyle = WhiteSplatfontStyle(fontSize: 11.0);

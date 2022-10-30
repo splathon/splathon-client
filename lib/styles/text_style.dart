@@ -72,6 +72,24 @@ class BlackSplatfontStyle extends TextStyle {
   Color? get color => blackColor;
 }
 
+// Notification用に複数行の行間調整のためのStyle
+class BlackSplatfontMultipleLinesStyle extends TextStyle {
+  const BlackSplatfontMultipleLinesStyle({required super.fontSize});
+
+  @override
+  String? get fontFamily => 'Splatfont';
+
+  @override
+  double? get height => 1.5;
+
+  @override
+  TextLeadingDistribution? get leadingDistribution =>
+      TextLeadingDistribution.proportional;
+
+  @override
+  Color? get color => blackColor;
+}
+
 class BlueSplatfontStyle extends TextStyle {
   const BlueSplatfontStyle({required super.fontSize});
 
