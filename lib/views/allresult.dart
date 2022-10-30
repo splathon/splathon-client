@@ -202,7 +202,7 @@ class MatchItem extends HookConsumerWidget {
               builder: (BuildContext context) =>
                   ResultDetail(matchId: match.id),
             ));
-        // TODO: 個別Refresh対応するならここに実装
+        ref.refresh(resultsProvider);
       },
       child: Container(
         decoration: boxDecoration,
