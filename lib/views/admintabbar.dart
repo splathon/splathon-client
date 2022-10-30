@@ -56,8 +56,8 @@ class AdminTabbedBarState extends ConsumerState<AdminTabbedBar>
       body: TabBarView(
         physics: const NeverScrollableScrollPhysics(),
         controller: controller,
-        children: <Widget>[
-          const AllResult(),
+        children: const <Widget>[
+          AllResult(),
           Accept(),
         ],
       ),
@@ -69,6 +69,7 @@ class AdminTabbedBarState extends ConsumerState<AdminTabbedBar>
             tabs: <Tab>[
               Tab(
                 icon: Image.asset('assets/images/icon_result.png'),
+                iconMargin: const EdgeInsets.only(bottom: 0),
                 child: const Text(
                   'レポート',
                   style: bottomTabTextStyle,
@@ -76,6 +77,7 @@ class AdminTabbedBarState extends ConsumerState<AdminTabbedBar>
               ),
               Tab(
                 icon: Image.asset('assets/images/icon_reception.png'),
+                iconMargin: const EdgeInsets.only(bottom: 0),
                 child: const Text(
                   'QR受付',
                   style: bottomTabTextStyle,
