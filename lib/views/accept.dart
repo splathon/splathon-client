@@ -1,30 +1,47 @@
 import 'dart:async';
+import 'dart:io';
 
-//import 'package:fast_qr_reader_view/fast_qr_reader_view.dart';
 import 'package:flutter/material.dart';
 import 'package:openapi/api.dart' as API;
+import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:splathon_app/styles/color.dart';
 import 'package:splathon_app/styles/text_style.dart';
 import 'package:splathon_app/utils/config.dart';
 import 'package:splathon_app/utils/preference.dart';
 
 class Accept extends StatefulWidget {
+  const Accept({super.key});
+
   @override
-  _AcceptState createState() => _AcceptState();
+  AcceptState createState() => AcceptState();
 }
 
 // TODO: QR読み取り機能がFlutter3, Dart2アップデートに耐えられなかったので別のもので代替する
-class _AcceptState extends State<Accept> with AutomaticKeepAliveClientMixin {
-  //late QRReaderController controller;
-  //late List<CameraDescription> cameras;
+class AcceptState extends State<Accept> with AutomaticKeepAliveClientMixin {
+  final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
+  QRViewController? controller;
 
   API.ReceptionPartcipantsDataResponse? _receptionModel;
 
   @override
   void initState() {
     super.initState();
+  }
 
-    setupCameras();
+  @override
+  void dispose() {
+    controller?.dispose();
+    super.dispose();
+  }
+
+  @override
+  void reassemble() {
+    super.reassemble();
+    if (Platform.isAndroid) {
+      controller!.pauseCamera();
+    } else if (Platform.isIOS) {
+      controller!.resumeCamera();
+    }
   }
 
   @override
@@ -43,24 +60,6 @@ class _AcceptState extends State<Accept> with AutomaticKeepAliveClientMixin {
         }));
   }
 
-  Future<void> setupCameras() async {
-    // cameras = await availableCameras();
-
-    // controller = QRReaderController(
-    //     cameras[0], ResolutionPreset.high, [CodeFormat.qr], (dynamic value) {
-    //   confirmAccept(value);
-    //   scannedCode = value;
-    //   Future.delayed(const Duration(seconds: 3), controller.startScanning);
-    // });
-    // controller.initialize().then((_) {
-    //   if (!mounted) {
-    //     return;
-    //   }
-    //   setState(() {});
-    //   controller.startScanning();
-    // });
-  }
-
   // TODO: implement confirm accept view
   Future confirmAccept(String value) async {
     if (isCompleting) {
@@ -72,30 +71,33 @@ class _AcceptState extends State<Accept> with AutomaticKeepAliveClientMixin {
     String token = Preference.getToken();
     var result = client.getParticipantsDataForReception(
         Config.eventNumber, value, token);
-    // result.then((resultsObj) {
-    //   buildConfirmDialog(context, resultsObj);
-    // }).catchError((onError) {
-    //   isCompleting = false;
-    // });
+    result.then((resultsObj) {
+      if (resultsObj == null) {
+        return;
+      }
+      buildConfirmDialog(context, resultsObj);
+    }).catchError((onError) {
+      isCompleting = false;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    //if (controller == null) {
-    // Loading
-    return const Center(
-      child: CircularProgressIndicator(),
+    return QRView(
+      key: qrKey,
+      onQRViewCreated: _onQRViewCreated,
     );
-    // }
-    // if (!controller.value.isInitialized) {
-    //   // Loading
-    //   return const Center(
-    //     child: CircularProgressIndicator(),
-    //   );
-    // }
-    // return AspectRatio(
-    //     aspectRatio: controller.value.aspectRatio,
-    //     child: QRReaderPreview(controller));
+  }
+
+  void _onQRViewCreated(QRViewController controller) {
+    this.controller = controller;
+    controller.scannedDataStream.listen((scanData) {
+      final code = scanData.code;
+      if (code == null) {
+        return;
+      }
+      confirmAccept(code);
+    });
   }
 
   buildConfirmDialog(

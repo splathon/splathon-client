@@ -49,5 +49,9 @@
 		<true/>
 		<key>UIStatusBarHidden</key>
 		<false/>
+		<key>io.flutter.embedded_views_preview</key>
+		<true/>
+		<key>NSCameraUsageDescription</key>
+		<string>QRコード撮影で使用します</string>
 	</dict>
 </plist>

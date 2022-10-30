@@ -47,6 +47,7 @@ dependencies:
   # 0.1.5だとandroid.supportに依存してしまっているが、masterでは修正されているので。
   # 次のversionがリリースされたら version 指定に戻すとかするべき
   #fast_qr_reader_view:
+  qr_code_scanner:
   firebase_messaging:
   firebase_core: 1.20.0
   shared_preferences:
