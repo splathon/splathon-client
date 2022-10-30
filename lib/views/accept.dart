@@ -16,7 +16,8 @@ class Accept extends StatefulWidget {
   AcceptState createState() => AcceptState();
 }
 
-// TODO: QR読み取り機能がFlutter3, Dart2アップデートに耐えられなかったので別のもので代替する
+// TODO: QRコード読み取りライブラリのIntegration iOSしかやってない
+// https://pub.dev/packages/qr_code_scanner#android-integration
 class AcceptState extends State<Accept> with AutomaticKeepAliveClientMixin {
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   QRViewController? controller;
