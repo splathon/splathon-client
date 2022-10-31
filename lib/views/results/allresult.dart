@@ -31,12 +31,15 @@ class AllResult extends HookConsumerWidget {
             ],
           );
         }
-        return Container(
-          color: backgroundColor,
-          child: ListView.builder(
-            itemBuilder: (BuildContext context, int index) =>
-                RoundItem(rounds[index], index == rounds.length - 1),
-            itemCount: rounds.length,
+        return Theme(
+          data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+          child: Container(
+            color: backgroundColor,
+            child: ListView.builder(
+              itemBuilder: (BuildContext context, int index) =>
+                  RoundItem(rounds[index], index == rounds.length - 1),
+              itemCount: rounds.length,
+            ),
           ),
         );
       },
