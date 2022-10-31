@@ -27,10 +27,6 @@ class NoticeReadtimeStateNotifier extends StateNotifier<int> {
       state = secounds;
     }
   }
-
-  void refresh() {
-    load();
-  }
 }
 
 final notificationStateProvider = StateNotifierProvider<

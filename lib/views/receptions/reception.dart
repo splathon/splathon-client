@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:splathon_app/styles/color.dart';
 import 'package:splathon_app/styles/text_style.dart';
-import 'package:splathon_app/views/enter.dart';
+import 'package:splathon_app/views/receptions/enter.dart';
 
 class ReceptionTabbedBar extends StatefulWidget {
   const ReceptionTabbedBar({super.key});

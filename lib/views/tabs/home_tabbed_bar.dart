@@ -1,7 +1,7 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:splathon_app/domains/notice_provider.dart';
+import 'package:splathon_app/domains/notification_provider.dart';
 import 'package:splathon_app/domains/ranking_provider.dart';
 import 'package:splathon_app/domains/reception_provider.dart';
 import 'package:splathon_app/domains/result_provider.dart';
@@ -9,10 +9,10 @@ import 'package:splathon_app/styles/color.dart';
 import 'package:splathon_app/styles/text.dart';
 import 'package:splathon_app/styles/text_style.dart';
 import 'package:splathon_app/utils/config.dart';
-import 'package:splathon_app/views/notification.dart';
-import 'package:splathon_app/views/rankings.dart';
-import 'package:splathon_app/views/reception.dart';
-import 'package:splathon_app/views/result.dart';
+import 'package:splathon_app/views/notifications/notification.dart';
+import 'package:splathon_app/views/rankings/rankings.dart';
+import 'package:splathon_app/views/receptions/reception.dart';
+import 'package:splathon_app/views/results/result.dart';
 
 /// Reference
 /// https://github.com/nisrulz/flutter-examples/blob/master/using_bottom_nav_bar/lib/main.dart
@@ -56,7 +56,7 @@ class HomeTabbedBarState extends ConsumerState<HomeTabbedBar>
               switch (controller.index) {
                 case 0:
                   ref.read(notificationStateProvider.notifier).load();
-                  ref.read(noticeReadtimeProvider.notifier).refresh();
+                  ref.read(noticeReadtimeProvider.notifier).load();
                   return;
                 case 1:
                   ref.read(resultProvider.notifier).load();

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import "package:intl/intl.dart";
-import 'package:splathon_app/domains/notice_provider.dart';
+import 'package:splathon_app/domains/notification_provider.dart';
 import 'package:splathon_app/domains/user_provider.dart';
 import 'package:splathon_app/styles/color.dart';
 import 'package:splathon_app/styles/text_style.dart';

@@ -8,7 +8,7 @@ import 'package:splathon_app/styles/color.dart';
 import 'package:splathon_app/styles/text_style.dart';
 import 'package:splathon_app/utils/preference.dart';
 import 'package:splathon_app/views/components/view.dart';
-import 'package:splathon_app/views/result_detail.dart';
+import 'package:splathon_app/views/results/result_detail.dart';
 
 class AllResult extends HookConsumerWidget {
   const AllResult({super.key});

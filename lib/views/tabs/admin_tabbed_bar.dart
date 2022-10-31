@@ -5,8 +5,8 @@ import 'package:splathon_app/styles/color.dart';
 import 'package:splathon_app/styles/text.dart';
 import 'package:splathon_app/styles/text_style.dart';
 import 'package:splathon_app/utils/config.dart';
-import 'package:splathon_app/views/accept.dart';
-import 'package:splathon_app/views/allresult.dart';
+import 'package:splathon_app/views/receptions/accept.dart';
+import 'package:splathon_app/views/results/allresult.dart';
 
 class AdminTabbedBar extends ConsumerStatefulWidget {
   const AdminTabbedBar({super.key});

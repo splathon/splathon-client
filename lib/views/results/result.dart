@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:splathon_app/styles/color.dart';
 import 'package:splathon_app/styles/text_style.dart';
-import 'package:splathon_app/views/allresult.dart';
-import 'package:splathon_app/views/myresult.dart';
+import 'package:splathon_app/views/results/allresult.dart';
+import 'package:splathon_app/views/results/myresult.dart';
 
 class ResultTabbedBar extends StatefulWidget {
   const ResultTabbedBar({super.key});

@@ -10,7 +10,7 @@ import 'package:splathon_app/styles/text_style.dart';
 import 'package:splathon_app/utils/preference.dart';
 import 'package:splathon_app/views/components/image.dart';
 import 'package:splathon_app/views/components/rounded_view.dart';
-import 'package:splathon_app/views/report.dart';
+import 'package:splathon_app/views/results/report.dart';
 
 class ResultDetail extends HookConsumerWidget {
   const ResultDetail({super.key, required this.matchId});
