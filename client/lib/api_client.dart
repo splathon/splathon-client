@@ -12,7 +12,7 @@ part of openapi.api;
 
 class ApiClient {
   ApiClient({
-    this.basePath = 'https://splathon-api.appspot.com/splathon',
+    this.basePath = '',
     this.authentication,
   });
 

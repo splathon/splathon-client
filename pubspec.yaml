@@ -54,6 +54,7 @@ dependencies:
   auto_size_text:
   intl:
   url_launcher:
+  flutter_dotenv:
   openapi:
     path: client/
 
@@ -145,6 +146,8 @@ flutter:
    - assets/images/reloadIcon.png
    - assets/images/girl.png
    - assets/images/boys.png
+   - env/.env.stg
+   - env/.env.prod
 
   fonts:
     - family: Splatfont

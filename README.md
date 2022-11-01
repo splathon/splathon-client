@@ -33,6 +33,12 @@ $ openapi-generator generate -i swagger.yaml -g dart -o client
 
 https://firebase.google.com/docs/flutter/setup
 
+### Run Debug
+
+```
+$ fvm flutter run --dart-define=FLAVOR=stg --dart-define=EVENT_NUMBER=11
+```
+
 ## Specs
 
 - [Google Drive - Splathon#10 App develop](https://drive.google.com/drive/folders/1IkOe2ItR_ZYUKULYlUSvZwqRhMjebM7z)

@@ -17,15 +17,7 @@ import 'dart:io';
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 import 'package:meta/meta.dart';
-
-part 'api_client.dart';
-part 'api_helper.dart';
-part 'api_exception.dart';
-part 'auth/authentication.dart';
-part 'auth/api_key_auth.dart';
-part 'auth/oauth.dart';
-part 'auth/http_basic_auth.dart';
-part 'auth/http_bearer_auth.dart';
+import 'package:splathon_app/utils/config.dart';
 
 part 'api/admin_api.dart';
 part 'api/default_api.dart';
@@ -33,7 +25,14 @@ part 'api/match_api.dart';
 part 'api/ranking_api.dart';
 part 'api/reception_api.dart';
 part 'api/result_api.dart';
-
+part 'api_client.dart';
+part 'api_exception.dart';
+part 'api_helper.dart';
+part 'auth/api_key_auth.dart';
+part 'auth/authentication.dart';
+part 'auth/http_basic_auth.dart';
+part 'auth/http_bearer_auth.dart';
+part 'auth/oauth.dart';
 part 'model/add_tournament_round_request.dart';
 part 'model/battle.dart';
 part 'model/delete_qualifier_request.dart';
@@ -71,7 +70,6 @@ part 'model/teams.dart';
 part 'model/update_reception_request.dart';
 part 'model/update_release_qualifier_request.dart';
 
-
 const _delimiters = {'csv': ',', 'ssv': ' ', 'tsv': '\t', 'pipes': '|'};
 const _dateEpochMarker = 'epoch';
 final _dateFormatter = DateFormat('yyyy-MM-dd');
@@ -79,4 +77,4 @@ final _regList = RegExp(r'^List<(.*)>$');
 final _regSet = RegExp(r'^Set<(.*)>$');
 final _regMap = RegExp(r'^Map<String,(.*)>$');
 
-ApiClient defaultApiClient = ApiClient();
+ApiClient defaultApiClient = ApiClient(basePath: Config.splathonApiHost);
