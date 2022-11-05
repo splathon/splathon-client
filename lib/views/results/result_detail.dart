@@ -302,7 +302,8 @@ class ResultDetail extends HookConsumerWidget {
         ? <Widget>[
             SizedBox(
                 height: 50,
-                child: Center(
+                child: Align(
+                  alignment: Alignment.centerLeft,
                   child: AutoSizeText(
                     match.teamAlpha.name,
                     style: resultTopTeamNameStyle,
@@ -313,7 +314,8 @@ class ResultDetail extends HookConsumerWidget {
         : <Widget>[
             SizedBox(
               height: 50,
-              child: Center(
+              child: Align(
+                alignment: Alignment.centerLeft,
                 child: AutoSizeText(
                   match.teamAlpha.name,
                   style: resultTopTeamNameStyle,
@@ -370,7 +372,8 @@ class ResultDetail extends HookConsumerWidget {
         ? <Widget>[
             SizedBox(
               height: 50,
-              child: Center(
+              child: Align(
+                alignment: Alignment.centerLeft,
                 child: AutoSizeText(
                   match.teamBravo.name,
                   style: resultTopTeamNameStyle,
@@ -382,7 +385,8 @@ class ResultDetail extends HookConsumerWidget {
         : <Widget>[
             SizedBox(
               height: 50,
-              child: Center(
+              child: Align(
+                alignment: Alignment.centerLeft,
                 child: AutoSizeText(
                   match.teamBravo.name,
                   style: resultTopTeamNameStyle,
