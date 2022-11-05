@@ -6,7 +6,7 @@ import 'package:openapi/api.dart';
 import 'package:splathon_app/utils/config.dart';
 import 'package:splathon_app/utils/preference.dart';
 
-final resultsProvider = FutureProvider.autoDispose<Results>((ref) async {
+final resultsProvider = FutureProvider<Results>((ref) async {
   var client = ResultApi();
   String token = Preference.getToken();
   var result =
