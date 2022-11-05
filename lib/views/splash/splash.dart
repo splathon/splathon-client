@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:splathon_app/domains/user_provider.dart';
+import 'package:splathon_app/views/components/loader.dart';
 
 class Splash extends HookConsumerWidget {
   const Splash({super.key});
@@ -20,7 +21,7 @@ class Splash extends HookConsumerWidget {
 
     return const Scaffold(
       body: Center(
-        child: CircularProgressIndicator(),
+        child: ColorLoader(),
       ),
     );
   }
