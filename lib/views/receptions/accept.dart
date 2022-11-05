@@ -8,6 +8,7 @@ import 'package:splathon_app/styles/color.dart';
 import 'package:splathon_app/styles/text_style.dart';
 import 'package:splathon_app/utils/config.dart';
 import 'package:splathon_app/utils/preference.dart';
+import 'package:splathon_app/views/components/dialog.dart';
 
 class Accept extends StatefulWidget {
   const Accept({super.key});
@@ -465,57 +466,15 @@ class AcceptState extends State<Accept> with AutomaticKeepAliveClientMixin {
                 result.then((resultObjet) {
                   isCompleting = false;
                   Navigator.pop(context, false);
-                  buildDialog(context, '受付', '受付を完了しました！');
+                  NormalDialog.show(context, '受付', '受付を完了しました！');
                 }).catchError((onError) {
                   isCompleting = false;
-                  buildDialog(context, 'エラー', '受付に失敗しました');
+                  ErrorDialog.show(context, '受付に失敗しました');
                 });
               },
             ),
           ],
         ));
-  }
-
-  buildDialog(BuildContext context, String title, String message) {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext build) {
-        return AlertDialog(
-          titlePadding: const EdgeInsets.all(0),
-          shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10))),
-          title: Container(
-            decoration: const BoxDecoration(
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(10),
-                topRight: Radius.circular(10),
-              ),
-              color: splaBlueColor,
-            ),
-            padding: const EdgeInsets.all(10),
-            child: Center(
-              child: Text(
-                title,
-                style: popupTitleStyle,
-              ),
-            ),
-          ),
-          content: Text(
-            message,
-            style: popupMessageStyle,
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('CLOSE'),
-              onPressed: () {
-                Navigator.pop(context, false);
-              },
-            ),
-          ],
-        );
-      },
-    );
   }
 
   String attendType(bool isPlayer, bool isStaff) {

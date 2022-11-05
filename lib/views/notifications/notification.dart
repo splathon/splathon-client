@@ -6,6 +6,7 @@ import 'package:splathon_app/domains/notification_provider.dart';
 import 'package:splathon_app/domains/user_provider.dart';
 import 'package:splathon_app/styles/color.dart';
 import 'package:splathon_app/styles/text_style.dart';
+import 'package:splathon_app/views/components/error_view.dart';
 import 'package:splathon_app/views/components/rounded_view.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
@@ -310,8 +311,9 @@ class Notifications extends HookConsumerWidget {
               }),
         );
       }),
-      error: (error, stackTrace) => const Center(
-        child: CircularProgressIndicator(),
+      error: (error, stackTrace) => ErrorView(
+        error: error,
+        retryPressed: () => ref.refresh(notificationStateProvider),
       ),
       loading: () => const Center(
         child: CircularProgressIndicator(),

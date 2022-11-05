@@ -8,6 +8,7 @@ import 'package:splathon_app/domains/teams_provider.dart';
 import 'package:splathon_app/styles/color.dart';
 import 'package:splathon_app/styles/text_style.dart';
 import 'package:splathon_app/utils/async_value_list_extension.dart';
+import 'package:splathon_app/views/components/error_view.dart';
 import 'package:splathon_app/views/components/view.dart';
 import 'package:splathon_app/views/results/result_detail.dart';
 
@@ -31,12 +32,13 @@ class EachResult extends HookConsumerWidget {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               const Text(
                 '試合を待て！',
                 style: noResultTextStyle,
               ),
+              const SizedBox(height: 30),
               Image.asset('assets/images/boys.png'),
             ],
           );
@@ -183,8 +185,12 @@ class EachResult extends HookConsumerWidget {
               }),
         );
       },
-      error: (error, stackTrace) => const Center(
-        child: CircularProgressIndicator(),
+      error: (error, stackTrace) => ErrorView(
+        error: error,
+        retryPressed: () {
+          ref.refresh(resultProvider);
+          ref.refresh(teamsProvider);
+        },
       ),
       loading: () => const Center(
         child: CircularProgressIndicator(),

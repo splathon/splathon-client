@@ -9,6 +9,7 @@ import 'package:splathon_app/styles/color.dart';
 import 'package:splathon_app/styles/text.dart';
 import 'package:splathon_app/styles/text_style.dart';
 import 'package:splathon_app/utils/config.dart';
+import 'package:splathon_app/views/components/dialog.dart';
 import 'package:splathon_app/views/notifications/notification.dart';
 import 'package:splathon_app/views/rankings/rankings.dart';
 import 'package:splathon_app/views/receptions/reception.dart';
@@ -149,54 +150,10 @@ class HomeTabbedBarState extends ConsumerState<HomeTabbedBar>
   }
 
   buildDialog(BuildContext context, RemoteNotification notification) {
-    String? title = notification.title;
+    String title = notification.title ?? 'お知らせ';
     String? body = notification.body;
+    if (body == null) return;
 
-    if (title == null && body == null) {
-      return;
-    }
-
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext build) {
-        return AlertDialog(
-          titlePadding: const EdgeInsets.all(0),
-          shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10))),
-          title: Container(
-            decoration: const BoxDecoration(
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(10),
-                topRight: Radius.circular(10),
-              ),
-              color: splaBlueColor,
-            ),
-            padding: const EdgeInsets.all(10),
-            child: Center(
-              child: Text(
-                title ?? 'お知らせ',
-                style: popupTitleStyle,
-              ),
-            ),
-          ),
-          content: ConstrainedBox(
-            constraints: const BoxConstraints(minHeight: 100),
-            child: Text(
-              body ?? '',
-              style: popupMessageStyle,
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('CLOSE'),
-              onPressed: () {
-                Navigator.pop(context, false);
-              },
-            ),
-          ],
-        );
-      },
-    );
+    NormalDialog.show(context, title, body);
   }
 }

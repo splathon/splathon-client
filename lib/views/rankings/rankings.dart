@@ -6,6 +6,7 @@ import 'package:openapi/api.dart' as API;
 import 'package:splathon_app/domains/ranking_provider.dart';
 import 'package:splathon_app/styles/color.dart';
 import 'package:splathon_app/styles/text_style.dart';
+import 'package:splathon_app/views/components/error_view.dart';
 import 'package:splathon_app/views/components/image.dart';
 import 'package:splathon_app/views/components/rounded_view.dart';
 
@@ -90,7 +91,10 @@ class Rankings extends HookConsumerWidget {
           );
         });
       },
-      error: (error, stackTrace) => const CircularProgressIndicator(),
+      error: (error, stackTrace) => ErrorView(
+        error: error,
+        retryPressed: () => ref.refresh(rankingProvider),
+      ),
       loading: () => const Center(
         child: CircularProgressIndicator(),
       ),

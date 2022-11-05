@@ -7,6 +7,7 @@ import 'package:splathon_app/styles/text.dart';
 import 'package:splathon_app/styles/text_style.dart';
 import 'package:splathon_app/utils/config.dart';
 import 'package:splathon_app/utils/preference.dart';
+import 'package:splathon_app/views/components/dialog.dart';
 
 class Report extends StatefulWidget {
   final API.Match _match;
@@ -350,56 +351,10 @@ class ReportState extends State<Report> {
         Config.eventNumber, widget._match.id, token, widget._battle);
     result
         .then((body) => setState(() {
-              pop();
+              Navigator.of(context).pop();
             }))
         .catchError((onError) {
-      buildDialog(context, 'エラー', '登録に失敗しました');
+      ErrorDialog.show(context, '登録に失敗しました');
     });
-  }
-
-  buildDialog(BuildContext context, String title, String message) {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext build) {
-        return AlertDialog(
-          titlePadding: const EdgeInsets.all(0),
-          shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10))),
-          title: Container(
-            decoration: const BoxDecoration(
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(10),
-                topRight: Radius.circular(10),
-              ),
-              color: splaBlueColor,
-            ),
-            padding: const EdgeInsets.all(10),
-            child: Center(
-              child: Text(
-                title,
-                style: popupTitleStyle,
-              ),
-            ),
-          ),
-          content: Text(
-            message,
-            style: popupMessageStyle,
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('CLOSE'),
-              onPressed: () {
-                pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  pop() {
-    Navigator.of(context).pop();
   }
 }
