@@ -146,6 +146,7 @@ flutter:
    - assets/images/reloadIcon.png
    - assets/images/girl.png
    - assets/images/boys.png
+   - assets/images/boy_and_girl.png
    - env/.env.stg
    - env/.env.prod
 

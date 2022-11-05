@@ -6,6 +6,7 @@ import 'package:splathon_app/domains/reception_provider.dart';
 import 'package:splathon_app/styles/color.dart';
 import 'package:splathon_app/styles/text.dart';
 import 'package:splathon_app/views/components/error_view.dart';
+import 'package:splathon_app/views/components/loader.dart';
 
 class Enter extends HookConsumerWidget {
   const Enter({super.key, required this.isBuilding});
@@ -57,9 +58,7 @@ class Enter extends HookConsumerWidget {
         error: error,
         retryPressed: () => ref.refresh(receptionProvider),
       ),
-      loading: () => const Center(
-        child: CircularProgressIndicator(),
-      ),
+      loading: () => const ColorLoader(),
     );
   }
 }

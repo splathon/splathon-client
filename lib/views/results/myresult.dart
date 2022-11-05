@@ -9,6 +9,7 @@ import 'package:splathon_app/styles/color.dart';
 import 'package:splathon_app/styles/text_style.dart';
 import 'package:splathon_app/utils/async_value_list_extension.dart';
 import 'package:splathon_app/views/components/error_view.dart';
+import 'package:splathon_app/views/components/loader.dart';
 import 'package:splathon_app/views/components/view.dart';
 import 'package:splathon_app/views/results/result_detail.dart';
 
@@ -192,9 +193,7 @@ class EachResult extends HookConsumerWidget {
           ref.refresh(teamsProvider);
         },
       ),
-      loading: () => const Center(
-        child: CircularProgressIndicator(),
-      ),
+      loading: () => const ColorLoader(),
     );
   }
 }

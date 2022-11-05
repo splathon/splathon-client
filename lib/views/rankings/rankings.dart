@@ -8,6 +8,7 @@ import 'package:splathon_app/styles/color.dart';
 import 'package:splathon_app/styles/text_style.dart';
 import 'package:splathon_app/views/components/error_view.dart';
 import 'package:splathon_app/views/components/image.dart';
+import 'package:splathon_app/views/components/loader.dart';
 import 'package:splathon_app/views/components/rounded_view.dart';
 
 class Rankings extends HookConsumerWidget {
@@ -95,9 +96,7 @@ class Rankings extends HookConsumerWidget {
         error: error,
         retryPressed: () => ref.refresh(rankingProvider),
       ),
-      loading: () => const Center(
-        child: CircularProgressIndicator(),
-      ),
+      loading: () => const ColorLoader(),
     );
   }
 

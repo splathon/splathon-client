@@ -8,6 +8,7 @@ import 'package:splathon_app/styles/color.dart';
 import 'package:splathon_app/styles/text_style.dart';
 import 'package:splathon_app/utils/preference.dart';
 import 'package:splathon_app/views/components/error_view.dart';
+import 'package:splathon_app/views/components/loader.dart';
 import 'package:splathon_app/views/components/view.dart';
 import 'package:splathon_app/views/results/result_detail.dart';
 
@@ -29,7 +30,7 @@ class AllResult extends HookConsumerWidget {
             children: <Widget>[
               const Text('試合を待て！', style: largeBlackTextStyle),
               const SizedBox(height: 30),
-              Image.asset('assets/images/girl.png'),
+              Image.asset('assets/images/boy_and_girl.png'),
             ],
           );
         }
@@ -49,9 +50,7 @@ class AllResult extends HookConsumerWidget {
         error: error,
         retryPressed: () => ref.refresh(resultsProvider),
       ),
-      loading: () => const Center(
-        child: CircularProgressIndicator(),
-      ),
+      loading: () => const ColorLoader(),
     );
   }
 }
