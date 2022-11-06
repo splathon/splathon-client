@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:splathon_app/styles/color.dart';
 
 Widget charactorImage(String url) {
+  final color = _randomColor();
   return SizedBox(
     width: 22,
     height: 22,
@@ -12,9 +13,9 @@ Widget charactorImage(String url) {
       borderRadius: BorderRadius.circular(11.0),
       child: CachedNetworkImage(
         placeholder: (contect, url) => CircularProgressIndicator(
-          color: _randomColor(),
+          color: color,
         ),
-        errorWidget: (contect, url, error) => const Icon(Icons.error),
+        errorWidget: (contect, url, error) => Icon(Icons.error, color: color),
         imageUrl: url,
         fadeOutDuration: const Duration(milliseconds: 0),
         fadeInDuration: const Duration(milliseconds: 0),
