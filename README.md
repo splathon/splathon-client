@@ -2,7 +2,9 @@
 
 Splathon client application
 
-<img src="https://raw.githubusercontent.com/splathon/splathon-client/master/assets/images/icon-splathon-app.png" width="500px">
+|#10|#11|#12|
+|----|----|----|
+|<img src="https://raw.githubusercontent.com/splathon/splathon-client/master/assets/images/girl.png" width="500px">|<img src="https://raw.githubusercontent.com/splathon/splathon-client/master/assets/images/boys.png" width="500px">|<img src="https://raw.githubusercontent.com/splathon/splathon-client/master/assets/images/boy_and_girl.png" width="500px">|
 
 ## Setup
 
@@ -36,12 +38,12 @@ https://firebase.google.com/docs/flutter/setup
 ### Run Debug
 
 ```
+# Mobile
 $ fvm flutter run --dart-define=FLAVOR=stg --dart-define=EVENT_NUMBER=11
+
+# Web
+$ fvm flutter run -d chrome --web-renderer html --dart-define=FLAVOR=stg --dart-define=EVENT_NUMBER=11
 ```
-
-## Specs
-
-- [Google Drive - Splathon#10 App develop](https://drive.google.com/drive/folders/1IkOe2ItR_ZYUKULYlUSvZwqRhMjebM7z)
 
 ## Design
 
