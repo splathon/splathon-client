@@ -1,4 +1,5 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:splathon_app/domains/notification_provider.dart';
@@ -87,43 +88,51 @@ class HomeTabbedBarState extends ConsumerState<HomeTabbedBar>
       bottomNavigationBar: Material(
         color: splaBlueColor,
         child: SafeArea(
-          child: TabBar(
-            isScrollable: false,
-            tabs: <Tab>[
-              Tab(
-                icon: Image.asset('assets/images/icon_notification.png'),
-                iconMargin: const EdgeInsets.only(bottom: 0),
-                child: const Text(
-                  'お知らせ',
-                  style: bottomTabTextStyle,
+          child: Padding(
+            padding: EdgeInsets.only(
+                bottom: kIsWeb &&
+                        (defaultTargetPlatform == TargetPlatform.iOS ||
+                            defaultTargetPlatform == TargetPlatform.macOS)
+                    ? 20
+                    : 0),
+            child: TabBar(
+              isScrollable: false,
+              tabs: <Tab>[
+                Tab(
+                  icon: Image.asset('assets/images/icon_notification.png'),
+                  iconMargin: const EdgeInsets.only(bottom: 0),
+                  child: const Text(
+                    'お知らせ',
+                    style: bottomTabTextStyle,
+                  ),
                 ),
-              ),
-              Tab(
-                icon: Image.asset('assets/images/icon_result.png'),
-                iconMargin: const EdgeInsets.only(bottom: 0),
-                child: const Text(
-                  'リザルト',
-                  style: bottomTabTextStyle,
+                Tab(
+                  icon: Image.asset('assets/images/icon_result.png'),
+                  iconMargin: const EdgeInsets.only(bottom: 0),
+                  child: const Text(
+                    'リザルト',
+                    style: bottomTabTextStyle,
+                  ),
                 ),
-              ),
-              Tab(
-                icon: Image.asset('assets/images/icon_ranking.png'),
-                iconMargin: const EdgeInsets.only(bottom: 0),
-                child: const Text(
-                  'ランキング',
-                  style: bottomTabTextStyle,
+                Tab(
+                  icon: Image.asset('assets/images/icon_ranking.png'),
+                  iconMargin: const EdgeInsets.only(bottom: 0),
+                  child: const Text(
+                    'ランキング',
+                    style: bottomTabTextStyle,
+                  ),
                 ),
-              ),
-              Tab(
-                icon: Image.asset('assets/images/icon_reception.png'),
-                iconMargin: const EdgeInsets.only(bottom: 0),
-                child: const Text(
-                  '受付コード',
-                  style: bottomTabTextStyle,
+                Tab(
+                  icon: Image.asset('assets/images/icon_reception.png'),
+                  iconMargin: const EdgeInsets.only(bottom: 0),
+                  child: const Text(
+                    '受付コード',
+                    style: bottomTabTextStyle,
+                  ),
                 ),
-              ),
-            ],
-            controller: controller,
+              ],
+              controller: controller,
+            ),
           ),
         ),
       ),
