@@ -80,11 +80,11 @@ dev_dependencies:
 flutter_icons:
   android: "launcher_icon"
   ios: true
-  image_path: "assets/images/boys.png"
+  image_path: "assets/images/boy_and_girl.png"
 
 flutter_native_splash:
   color: "#0B318F"
-  image: "assets/images/boys.png"
+  image: "assets/images/boy_and_girl.png"
   android: true
   ios: true
 
