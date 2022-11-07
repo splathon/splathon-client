@@ -21,7 +21,7 @@ void main() async {
   runApp(
     ProviderScope(
       child: MaterialApp(
-        title: 'Navigation with Routes',
+        title: 'Splathon App',
         routes: <String, WidgetBuilder>{
           '/': (_) => const Splash(),
           '/login': (_) => Login(),
