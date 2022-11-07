@@ -1,13 +1,13 @@
 {
-    "name": "splathon_client",
-    "short_name": "splathon_client",
+    "name": "Splathon App",
+    "short_name": "Splathon",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "background_color": "#0b318F",
+    "theme_color": "#0b318F",
+    "description": "Splathon Event Application",
     "orientation": "portrait-primary",
-    "prefer_related_applications": false,
+    "prefer_related_applications": true,
     "icons": [
         {
             "src": "icons/Icon-192.png",
