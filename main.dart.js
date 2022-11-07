@@ -23513,7 +23513,7 @@ return A.A(A.a9O(),$async$wM)
 case 4:q=A.aw(["/",new A.as0(),"/login",new A.as1(),"/home",new A.as2(),"/admin",new A.as3()],t.N,t.Ab)
 if($.N==null)A.auN()
 p=$.N
-p.TR(new A.AJ(new A.zG(q,"Navigation with Routes",null),null))
+p.TR(new A.AJ(new A.zG(q,"Splathon App",null),null))
 p.H4()
 return A.G(null,r)}})
 return A.H($async$wM,r)},
