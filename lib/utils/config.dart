@@ -9,7 +9,7 @@ class Config {
   static loadFlavor() async {
     const flavor = String.fromEnvironment('FLAVOR');
     try {
-      await dotenv.load(fileName: "env/.env.$flavor");
+      await dotenv.load(fileName: "env/dotEnv.$flavor");
     } catch (e) {
       debugPrint(e.toString());
     }

@@ -147,8 +147,8 @@ flutter:
    - assets/images/girl.png
    - assets/images/boys.png
    - assets/images/boy_and_girl.png
-   - env/.env.stg
-   - env/.env.prod
+   - env/dotEnv.stg
+   - env/dotEnv.prod
 
   fonts:
     - family: Splatfont
