@@ -24740,7 +24740,7 @@ a_l(){var s=0,r=A.I(t.z),q=1,p,o,n,m
 var $async$a_l=A.E(function(a,b){if(a===1){p=b
 s=q}while(true)switch(s){case 0:q=3
 s=6
-return A.A($.awF().xl(0,"env/.env.prod"),$async$a_l)
+return A.A($.awF().xl(0,"env/dotEnv.prod"),$async$a_l)
 case 6:q=1
 s=5
 break
