@@ -15,6 +15,7 @@ class Event {
   Event({
     required this.name,
     required this.numbering,
+    this.heldOnTimestampSec,
     this.rules = const [],
     this.stages = const [],
     this.rooms = const [],
@@ -23,6 +24,15 @@ class Event {
   String name;
 
   int numbering;
+
+  /// 開催日のタイムスタンプ
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
+  int? heldOnTimestampSec;
 
   List<Rule> rules;
 
@@ -34,6 +44,7 @@ class Event {
   bool operator ==(Object other) => identical(this, other) || other is Event &&
      other.name == name &&
      other.numbering == numbering &&
+     other.heldOnTimestampSec == heldOnTimestampSec &&
      other.rules == rules &&
      other.stages == stages &&
      other.rooms == rooms;
@@ -43,17 +54,23 @@ class Event {
     // ignore: unnecessary_parenthesis
     (name.hashCode) +
     (numbering.hashCode) +
+    (heldOnTimestampSec == null ? 0 : heldOnTimestampSec!.hashCode) +
     (rules.hashCode) +
     (stages.hashCode) +
     (rooms.hashCode);
 
   @override
-  String toString() => 'Event[name=$name, numbering=$numbering, rules=$rules, stages=$stages, rooms=$rooms]';
+  String toString() => 'Event[name=$name, numbering=$numbering, heldOnTimestampSec=$heldOnTimestampSec, rules=$rules, stages=$stages, rooms=$rooms]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
       json[r'name'] = this.name;
       json[r'numbering'] = this.numbering;
+    if (this.heldOnTimestampSec != null) {
+      json[r'held_on_timestamp_sec'] = this.heldOnTimestampSec;
+    } else {
+      json[r'held_on_timestamp_sec'] = null;
+    }
       json[r'rules'] = this.rules;
       json[r'stages'] = this.stages;
       json[r'rooms'] = this.rooms;
@@ -81,6 +98,7 @@ class Event {
       return Event(
         name: mapValueOfType<String>(json, r'name')!,
         numbering: mapValueOfType<int>(json, r'numbering')!,
+        heldOnTimestampSec: mapValueOfType<int>(json, r'held_on_timestamp_sec'),
         rules: Rule.listFromJson(json[r'rules']) ?? const [],
         stages: Stage.listFromJson(json[r'stages']) ?? const [],
         rooms: SupportedRoom.listFromJson(json[r'rooms']) ?? const [],

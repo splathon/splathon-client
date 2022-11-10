@@ -22,14 +22,14 @@ class RankingApi {
   ///
   /// Parameters:
   ///
-  /// * [int] eventId (required):
+  /// * [String] eventId (required):
   ///
   /// * [bool] latest:
   ///   Return latest ranking if true.
-  Future<Response> getRankingWithHttpInfo(int eventId, { bool? latest, }) async {
+  Future<Response> getRankingWithHttpInfo(String eventId, { bool? latest, }) async {
     // ignore: prefer_const_declarations
-    final path = r'/v{eventId}/ranking'
-      .replaceAll('{eventId}', eventId.toString());
+    final path = r'/{eventId}/ranking'
+      .replaceAll('{eventId}', eventId);
 
     // ignore: prefer_final_locals
     Object? postBody;
@@ -60,11 +60,11 @@ class RankingApi {
   ///
   /// Parameters:
   ///
-  /// * [int] eventId (required):
+  /// * [String] eventId (required):
   ///
   /// * [bool] latest:
   ///   Return latest ranking if true.
-  Future<Ranking?> getRanking(int eventId, { bool? latest, }) async {
+  Future<Ranking?> getRanking(String eventId, { bool? latest, }) async {
     final response = await getRankingWithHttpInfo(eventId,  latest: latest, );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));

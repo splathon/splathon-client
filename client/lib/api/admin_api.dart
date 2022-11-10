@@ -16,18 +16,18 @@ class AdminApi {
 
   final ApiClient apiClient;
 
-  /// Performs an HTTP 'POST /v{eventId}/tournament/' operation and returns the [Response].
+  /// Performs an HTTP 'POST /{eventId}/tournament/' operation and returns the [Response].
   /// Parameters:
   ///
-  /// * [int] eventId (required):
+  /// * [String] eventId (required):
   ///
   /// * [String] X_SPLATHON_API_TOKEN (required):
   ///
   /// * [AddTournamentRoundRequest] request (required):
-  Future<Response> addTournamentRoundWithHttpInfo(int eventId, String X_SPLATHON_API_TOKEN, AddTournamentRoundRequest request,) async {
+  Future<Response> addTournamentRoundWithHttpInfo(String eventId, String X_SPLATHON_API_TOKEN, AddTournamentRoundRequest request,) async {
     // ignore: prefer_const_declarations
-    final path = r'/v{eventId}/tournament/'
-      .replaceAll('{eventId}', eventId.toString());
+    final path = r'/{eventId}/tournament/'
+      .replaceAll('{eventId}', eventId);
 
     // ignore: prefer_final_locals
     Object? postBody = request;
@@ -54,12 +54,12 @@ class AdminApi {
 
   /// Parameters:
   ///
-  /// * [int] eventId (required):
+  /// * [String] eventId (required):
   ///
   /// * [String] X_SPLATHON_API_TOKEN (required):
   ///
   /// * [AddTournamentRoundRequest] request (required):
-  Future<void> addTournamentRound(int eventId, String X_SPLATHON_API_TOKEN, AddTournamentRoundRequest request,) async {
+  Future<void> addTournamentRound(String eventId, String X_SPLATHON_API_TOKEN, AddTournamentRoundRequest request,) async {
     final response = await addTournamentRoundWithHttpInfo(eventId, X_SPLATHON_API_TOKEN, request,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
@@ -72,16 +72,16 @@ class AdminApi {
   ///
   /// Parameters:
   ///
-  /// * [int] eventId (required):
+  /// * [String] eventId (required):
   ///
   /// * [String] splathonReceptionCode (required):
   ///   ReceptionResponse.splathon.code と同じもの(たぶん内部SlackID).
   ///
   /// * [String] X_SPLATHON_API_TOKEN (required):
-  Future<Response> completeReceptionWithHttpInfo(int eventId, String splathonReceptionCode, String X_SPLATHON_API_TOKEN,) async {
+  Future<Response> completeReceptionWithHttpInfo(String eventId, String splathonReceptionCode, String X_SPLATHON_API_TOKEN,) async {
     // ignore: prefer_const_declarations
-    final path = r'/v{eventId}/reception/{splathonReceptionCode}/complete'
-      .replaceAll('{eventId}', eventId.toString())
+    final path = r'/{eventId}/reception/{splathonReceptionCode}/complete'
+      .replaceAll('{eventId}', eventId)
       .replaceAll('{splathonReceptionCode}', splathonReceptionCode);
 
     // ignore: prefer_final_locals
@@ -111,29 +111,79 @@ class AdminApi {
   ///
   /// Parameters:
   ///
-  /// * [int] eventId (required):
+  /// * [String] eventId (required):
   ///
   /// * [String] splathonReceptionCode (required):
   ///   ReceptionResponse.splathon.code と同じもの(たぶん内部SlackID).
   ///
   /// * [String] X_SPLATHON_API_TOKEN (required):
-  Future<void> completeReception(int eventId, String splathonReceptionCode, String X_SPLATHON_API_TOKEN,) async {
+  Future<void> completeReception(String eventId, String splathonReceptionCode, String X_SPLATHON_API_TOKEN,) async {
     final response = await completeReceptionWithHttpInfo(eventId, splathonReceptionCode, X_SPLATHON_API_TOKEN,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
   }
 
-  /// Performs an HTTP 'POST /v{eventId}/qualifier' operation and returns the [Response].
+  /// Create event data
+  ///
+  /// Note: This method returns the HTTP [Response].
+  ///
   /// Parameters:
   ///
-  /// * [int] eventId (required):
+  /// * [String] X_SPLATHON_API_TOKEN (required):
+  ///
+  /// * [Event] request (required):
+  Future<Response> createEventWithHttpInfo(String X_SPLATHON_API_TOKEN, Event request,) async {
+    // ignore: prefer_const_declarations
+    final path = r'/create-event';
+
+    // ignore: prefer_final_locals
+    Object? postBody = request;
+
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
+
+    headerParams[r'X-SPLATHON-API-TOKEN'] = parameterToString(X_SPLATHON_API_TOKEN);
+
+    const contentTypes = <String>['application/json'];
+
+
+    return apiClient.invokeAPI(
+      path,
+      'POST',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      contentTypes.isEmpty ? null : contentTypes.first,
+    );
+  }
+
+  /// Create event data
+  ///
+  /// Parameters:
   ///
   /// * [String] X_SPLATHON_API_TOKEN (required):
-  Future<Response> createNewQualifierWithHttpInfo(int eventId, String X_SPLATHON_API_TOKEN,) async {
+  ///
+  /// * [Event] request (required):
+  Future<void> createEvent(String X_SPLATHON_API_TOKEN, Event request,) async {
+    final response = await createEventWithHttpInfo(X_SPLATHON_API_TOKEN, request,);
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
+    }
+  }
+
+  /// Performs an HTTP 'POST /{eventId}/qualifier' operation and returns the [Response].
+  /// Parameters:
+  ///
+  /// * [String] eventId (required):
+  ///
+  /// * [String] X_SPLATHON_API_TOKEN (required):
+  Future<Response> createNewQualifierWithHttpInfo(String eventId, String X_SPLATHON_API_TOKEN,) async {
     // ignore: prefer_const_declarations
-    final path = r'/v{eventId}/qualifier'
-      .replaceAll('{eventId}', eventId.toString());
+    final path = r'/{eventId}/qualifier'
+      .replaceAll('{eventId}', eventId);
 
     // ignore: prefer_final_locals
     Object? postBody;
@@ -160,28 +210,74 @@ class AdminApi {
 
   /// Parameters:
   ///
-  /// * [int] eventId (required):
+  /// * [String] eventId (required):
   ///
   /// * [String] X_SPLATHON_API_TOKEN (required):
-  Future<void> createNewQualifier(int eventId, String X_SPLATHON_API_TOKEN,) async {
+  Future<void> createNewQualifier(String eventId, String X_SPLATHON_API_TOKEN,) async {
     final response = await createNewQualifierWithHttpInfo(eventId, X_SPLATHON_API_TOKEN,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
   }
 
-  /// Performs an HTTP 'DELETE /v{eventId}/notices/{noticeId}' operation and returns the [Response].
+  /// Performs an HTTP 'DELETE /{eventId}/event' operation and returns the [Response].
   /// Parameters:
   ///
-  /// * [int] eventId (required):
+  /// * [String] eventId (required):
+  ///
+  /// * [String] X_SPLATHON_API_TOKEN (required):
+  Future<Response> deleteEventWithHttpInfo(String eventId, String X_SPLATHON_API_TOKEN,) async {
+    // ignore: prefer_const_declarations
+    final path = r'/{eventId}/event'
+      .replaceAll('{eventId}', eventId);
+
+    // ignore: prefer_final_locals
+    Object? postBody;
+
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
+
+    headerParams[r'X-SPLATHON-API-TOKEN'] = parameterToString(X_SPLATHON_API_TOKEN);
+
+    const contentTypes = <String>[];
+
+
+    return apiClient.invokeAPI(
+      path,
+      'DELETE',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      contentTypes.isEmpty ? null : contentTypes.first,
+    );
+  }
+
+  /// Parameters:
+  ///
+  /// * [String] eventId (required):
+  ///
+  /// * [String] X_SPLATHON_API_TOKEN (required):
+  Future<void> deleteEvent(String eventId, String X_SPLATHON_API_TOKEN,) async {
+    final response = await deleteEventWithHttpInfo(eventId, X_SPLATHON_API_TOKEN,);
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
+    }
+  }
+
+  /// Performs an HTTP 'DELETE /{eventId}/notices/{noticeId}' operation and returns the [Response].
+  /// Parameters:
+  ///
+  /// * [String] eventId (required):
   ///
   /// * [int] noticeId (required):
   ///
   /// * [String] X_SPLATHON_API_TOKEN (required):
-  Future<Response> deleteNoticeWithHttpInfo(int eventId, int noticeId, String X_SPLATHON_API_TOKEN,) async {
+  Future<Response> deleteNoticeWithHttpInfo(String eventId, int noticeId, String X_SPLATHON_API_TOKEN,) async {
     // ignore: prefer_const_declarations
-    final path = r'/v{eventId}/notices/{noticeId}'
-      .replaceAll('{eventId}', eventId.toString())
+    final path = r'/{eventId}/notices/{noticeId}'
+      .replaceAll('{eventId}', eventId)
       .replaceAll('{noticeId}', noticeId.toString());
 
     // ignore: prefer_final_locals
@@ -209,30 +305,30 @@ class AdminApi {
 
   /// Parameters:
   ///
-  /// * [int] eventId (required):
+  /// * [String] eventId (required):
   ///
   /// * [int] noticeId (required):
   ///
   /// * [String] X_SPLATHON_API_TOKEN (required):
-  Future<void> deleteNotice(int eventId, int noticeId, String X_SPLATHON_API_TOKEN,) async {
+  Future<void> deleteNotice(String eventId, int noticeId, String X_SPLATHON_API_TOKEN,) async {
     final response = await deleteNoticeWithHttpInfo(eventId, noticeId, X_SPLATHON_API_TOKEN,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
   }
 
-  /// Performs an HTTP 'POST /v{eventId}/delete-qualifier' operation and returns the [Response].
+  /// Performs an HTTP 'POST /{eventId}/delete-qualifier' operation and returns the [Response].
   /// Parameters:
   ///
-  /// * [int] eventId (required):
+  /// * [String] eventId (required):
   ///
   /// * [String] X_SPLATHON_API_TOKEN (required):
   ///
   /// * [DeleteQualifierRequest] request:
-  Future<Response> deleteQualifierWithHttpInfo(int eventId, String X_SPLATHON_API_TOKEN, { DeleteQualifierRequest? request, }) async {
+  Future<Response> deleteQualifierWithHttpInfo(String eventId, String X_SPLATHON_API_TOKEN, { DeleteQualifierRequest? request, }) async {
     // ignore: prefer_const_declarations
-    final path = r'/v{eventId}/delete-qualifier'
-      .replaceAll('{eventId}', eventId.toString());
+    final path = r'/{eventId}/delete-qualifier'
+      .replaceAll('{eventId}', eventId);
 
     // ignore: prefer_final_locals
     Object? postBody = request;
@@ -259,12 +355,12 @@ class AdminApi {
 
   /// Parameters:
   ///
-  /// * [int] eventId (required):
+  /// * [String] eventId (required):
   ///
   /// * [String] X_SPLATHON_API_TOKEN (required):
   ///
   /// * [DeleteQualifierRequest] request:
-  Future<void> deleteQualifier(int eventId, String X_SPLATHON_API_TOKEN, { DeleteQualifierRequest? request, }) async {
+  Future<void> deleteQualifier(String eventId, String X_SPLATHON_API_TOKEN, { DeleteQualifierRequest? request, }) async {
     final response = await deleteQualifierWithHttpInfo(eventId, X_SPLATHON_API_TOKEN,  request: request, );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
@@ -277,16 +373,16 @@ class AdminApi {
   ///
   /// Parameters:
   ///
-  /// * [int] eventId (required):
+  /// * [String] eventId (required):
   ///
   /// * [String] splathonReceptionCode (required):
   ///   ReceptionResponse.splathon.code と同じもの(たぶん内部SlackID).
   ///
   /// * [String] X_SPLATHON_API_TOKEN (required):
-  Future<Response> getParticipantsDataForReceptionWithHttpInfo(int eventId, String splathonReceptionCode, String X_SPLATHON_API_TOKEN,) async {
+  Future<Response> getParticipantsDataForReceptionWithHttpInfo(String eventId, String splathonReceptionCode, String X_SPLATHON_API_TOKEN,) async {
     // ignore: prefer_const_declarations
-    final path = r'/v{eventId}/reception/{splathonReceptionCode}'
-      .replaceAll('{eventId}', eventId.toString())
+    final path = r'/{eventId}/reception/{splathonReceptionCode}'
+      .replaceAll('{eventId}', eventId)
       .replaceAll('{splathonReceptionCode}', splathonReceptionCode);
 
     // ignore: prefer_final_locals
@@ -316,13 +412,13 @@ class AdminApi {
   ///
   /// Parameters:
   ///
-  /// * [int] eventId (required):
+  /// * [String] eventId (required):
   ///
   /// * [String] splathonReceptionCode (required):
   ///   ReceptionResponse.splathon.code と同じもの(たぶん内部SlackID).
   ///
   /// * [String] X_SPLATHON_API_TOKEN (required):
-  Future<ReceptionPartcipantsDataResponse?> getParticipantsDataForReception(int eventId, String splathonReceptionCode, String X_SPLATHON_API_TOKEN,) async {
+  Future<ReceptionPartcipantsDataResponse?> getParticipantsDataForReception(String eventId, String splathonReceptionCode, String X_SPLATHON_API_TOKEN,) async {
     final response = await getParticipantsDataForReceptionWithHttpInfo(eventId, splathonReceptionCode, X_SPLATHON_API_TOKEN,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
@@ -337,16 +433,16 @@ class AdminApi {
     return null;
   }
 
-  /// Performs an HTTP 'GET /v{eventId}/release-qualifier' operation and returns the [Response].
+  /// Performs an HTTP 'GET /{eventId}/release-qualifier' operation and returns the [Response].
   /// Parameters:
   ///
-  /// * [int] eventId (required):
+  /// * [String] eventId (required):
   ///
   /// * [String] X_SPLATHON_API_TOKEN (required):
-  Future<Response> getReleaseQualifierWithHttpInfo(int eventId, String X_SPLATHON_API_TOKEN,) async {
+  Future<Response> getReleaseQualifierWithHttpInfo(String eventId, String X_SPLATHON_API_TOKEN,) async {
     // ignore: prefer_const_declarations
-    final path = r'/v{eventId}/release-qualifier'
-      .replaceAll('{eventId}', eventId.toString());
+    final path = r'/{eventId}/release-qualifier'
+      .replaceAll('{eventId}', eventId);
 
     // ignore: prefer_final_locals
     Object? postBody;
@@ -373,10 +469,10 @@ class AdminApi {
 
   /// Parameters:
   ///
-  /// * [int] eventId (required):
+  /// * [String] eventId (required):
   ///
   /// * [String] X_SPLATHON_API_TOKEN (required):
-  Future<int?> getReleaseQualifier(int eventId, String X_SPLATHON_API_TOKEN,) async {
+  Future<int?> getReleaseQualifier(String eventId, String X_SPLATHON_API_TOKEN,) async {
     final response = await getReleaseQualifierWithHttpInfo(eventId, X_SPLATHON_API_TOKEN,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
@@ -391,16 +487,16 @@ class AdminApi {
     return null;
   }
 
-  /// Performs an HTTP 'GET /v{eventId}/list-reception' operation and returns the [Response].
+  /// Performs an HTTP 'GET /{eventId}/list-reception' operation and returns the [Response].
   /// Parameters:
   ///
-  /// * [int] eventId (required):
+  /// * [String] eventId (required):
   ///
   /// * [String] X_SPLATHON_API_TOKEN (required):
-  Future<Response> listReceptionWithHttpInfo(int eventId, String X_SPLATHON_API_TOKEN,) async {
+  Future<Response> listReceptionWithHttpInfo(String eventId, String X_SPLATHON_API_TOKEN,) async {
     // ignore: prefer_const_declarations
-    final path = r'/v{eventId}/list-reception'
-      .replaceAll('{eventId}', eventId.toString());
+    final path = r'/{eventId}/list-reception'
+      .replaceAll('{eventId}', eventId);
 
     // ignore: prefer_final_locals
     Object? postBody;
@@ -427,10 +523,10 @@ class AdminApi {
 
   /// Parameters:
   ///
-  /// * [int] eventId (required):
+  /// * [String] eventId (required):
   ///
   /// * [String] X_SPLATHON_API_TOKEN (required):
-  Future<ListReceptionResponse?> listReception(int eventId, String X_SPLATHON_API_TOKEN,) async {
+  Future<ListReceptionResponse?> listReception(String eventId, String X_SPLATHON_API_TOKEN,) async {
     final response = await listReceptionWithHttpInfo(eventId, X_SPLATHON_API_TOKEN,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
@@ -451,7 +547,7 @@ class AdminApi {
   ///
   /// Parameters:
   ///
-  /// * [int] eventId (required):
+  /// * [String] eventId (required):
   ///
   /// * [int] matchId (required):
   ///   match id
@@ -459,10 +555,10 @@ class AdminApi {
   /// * [String] X_SPLATHON_API_TOKEN (required):
   ///
   /// * [Battle] battle (required):
-  Future<Response> updateBattleWithHttpInfo(int eventId, int matchId, String X_SPLATHON_API_TOKEN, Battle battle,) async {
+  Future<Response> updateBattleWithHttpInfo(String eventId, int matchId, String X_SPLATHON_API_TOKEN, Battle battle,) async {
     // ignore: prefer_const_declarations
-    final path = r'/v{eventId}/matches/{matchId}'
-      .replaceAll('{eventId}', eventId.toString())
+    final path = r'/{eventId}/matches/{matchId}'
+      .replaceAll('{eventId}', eventId)
       .replaceAll('{matchId}', matchId.toString());
 
     // ignore: prefer_final_locals
@@ -492,7 +588,7 @@ class AdminApi {
   ///
   /// Parameters:
   ///
-  /// * [int] eventId (required):
+  /// * [String] eventId (required):
   ///
   /// * [int] matchId (required):
   ///   match id
@@ -500,17 +596,72 @@ class AdminApi {
   /// * [String] X_SPLATHON_API_TOKEN (required):
   ///
   /// * [Battle] battle (required):
-  Future<void> updateBattle(int eventId, int matchId, String X_SPLATHON_API_TOKEN, Battle battle,) async {
+  Future<void> updateBattle(String eventId, int matchId, String X_SPLATHON_API_TOKEN, Battle battle,) async {
     final response = await updateBattleWithHttpInfo(eventId, matchId, X_SPLATHON_API_TOKEN, battle,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
   }
 
-  /// Performs an HTTP 'PUT /v{eventId}/matches/{matchId}' operation and returns the [Response].
+  /// Update event data
+  ///
+  /// Note: This method returns the HTTP [Response].
+  ///
   /// Parameters:
   ///
-  /// * [int] eventId (required):
+  /// * [String] eventId (required):
+  ///
+  /// * [String] X_SPLATHON_API_TOKEN (required):
+  ///
+  /// * [Event] request (required):
+  Future<Response> updateEventWithHttpInfo(String eventId, String X_SPLATHON_API_TOKEN, Event request,) async {
+    // ignore: prefer_const_declarations
+    final path = r'/{eventId}/event'
+      .replaceAll('{eventId}', eventId);
+
+    // ignore: prefer_final_locals
+    Object? postBody = request;
+
+    final queryParams = <QueryParam>[];
+    final headerParams = <String, String>{};
+    final formParams = <String, String>{};
+
+    headerParams[r'X-SPLATHON-API-TOKEN'] = parameterToString(X_SPLATHON_API_TOKEN);
+
+    const contentTypes = <String>['application/json'];
+
+
+    return apiClient.invokeAPI(
+      path,
+      'PUT',
+      queryParams,
+      postBody,
+      headerParams,
+      formParams,
+      contentTypes.isEmpty ? null : contentTypes.first,
+    );
+  }
+
+  /// Update event data
+  ///
+  /// Parameters:
+  ///
+  /// * [String] eventId (required):
+  ///
+  /// * [String] X_SPLATHON_API_TOKEN (required):
+  ///
+  /// * [Event] request (required):
+  Future<void> updateEvent(String eventId, String X_SPLATHON_API_TOKEN, Event request,) async {
+    final response = await updateEventWithHttpInfo(eventId, X_SPLATHON_API_TOKEN, request,);
+    if (response.statusCode >= HttpStatus.badRequest) {
+      throw ApiException(response.statusCode, await _decodeBodyBytes(response));
+    }
+  }
+
+  /// Performs an HTTP 'PUT /{eventId}/matches/{matchId}' operation and returns the [Response].
+  /// Parameters:
+  ///
+  /// * [String] eventId (required):
   ///
   /// * [int] matchId (required):
   ///   match id
@@ -518,10 +669,10 @@ class AdminApi {
   /// * [String] X_SPLATHON_API_TOKEN (required):
   ///
   /// * [NewMatchRequest] match (required):
-  Future<Response> updateMatchWithHttpInfo(int eventId, int matchId, String X_SPLATHON_API_TOKEN, NewMatchRequest match,) async {
+  Future<Response> updateMatchWithHttpInfo(String eventId, int matchId, String X_SPLATHON_API_TOKEN, NewMatchRequest match,) async {
     // ignore: prefer_const_declarations
-    final path = r'/v{eventId}/matches/{matchId}'
-      .replaceAll('{eventId}', eventId.toString())
+    final path = r'/{eventId}/matches/{matchId}'
+      .replaceAll('{eventId}', eventId)
       .replaceAll('{matchId}', matchId.toString());
 
     // ignore: prefer_final_locals
@@ -549,7 +700,7 @@ class AdminApi {
 
   /// Parameters:
   ///
-  /// * [int] eventId (required):
+  /// * [String] eventId (required):
   ///
   /// * [int] matchId (required):
   ///   match id
@@ -557,25 +708,25 @@ class AdminApi {
   /// * [String] X_SPLATHON_API_TOKEN (required):
   ///
   /// * [NewMatchRequest] match (required):
-  Future<void> updateMatch(int eventId, int matchId, String X_SPLATHON_API_TOKEN, NewMatchRequest match,) async {
+  Future<void> updateMatch(String eventId, int matchId, String X_SPLATHON_API_TOKEN, NewMatchRequest match,) async {
     final response = await updateMatchWithHttpInfo(eventId, matchId, X_SPLATHON_API_TOKEN, match,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
   }
 
-  /// Performs an HTTP 'POST /v{eventId}/update-reception' operation and returns the [Response].
+  /// Performs an HTTP 'POST /{eventId}/update-reception' operation and returns the [Response].
   /// Parameters:
   ///
-  /// * [int] eventId (required):
+  /// * [String] eventId (required):
   ///
   /// * [String] X_SPLATHON_API_TOKEN (required):
   ///
   /// * [UpdateReceptionRequest] request (required):
-  Future<Response> updateReceptionWithHttpInfo(int eventId, String X_SPLATHON_API_TOKEN, UpdateReceptionRequest request,) async {
+  Future<Response> updateReceptionWithHttpInfo(String eventId, String X_SPLATHON_API_TOKEN, UpdateReceptionRequest request,) async {
     // ignore: prefer_const_declarations
-    final path = r'/v{eventId}/update-reception'
-      .replaceAll('{eventId}', eventId.toString());
+    final path = r'/{eventId}/update-reception'
+      .replaceAll('{eventId}', eventId);
 
     // ignore: prefer_final_locals
     Object? postBody = request;
@@ -602,30 +753,30 @@ class AdminApi {
 
   /// Parameters:
   ///
-  /// * [int] eventId (required):
+  /// * [String] eventId (required):
   ///
   /// * [String] X_SPLATHON_API_TOKEN (required):
   ///
   /// * [UpdateReceptionRequest] request (required):
-  Future<void> updateReception(int eventId, String X_SPLATHON_API_TOKEN, UpdateReceptionRequest request,) async {
+  Future<void> updateReception(String eventId, String X_SPLATHON_API_TOKEN, UpdateReceptionRequest request,) async {
     final response = await updateReceptionWithHttpInfo(eventId, X_SPLATHON_API_TOKEN, request,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }
   }
 
-  /// Performs an HTTP 'PUT /v{eventId}/release-qualifier' operation and returns the [Response].
+  /// Performs an HTTP 'PUT /{eventId}/release-qualifier' operation and returns the [Response].
   /// Parameters:
   ///
-  /// * [int] eventId (required):
+  /// * [String] eventId (required):
   ///
   /// * [String] X_SPLATHON_API_TOKEN (required):
   ///
   /// * [UpdateReleaseQualifierRequest] request:
-  Future<Response> updateReleaseQualifierWithHttpInfo(int eventId, String X_SPLATHON_API_TOKEN, { UpdateReleaseQualifierRequest? request, }) async {
+  Future<Response> updateReleaseQualifierWithHttpInfo(String eventId, String X_SPLATHON_API_TOKEN, { UpdateReleaseQualifierRequest? request, }) async {
     // ignore: prefer_const_declarations
-    final path = r'/v{eventId}/release-qualifier'
-      .replaceAll('{eventId}', eventId.toString());
+    final path = r'/{eventId}/release-qualifier'
+      .replaceAll('{eventId}', eventId);
 
     // ignore: prefer_final_locals
     Object? postBody = request;
@@ -652,12 +803,12 @@ class AdminApi {
 
   /// Parameters:
   ///
-  /// * [int] eventId (required):
+  /// * [String] eventId (required):
   ///
   /// * [String] X_SPLATHON_API_TOKEN (required):
   ///
   /// * [UpdateReleaseQualifierRequest] request:
-  Future<void> updateReleaseQualifier(int eventId, String X_SPLATHON_API_TOKEN, { UpdateReleaseQualifierRequest? request, }) async {
+  Future<void> updateReleaseQualifier(String eventId, String X_SPLATHON_API_TOKEN, { UpdateReleaseQualifierRequest? request, }) async {
     final response = await updateReleaseQualifierWithHttpInfo(eventId, X_SPLATHON_API_TOKEN,  request: request, );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
@@ -670,15 +821,15 @@ class AdminApi {
   ///
   /// Parameters:
   ///
-  /// * [int] eventId (required):
+  /// * [String] eventId (required):
   ///
   /// * [String] X_SPLATHON_API_TOKEN (required):
   ///
   /// * [Schedule] request (required):
-  Future<Response> updateScheduleWithHttpInfo(int eventId, String X_SPLATHON_API_TOKEN, Schedule request,) async {
+  Future<Response> updateScheduleWithHttpInfo(String eventId, String X_SPLATHON_API_TOKEN, Schedule request,) async {
     // ignore: prefer_const_declarations
-    final path = r'/v{eventId}/schedule'
-      .replaceAll('{eventId}', eventId.toString());
+    final path = r'/{eventId}/schedule'
+      .replaceAll('{eventId}', eventId);
 
     // ignore: prefer_final_locals
     Object? postBody = request;
@@ -707,12 +858,12 @@ class AdminApi {
   ///
   /// Parameters:
   ///
-  /// * [int] eventId (required):
+  /// * [String] eventId (required):
   ///
   /// * [String] X_SPLATHON_API_TOKEN (required):
   ///
   /// * [Schedule] request (required):
-  Future<void> updateSchedule(int eventId, String X_SPLATHON_API_TOKEN, Schedule request,) async {
+  Future<void> updateSchedule(String eventId, String X_SPLATHON_API_TOKEN, Schedule request,) async {
     final response = await updateScheduleWithHttpInfo(eventId, X_SPLATHON_API_TOKEN, request,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
@@ -725,15 +876,15 @@ class AdminApi {
   ///
   /// Parameters:
   ///
-  /// * [int] eventId (required):
+  /// * [String] eventId (required):
   ///
   /// * [String] X_SPLATHON_API_TOKEN (required):
   ///
   /// * [Notice] notice (required):
-  Future<Response> writeNoticeWithHttpInfo(int eventId, String X_SPLATHON_API_TOKEN, Notice notice,) async {
+  Future<Response> writeNoticeWithHttpInfo(String eventId, String X_SPLATHON_API_TOKEN, Notice notice,) async {
     // ignore: prefer_const_declarations
-    final path = r'/v{eventId}/notices'
-      .replaceAll('{eventId}', eventId.toString());
+    final path = r'/{eventId}/notices'
+      .replaceAll('{eventId}', eventId);
 
     // ignore: prefer_final_locals
     Object? postBody = notice;
@@ -762,12 +913,12 @@ class AdminApi {
   ///
   /// Parameters:
   ///
-  /// * [int] eventId (required):
+  /// * [String] eventId (required):
   ///
   /// * [String] X_SPLATHON_API_TOKEN (required):
   ///
   /// * [Notice] notice (required):
-  Future<void> writeNotice(int eventId, String X_SPLATHON_API_TOKEN, Notice notice,) async {
+  Future<void> writeNotice(String eventId, String X_SPLATHON_API_TOKEN, Notice notice,) async {
     final response = await writeNoticeWithHttpInfo(eventId, X_SPLATHON_API_TOKEN, notice,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));

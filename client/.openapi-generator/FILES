@@ -9,6 +9,7 @@ doc/DefaultApi.md
 doc/DeleteQualifierRequest.md
 doc/Error.md
 doc/Event.md
+doc/Events.md
 doc/GetNextMatchResponse.md
 doc/ListNoticesResponse.md
 doc/ListReceptionResponse.md
@@ -65,6 +66,7 @@ lib/model/battle.dart
 lib/model/delete_qualifier_request.dart
 lib/model/error.dart
 lib/model/event.dart
+lib/model/events.dart
 lib/model/get_next_match_response.dart
 lib/model/list_notices_response.dart
 lib/model/list_reception_response.dart
@@ -97,3 +99,4 @@ lib/model/teams.dart
 lib/model/update_reception_request.dart
 lib/model/update_release_qualifier_request.dart
 pubspec.yaml
+test/events_test.dart

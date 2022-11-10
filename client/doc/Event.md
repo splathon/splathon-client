@@ -10,6 +10,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **name** | **String** |  | 
 **numbering** | **int** |  | 
+**heldOnTimestampSec** | **int** | 開催日のタイムスタンプ | [optional] 
 **rules** | [**List<Rule>**](Rule.md) |  | [optional] [default to const []]
 **stages** | [**List<Stage>**](Stage.md) |  | [optional] [default to const []]
 **rooms** | [**List<SupportedRoom>**](SupportedRoom.md) |  | [optional] [default to const []]

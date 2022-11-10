@@ -22,16 +22,16 @@ class ResultApi {
   ///
   /// Parameters:
   ///
-  /// * [int] eventId (required):
+  /// * [String] eventId (required):
   ///
   /// * [int] teamId:
   ///   team id
   ///
   /// * [String] X_SPLATHON_API_TOKEN:
-  Future<Response> getResultWithHttpInfo(int eventId, { int? teamId, String? X_SPLATHON_API_TOKEN, }) async {
+  Future<Response> getResultWithHttpInfo(String eventId, { int? teamId, String? X_SPLATHON_API_TOKEN, }) async {
     // ignore: prefer_const_declarations
-    final path = r'/v{eventId}/results'
-      .replaceAll('{eventId}', eventId.toString());
+    final path = r'/{eventId}/results'
+      .replaceAll('{eventId}', eventId);
 
     // ignore: prefer_final_locals
     Object? postBody;
@@ -66,13 +66,13 @@ class ResultApi {
   ///
   /// Parameters:
   ///
-  /// * [int] eventId (required):
+  /// * [String] eventId (required):
   ///
   /// * [int] teamId:
   ///   team id
   ///
   /// * [String] X_SPLATHON_API_TOKEN:
-  Future<Results?> getResult(int eventId, { int? teamId, String? X_SPLATHON_API_TOKEN, }) async {
+  Future<Results?> getResult(String eventId, { int? teamId, String? X_SPLATHON_API_TOKEN, }) async {
     final response = await getResultWithHttpInfo(eventId,  teamId: teamId, X_SPLATHON_API_TOKEN: X_SPLATHON_API_TOKEN, );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));

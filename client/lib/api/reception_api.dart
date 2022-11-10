@@ -22,16 +22,16 @@ class ReceptionApi {
   ///
   /// Parameters:
   ///
-  /// * [int] eventId (required):
+  /// * [String] eventId (required):
   ///
   /// * [String] splathonReceptionCode (required):
   ///   ReceptionResponse.splathon.code と同じもの(たぶん内部SlackID).
   ///
   /// * [String] X_SPLATHON_API_TOKEN (required):
-  Future<Response> completeReceptionWithHttpInfo(int eventId, String splathonReceptionCode, String X_SPLATHON_API_TOKEN,) async {
+  Future<Response> completeReceptionWithHttpInfo(String eventId, String splathonReceptionCode, String X_SPLATHON_API_TOKEN,) async {
     // ignore: prefer_const_declarations
-    final path = r'/v{eventId}/reception/{splathonReceptionCode}/complete'
-      .replaceAll('{eventId}', eventId.toString())
+    final path = r'/{eventId}/reception/{splathonReceptionCode}/complete'
+      .replaceAll('{eventId}', eventId)
       .replaceAll('{splathonReceptionCode}', splathonReceptionCode);
 
     // ignore: prefer_final_locals
@@ -61,13 +61,13 @@ class ReceptionApi {
   ///
   /// Parameters:
   ///
-  /// * [int] eventId (required):
+  /// * [String] eventId (required):
   ///
   /// * [String] splathonReceptionCode (required):
   ///   ReceptionResponse.splathon.code と同じもの(たぶん内部SlackID).
   ///
   /// * [String] X_SPLATHON_API_TOKEN (required):
-  Future<void> completeReception(int eventId, String splathonReceptionCode, String X_SPLATHON_API_TOKEN,) async {
+  Future<void> completeReception(String eventId, String splathonReceptionCode, String X_SPLATHON_API_TOKEN,) async {
     final response = await completeReceptionWithHttpInfo(eventId, splathonReceptionCode, X_SPLATHON_API_TOKEN,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
@@ -80,16 +80,16 @@ class ReceptionApi {
   ///
   /// Parameters:
   ///
-  /// * [int] eventId (required):
+  /// * [String] eventId (required):
   ///
   /// * [String] splathonReceptionCode (required):
   ///   ReceptionResponse.splathon.code と同じもの(たぶん内部SlackID).
   ///
   /// * [String] X_SPLATHON_API_TOKEN (required):
-  Future<Response> getParticipantsDataForReceptionWithHttpInfo(int eventId, String splathonReceptionCode, String X_SPLATHON_API_TOKEN,) async {
+  Future<Response> getParticipantsDataForReceptionWithHttpInfo(String eventId, String splathonReceptionCode, String X_SPLATHON_API_TOKEN,) async {
     // ignore: prefer_const_declarations
-    final path = r'/v{eventId}/reception/{splathonReceptionCode}'
-      .replaceAll('{eventId}', eventId.toString())
+    final path = r'/{eventId}/reception/{splathonReceptionCode}'
+      .replaceAll('{eventId}', eventId)
       .replaceAll('{splathonReceptionCode}', splathonReceptionCode);
 
     // ignore: prefer_final_locals
@@ -119,13 +119,13 @@ class ReceptionApi {
   ///
   /// Parameters:
   ///
-  /// * [int] eventId (required):
+  /// * [String] eventId (required):
   ///
   /// * [String] splathonReceptionCode (required):
   ///   ReceptionResponse.splathon.code と同じもの(たぶん内部SlackID).
   ///
   /// * [String] X_SPLATHON_API_TOKEN (required):
-  Future<ReceptionPartcipantsDataResponse?> getParticipantsDataForReception(int eventId, String splathonReceptionCode, String X_SPLATHON_API_TOKEN,) async {
+  Future<ReceptionPartcipantsDataResponse?> getParticipantsDataForReception(String eventId, String splathonReceptionCode, String X_SPLATHON_API_TOKEN,) async {
     final response = await getParticipantsDataForReceptionWithHttpInfo(eventId, splathonReceptionCode, X_SPLATHON_API_TOKEN,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
@@ -140,16 +140,16 @@ class ReceptionApi {
     return null;
   }
 
-  /// Performs an HTTP 'GET /v{eventId}/reception' operation and returns the [Response].
+  /// Performs an HTTP 'GET /{eventId}/reception' operation and returns the [Response].
   /// Parameters:
   ///
-  /// * [int] eventId (required):
+  /// * [String] eventId (required):
   ///
   /// * [String] X_SPLATHON_API_TOKEN (required):
-  Future<Response> getReceptionWithHttpInfo(int eventId, String X_SPLATHON_API_TOKEN,) async {
+  Future<Response> getReceptionWithHttpInfo(String eventId, String X_SPLATHON_API_TOKEN,) async {
     // ignore: prefer_const_declarations
-    final path = r'/v{eventId}/reception'
-      .replaceAll('{eventId}', eventId.toString());
+    final path = r'/{eventId}/reception'
+      .replaceAll('{eventId}', eventId);
 
     // ignore: prefer_final_locals
     Object? postBody;
@@ -176,10 +176,10 @@ class ReceptionApi {
 
   /// Parameters:
   ///
-  /// * [int] eventId (required):
+  /// * [String] eventId (required):
   ///
   /// * [String] X_SPLATHON_API_TOKEN (required):
-  Future<ReceptionResponse?> getReception(int eventId, String X_SPLATHON_API_TOKEN,) async {
+  Future<ReceptionResponse?> getReception(String eventId, String X_SPLATHON_API_TOKEN,) async {
     final response = await getReceptionWithHttpInfo(eventId, X_SPLATHON_API_TOKEN,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));

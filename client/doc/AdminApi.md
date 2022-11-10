@@ -5,24 +5,27 @@
 import 'package:openapi/api.dart';
 ```
 
-All URIs are relative to *https://splathon-api-us.appspot.com/splathon*
+All URIs are relative to *https://splathon-api-dev.appspot.com/splathon*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**addTournamentRound**](AdminApi.md#addtournamentround) | **POST** /v{eventId}/tournament/ | 
-[**completeReception**](AdminApi.md#completereception) | **POST** /v{eventId}/reception/{splathonReceptionCode}/complete | 
-[**createNewQualifier**](AdminApi.md#createnewqualifier) | **POST** /v{eventId}/qualifier | 
-[**deleteNotice**](AdminApi.md#deletenotice) | **DELETE** /v{eventId}/notices/{noticeId} | 
-[**deleteQualifier**](AdminApi.md#deletequalifier) | **POST** /v{eventId}/delete-qualifier | 
-[**getParticipantsDataForReception**](AdminApi.md#getparticipantsdataforreception) | **GET** /v{eventId}/reception/{splathonReceptionCode} | 
-[**getReleaseQualifier**](AdminApi.md#getreleasequalifier) | **GET** /v{eventId}/release-qualifier | 
-[**listReception**](AdminApi.md#listreception) | **GET** /v{eventId}/list-reception | 
-[**updateBattle**](AdminApi.md#updatebattle) | **POST** /v{eventId}/matches/{matchId} | 
-[**updateMatch**](AdminApi.md#updatematch) | **PUT** /v{eventId}/matches/{matchId} | 
-[**updateReception**](AdminApi.md#updatereception) | **POST** /v{eventId}/update-reception | 
-[**updateReleaseQualifier**](AdminApi.md#updatereleasequalifier) | **PUT** /v{eventId}/release-qualifier | 
-[**updateSchedule**](AdminApi.md#updateschedule) | **PUT** /v{eventId}/schedule | 
-[**writeNotice**](AdminApi.md#writenotice) | **POST** /v{eventId}/notices | 
+[**addTournamentRound**](AdminApi.md#addtournamentround) | **POST** /{eventId}/tournament/ | 
+[**completeReception**](AdminApi.md#completereception) | **POST** /{eventId}/reception/{splathonReceptionCode}/complete | 
+[**createEvent**](AdminApi.md#createevent) | **POST** /create-event | 
+[**createNewQualifier**](AdminApi.md#createnewqualifier) | **POST** /{eventId}/qualifier | 
+[**deleteEvent**](AdminApi.md#deleteevent) | **DELETE** /{eventId}/event | 
+[**deleteNotice**](AdminApi.md#deletenotice) | **DELETE** /{eventId}/notices/{noticeId} | 
+[**deleteQualifier**](AdminApi.md#deletequalifier) | **POST** /{eventId}/delete-qualifier | 
+[**getParticipantsDataForReception**](AdminApi.md#getparticipantsdataforreception) | **GET** /{eventId}/reception/{splathonReceptionCode} | 
+[**getReleaseQualifier**](AdminApi.md#getreleasequalifier) | **GET** /{eventId}/release-qualifier | 
+[**listReception**](AdminApi.md#listreception) | **GET** /{eventId}/list-reception | 
+[**updateBattle**](AdminApi.md#updatebattle) | **POST** /{eventId}/matches/{matchId} | 
+[**updateEvent**](AdminApi.md#updateevent) | **PUT** /{eventId}/event | 
+[**updateMatch**](AdminApi.md#updatematch) | **PUT** /{eventId}/matches/{matchId} | 
+[**updateReception**](AdminApi.md#updatereception) | **POST** /{eventId}/update-reception | 
+[**updateReleaseQualifier**](AdminApi.md#updatereleasequalifier) | **PUT** /{eventId}/release-qualifier | 
+[**updateSchedule**](AdminApi.md#updateschedule) | **PUT** /{eventId}/schedule | 
+[**writeNotice**](AdminApi.md#writenotice) | **POST** /{eventId}/notices | 
 
 
 # **addTournamentRound**
@@ -35,7 +38,7 @@ Method | HTTP request | Description
 import 'package:openapi/api.dart';
 
 final api_instance = AdminApi();
-final eventId = 789; // int | 
+final eventId = eventId_example; // String | 
 final X_SPLATHON_API_TOKEN = X_SPLATHON_API_TOKEN_example; // String | 
 final request = AddTournamentRoundRequest(); // AddTournamentRoundRequest | 
 
@@ -50,7 +53,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **eventId** | **int**|  | 
+ **eventId** | **String**|  | 
  **X_SPLATHON_API_TOKEN** | **String**|  | 
  **request** | [**AddTournamentRoundRequest**](AddTournamentRoundRequest.md)|  | 
 
@@ -81,7 +84,7 @@ No authorization required
 import 'package:openapi/api.dart';
 
 final api_instance = AdminApi();
-final eventId = 789; // int | 
+final eventId = eventId_example; // String | 
 final splathonReceptionCode = splathonReceptionCode_example; // String | ReceptionResponse.splathon.code と同じもの(たぶん内部SlackID).
 final X_SPLATHON_API_TOKEN = X_SPLATHON_API_TOKEN_example; // String | 
 
@@ -96,7 +99,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **eventId** | **int**|  | 
+ **eventId** | **String**|  | 
  **splathonReceptionCode** | **String**| ReceptionResponse.splathon.code と同じもの(たぶん内部SlackID). | 
  **X_SPLATHON_API_TOKEN** | **String**|  | 
 
@@ -115,6 +118,50 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **createEvent**
+> createEvent(X_SPLATHON_API_TOKEN, request)
+
+
+
+Create event data
+
+### Example
+```dart
+import 'package:openapi/api.dart';
+
+final api_instance = AdminApi();
+final X_SPLATHON_API_TOKEN = X_SPLATHON_API_TOKEN_example; // String | 
+final request = Event(); // Event | 
+
+try {
+    api_instance.createEvent(X_SPLATHON_API_TOKEN, request);
+} catch (e) {
+    print('Exception when calling AdminApi->createEvent: $e\n');
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **X_SPLATHON_API_TOKEN** | **String**|  | 
+ **request** | [**Event**](Event.md)|  | 
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json; charset=utf-8
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **createNewQualifier**
 > createNewQualifier(eventId, X_SPLATHON_API_TOKEN)
 
@@ -125,7 +172,7 @@ No authorization required
 import 'package:openapi/api.dart';
 
 final api_instance = AdminApi();
-final eventId = 789; // int | 
+final eventId = eventId_example; // String | 
 final X_SPLATHON_API_TOKEN = X_SPLATHON_API_TOKEN_example; // String | 
 
 try {
@@ -139,7 +186,49 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **eventId** | **int**|  | 
+ **eventId** | **String**|  | 
+ **X_SPLATHON_API_TOKEN** | **String**|  | 
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json; charset=utf-8
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **deleteEvent**
+> deleteEvent(eventId, X_SPLATHON_API_TOKEN)
+
+
+
+### Example
+```dart
+import 'package:openapi/api.dart';
+
+final api_instance = AdminApi();
+final eventId = eventId_example; // String | 
+final X_SPLATHON_API_TOKEN = X_SPLATHON_API_TOKEN_example; // String | 
+
+try {
+    api_instance.deleteEvent(eventId, X_SPLATHON_API_TOKEN);
+} catch (e) {
+    print('Exception when calling AdminApi->deleteEvent: $e\n');
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **eventId** | **String**|  | 
  **X_SPLATHON_API_TOKEN** | **String**|  | 
 
 ### Return type
@@ -167,7 +256,7 @@ No authorization required
 import 'package:openapi/api.dart';
 
 final api_instance = AdminApi();
-final eventId = 789; // int | 
+final eventId = eventId_example; // String | 
 final noticeId = 789; // int | 
 final X_SPLATHON_API_TOKEN = X_SPLATHON_API_TOKEN_example; // String | 
 
@@ -182,7 +271,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **eventId** | **int**|  | 
+ **eventId** | **String**|  | 
  **noticeId** | **int**|  | 
  **X_SPLATHON_API_TOKEN** | **String**|  | 
 
@@ -211,7 +300,7 @@ No authorization required
 import 'package:openapi/api.dart';
 
 final api_instance = AdminApi();
-final eventId = 789; // int | 
+final eventId = eventId_example; // String | 
 final X_SPLATHON_API_TOKEN = X_SPLATHON_API_TOKEN_example; // String | 
 final request = DeleteQualifierRequest(); // DeleteQualifierRequest | 
 
@@ -226,7 +315,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **eventId** | **int**|  | 
+ **eventId** | **String**|  | 
  **X_SPLATHON_API_TOKEN** | **String**|  | 
  **request** | [**DeleteQualifierRequest**](DeleteQualifierRequest.md)|  | [optional] 
 
@@ -257,7 +346,7 @@ No authorization required
 import 'package:openapi/api.dart';
 
 final api_instance = AdminApi();
-final eventId = 789; // int | 
+final eventId = eventId_example; // String | 
 final splathonReceptionCode = splathonReceptionCode_example; // String | ReceptionResponse.splathon.code と同じもの(たぶん内部SlackID).
 final X_SPLATHON_API_TOKEN = X_SPLATHON_API_TOKEN_example; // String | 
 
@@ -273,7 +362,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **eventId** | **int**|  | 
+ **eventId** | **String**|  | 
  **splathonReceptionCode** | **String**| ReceptionResponse.splathon.code と同じもの(たぶん内部SlackID). | 
  **X_SPLATHON_API_TOKEN** | **String**|  | 
 
@@ -302,7 +391,7 @@ No authorization required
 import 'package:openapi/api.dart';
 
 final api_instance = AdminApi();
-final eventId = 789; // int | 
+final eventId = eventId_example; // String | 
 final X_SPLATHON_API_TOKEN = X_SPLATHON_API_TOKEN_example; // String | 
 
 try {
@@ -317,7 +406,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **eventId** | **int**|  | 
+ **eventId** | **String**|  | 
  **X_SPLATHON_API_TOKEN** | **String**|  | 
 
 ### Return type
@@ -345,7 +434,7 @@ No authorization required
 import 'package:openapi/api.dart';
 
 final api_instance = AdminApi();
-final eventId = 789; // int | 
+final eventId = eventId_example; // String | 
 final X_SPLATHON_API_TOKEN = X_SPLATHON_API_TOKEN_example; // String | 
 
 try {
@@ -360,7 +449,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **eventId** | **int**|  | 
+ **eventId** | **String**|  | 
  **X_SPLATHON_API_TOKEN** | **String**|  | 
 
 ### Return type
@@ -390,7 +479,7 @@ Update a battle data in the match.
 import 'package:openapi/api.dart';
 
 final api_instance = AdminApi();
-final eventId = 789; // int | 
+final eventId = eventId_example; // String | 
 final matchId = 789; // int | match id
 final X_SPLATHON_API_TOKEN = X_SPLATHON_API_TOKEN_example; // String | 
 final battle = Battle(); // Battle | 
@@ -406,10 +495,56 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **eventId** | **int**|  | 
+ **eventId** | **String**|  | 
  **matchId** | **int**| match id | 
  **X_SPLATHON_API_TOKEN** | **String**|  | 
  **battle** | [**Battle**](Battle.md)|  | 
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json; charset=utf-8
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **updateEvent**
+> updateEvent(eventId, X_SPLATHON_API_TOKEN, request)
+
+
+
+Update event data
+
+### Example
+```dart
+import 'package:openapi/api.dart';
+
+final api_instance = AdminApi();
+final eventId = eventId_example; // String | 
+final X_SPLATHON_API_TOKEN = X_SPLATHON_API_TOKEN_example; // String | 
+final request = Event(); // Event | 
+
+try {
+    api_instance.updateEvent(eventId, X_SPLATHON_API_TOKEN, request);
+} catch (e) {
+    print('Exception when calling AdminApi->updateEvent: $e\n');
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **eventId** | **String**|  | 
+ **X_SPLATHON_API_TOKEN** | **String**|  | 
+ **request** | [**Event**](Event.md)|  | 
 
 ### Return type
 
@@ -436,7 +571,7 @@ No authorization required
 import 'package:openapi/api.dart';
 
 final api_instance = AdminApi();
-final eventId = 789; // int | 
+final eventId = eventId_example; // String | 
 final matchId = 789; // int | match id
 final X_SPLATHON_API_TOKEN = X_SPLATHON_API_TOKEN_example; // String | 
 final match = NewMatchRequest(); // NewMatchRequest | 
@@ -452,7 +587,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **eventId** | **int**|  | 
+ **eventId** | **String**|  | 
  **matchId** | **int**| match id | 
  **X_SPLATHON_API_TOKEN** | **String**|  | 
  **match** | [**NewMatchRequest**](NewMatchRequest.md)|  | 
@@ -482,7 +617,7 @@ No authorization required
 import 'package:openapi/api.dart';
 
 final api_instance = AdminApi();
-final eventId = 789; // int | 
+final eventId = eventId_example; // String | 
 final X_SPLATHON_API_TOKEN = X_SPLATHON_API_TOKEN_example; // String | 
 final request = UpdateReceptionRequest(); // UpdateReceptionRequest | 
 
@@ -497,7 +632,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **eventId** | **int**|  | 
+ **eventId** | **String**|  | 
  **X_SPLATHON_API_TOKEN** | **String**|  | 
  **request** | [**UpdateReceptionRequest**](UpdateReceptionRequest.md)|  | 
 
@@ -526,7 +661,7 @@ No authorization required
 import 'package:openapi/api.dart';
 
 final api_instance = AdminApi();
-final eventId = 789; // int | 
+final eventId = eventId_example; // String | 
 final X_SPLATHON_API_TOKEN = X_SPLATHON_API_TOKEN_example; // String | 
 final request = UpdateReleaseQualifierRequest(); // UpdateReleaseQualifierRequest | 
 
@@ -541,7 +676,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **eventId** | **int**|  | 
+ **eventId** | **String**|  | 
  **X_SPLATHON_API_TOKEN** | **String**|  | 
  **request** | [**UpdateReleaseQualifierRequest**](UpdateReleaseQualifierRequest.md)|  | [optional] 
 
@@ -572,7 +707,7 @@ Update event schedule data
 import 'package:openapi/api.dart';
 
 final api_instance = AdminApi();
-final eventId = 789; // int | 
+final eventId = eventId_example; // String | 
 final X_SPLATHON_API_TOKEN = X_SPLATHON_API_TOKEN_example; // String | 
 final request = Schedule(); // Schedule | 
 
@@ -587,7 +722,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **eventId** | **int**|  | 
+ **eventId** | **String**|  | 
  **X_SPLATHON_API_TOKEN** | **String**|  | 
  **request** | [**Schedule**](Schedule.md)|  | 
 
@@ -618,7 +753,7 @@ Insert or update notices. Update if Notice.id is specified.
 import 'package:openapi/api.dart';
 
 final api_instance = AdminApi();
-final eventId = 789; // int | 
+final eventId = eventId_example; // String | 
 final X_SPLATHON_API_TOKEN = X_SPLATHON_API_TOKEN_example; // String | 
 final notice = Notice(); // Notice | 
 
@@ -633,7 +768,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **eventId** | **int**|  | 
+ **eventId** | **String**|  | 
  **X_SPLATHON_API_TOKEN** | **String**|  | 
  **notice** | [**Notice**](Notice.md)|  | 
 

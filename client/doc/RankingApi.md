@@ -5,11 +5,11 @@
 import 'package:openapi/api.dart';
 ```
 
-All URIs are relative to *https://splathon-api-us.appspot.com/splathon*
+All URIs are relative to *https://splathon-api-dev.appspot.com/splathon*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**getRanking**](RankingApi.md#getranking) | **GET** /v{eventId}/ranking | 
+[**getRanking**](RankingApi.md#getranking) | **GET** /{eventId}/ranking | 
 
 
 # **getRanking**
@@ -24,7 +24,7 @@ Method | HTTP request | Description
 import 'package:openapi/api.dart';
 
 final api_instance = RankingApi();
-final eventId = 789; // int | 
+final eventId = eventId_example; // String | 
 final latest = true; // bool | Return latest ranking if true.
 
 try {
@@ -39,7 +39,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **eventId** | **int**|  | 
+ **eventId** | **String**|  | 
  **latest** | **bool**| Return latest ranking if true. | [optional] 
 
 ### Return type

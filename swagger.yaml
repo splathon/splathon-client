@@ -3,7 +3,9 @@ info:
   description: "Splathonで使うAPI"
   version: "1.0.0"
   title: "SplathonAPI"
-host: "splathon-api-us.appspot.com"
+host: "splathon-api-dev.appspot.com"
+# PROD
+# host: "splathon-api.appspot.com"
 basePath: "/splathon/"
 schemes:
   - "https"
@@ -24,15 +26,14 @@ tags:
   description: "受付機能"
 
 paths:
-  "/v{eventId}/login":
+  "/{eventId}/login":
     post:
       operationId: "login"
       parameters:
       - name: eventId
         in: path
         required: true
-        type: integer
-        format: int64
+        type: string
       - name: request
         in: body
         required: true
@@ -48,7 +49,31 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
-  "/v{eventId}/event":
+  "/create-event":
+    post:
+      tags:
+      - "admin"
+      description: "Create event data"
+      operationId: "createEvent"
+      parameters:
+      - name: "X-SPLATHON-API-TOKEN"
+        in: header
+        type: string
+        required: true
+      - name: request
+        in: body
+        required: true
+        schema:
+          $ref: "#/definitions/Event"
+      responses:
+        200:
+          description: Success
+        default:
+          description: Generic error
+          schema:
+            $ref: "#/definitions/Error"
+
+  "/{eventId}/event":
     get:
       description: "Return event data"
       operationId: "getEvent"
@@ -56,8 +81,7 @@ paths:
       - name: eventId
         in: path
         required: true
-        type: integer
-        format: int64
+        type: string
       responses:
         200:
           description: Success
@@ -67,8 +91,71 @@ paths:
           description: Generic error
           schema:
             $ref: "#/definitions/Error"
+    put:
+      tags:
+      - "admin"
+      description: "Update event data"
+      operationId: "updateEvent"
+      parameters:
+      - name: eventId
+        in: path
+        required: true
+        type: string
+        format: int64
+      - name: "X-SPLATHON-API-TOKEN"
+        in: header
+        type: string
+        required: true
+      - name: request
+        in: body
+        required: true
+        schema:
+          $ref: "#/definitions/Event"
+      responses:
+        200:
+          description: Success
+        default:
+          description: Generic error
+          schema:
+            $ref: "#/definitions/Error"
 
-  "/v{eventId}/next-match":
+    delete:
+      tags:
+      - "admin"
+      operationId: "deleteEvent"
+      parameters:
+      - name: eventId
+        in: path
+        required: true
+        type: string
+        format: int64
+      - name: "X-SPLATHON-API-TOKEN"
+        in: header
+        type: string
+        required: true
+      responses:
+        200:
+          description: Success
+        default:
+          description: Generic error
+          schema:
+            $ref: "#/definitions/Error"
+
+  "/events":
+    get:
+      description: "Return event list data"
+      operationId: "listEvents"
+      responses:
+        200:
+          description: Success
+          schema:
+            $ref: "#/definitions/Events"
+        default:
+          description: Generic error
+          schema:
+            $ref: "#/definitions/Error"
+
+  "/{eventId}/next-match":
     get:
       tags:
       - "match"
@@ -81,8 +168,7 @@ paths:
       - name: eventId
         in: path
         required: true
-        type: integer
-        format: int64
+        type: string
       - name: "X-SPLATHON-API-TOKEN"
         in: header
         type: string
@@ -102,7 +188,7 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
-  "/v{eventId}/notices":
+  "/{eventId}/notices":
     get:
       description: "Return notices"
       operationId: "listNotices"
@@ -110,8 +196,7 @@ paths:
       - name: eventId
         in: path
         required: true
-        type: integer
-        format: int64
+        type: string
       - name: "X-SPLATHON-API-TOKEN"
         in: header
         type: string
@@ -135,8 +220,7 @@ paths:
       - name: eventId
         in: path
         required: true
-        type: integer
-        format: int64
+        type: string
       - name: "X-SPLATHON-API-TOKEN"
         in: header
         type: string
@@ -154,7 +238,7 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
-  "/v{eventId}/notices/{noticeId}":
+  "/{eventId}/notices/{noticeId}":
     delete:
       tags:
       - "admin"
@@ -163,7 +247,7 @@ paths:
       - name: eventId
         in: path
         required: true
-        type: integer
+        type: string
         format: int64
       - name: noticeId
         in: path
@@ -182,7 +266,7 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
-  "/v{eventId}/results":
+  "/{eventId}/results":
     get:
       tags:
       - "result"
@@ -192,8 +276,7 @@ paths:
       - name: eventId
         in: path
         required: true
-        type: integer
-        format: int64
+        type: string
       - name: team_id
         in: query
         description: team id
@@ -212,7 +295,7 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
-  "/v{eventId}/matches/{matchId}":
+  "/{eventId}/matches/{matchId}":
     get:
       tags:
       - "match"
@@ -222,8 +305,7 @@ paths:
       - name: eventId
         in: path
         required: true
-        type: integer
-        format: int64
+        type: string
       - name: matchId
         in: path
         required: true
@@ -250,8 +332,7 @@ paths:
       - name: eventId
         in: path
         required: true
-        type: integer
-        format: int64
+        type: string
       - name: matchId
         in: path
         required: true
@@ -283,8 +364,7 @@ paths:
       - name: eventId
         in: path
         required: true
-        type: integer
-        format: int64
+        type: string
       - name: matchId
         in: path
         required: true
@@ -308,7 +388,7 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
-  "/v{eventId}/ranking":
+  "/{eventId}/ranking":
     get:
       tags:
       - "ranking"
@@ -318,8 +398,7 @@ paths:
       - name: eventId
         in: path
         required: true
-        type: integer
-        format: int64
+        type: string
       - name: latest
         in: query
         description: "Return latest ranking if true."
@@ -334,7 +413,7 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
-  "/v{eventId}/teams":
+  "/{eventId}/teams":
     get:
       description: "Return team list"
       operationId: "listTeams"
@@ -342,8 +421,7 @@ paths:
       - name: eventId
         in: path
         required: true
-        type: integer
-        format: int64
+        type: string
       responses:
         200:
           description: Success
@@ -354,7 +432,7 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
-  "/v{eventId}/teams/{team_id}":
+  "/{eventId}/teams/{team_id}":
     get:
       description: "Return detail team data"
       operationId: "getTeamDetail"
@@ -362,8 +440,7 @@ paths:
       - name: eventId
         in: path
         required: true
-        type: integer
-        format: int64
+        type: string
       - name: team_id
         in: path
         required: true
@@ -380,7 +457,7 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
-  "/v{eventId}/reception":
+  "/{eventId}/reception":
     get:
       tags:
       - "reception"
@@ -389,8 +466,7 @@ paths:
       - name: eventId
         in: path
         required: true
-        type: integer
-        format: int64
+        type: string
       - name: "X-SPLATHON-API-TOKEN"
         in: header
         type: string
@@ -405,7 +481,7 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
-  "/v{eventId}/reception/{splathonReceptionCode}":
+  "/{eventId}/reception/{splathonReceptionCode}":
     get:
       operationId: "getParticipantsDataForReception"
       description: "参加者情報取得API"
@@ -416,8 +492,7 @@ paths:
       - name: eventId
         in: path
         required: true
-        type: integer
-        format: int64
+        type: string
       - name: splathonReceptionCode
         description: "ReceptionResponse.splathon.code と同じもの(たぶん内部SlackID)."
         in: path
@@ -437,7 +512,7 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
-  "/v{eventId}/reception/{splathonReceptionCode}/complete":
+  "/{eventId}/reception/{splathonReceptionCode}/complete":
     post:
       operationId: "completeReception"
       description: "参加登録API"
@@ -448,8 +523,7 @@ paths:
       - name: eventId
         in: path
         required: true
-        type: integer
-        format: int64
+        type: string
       - name: splathonReceptionCode
         description: "ReceptionResponse.splathon.code と同じもの(たぶん内部SlackID)."
         in: path
@@ -467,7 +541,7 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
-  "/v{eventId}/list-reception":
+  "/{eventId}/list-reception":
     get:
       operationId: "listReception"
       tags:
@@ -476,8 +550,7 @@ paths:
       - name: eventId
         in: path
         required: true
-        type: integer
-        format: int64
+        type: string
       - name: "X-SPLATHON-API-TOKEN"
         in: header
         type: string
@@ -492,7 +565,7 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
-  "/v{eventId}/update-reception":
+  "/{eventId}/update-reception":
     post:
       operationId: "updateReception"
       tags:
@@ -501,8 +574,7 @@ paths:
       - name: eventId
         in: path
         required: true
-        type: integer
-        format: int64
+        type: string
       - name: "X-SPLATHON-API-TOKEN"
         in: header
         type: string
@@ -520,7 +592,7 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
-  "/v{eventId}/tournament/":
+  "/{eventId}/tournament/":
     post:
       operationId: "addTournamentRound"
       tags:
@@ -529,8 +601,7 @@ paths:
       - name: eventId
         in: path
         required: true
-        type: integer
-        format: int64
+        type: string
       - name: "X-SPLATHON-API-TOKEN"
         in: header
         type: string
@@ -548,7 +619,7 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
-  "/v{eventId}/qualifier":
+  "/{eventId}/qualifier":
     post:
       operationId: "CreateNewQualifier"
       tags:
@@ -557,8 +628,7 @@ paths:
       - name: eventId
         in: path
         required: true
-        type: integer
-        format: int64
+        type: string
       - name: "X-SPLATHON-API-TOKEN"
         in: header
         type: string
@@ -571,7 +641,7 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
-  "/v{eventId}/delete-qualifier":
+  "/{eventId}/delete-qualifier":
     post:
       operationId: "DeleteQualifier"
       tags:
@@ -580,8 +650,7 @@ paths:
       - name: eventId
         in: path
         required: true
-        type: integer
-        format: int64
+        type: string
       - name: "X-SPLATHON-API-TOKEN"
         in: header
         type: string
@@ -598,7 +667,7 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
-  "/v{eventId}/release-qualifier":
+  "/{eventId}/release-qualifier":
     get:
       operationId: "getReleaseQualifier"
       tags:
@@ -607,8 +676,7 @@ paths:
       - name: eventId
         in: path
         required: true
-        type: integer
-        format: int64
+        type: string
       - name: "X-SPLATHON-API-TOKEN"
         in: header
         type: string
@@ -632,8 +700,7 @@ paths:
       - name: eventId
         in: path
         required: true
-        type: integer
-        format: int64
+        type: string
       - name: "X-SPLATHON-API-TOKEN"
         in: header
         type: string
@@ -650,7 +717,7 @@ paths:
           schema:
             $ref: "#/definitions/Error"
 
-  "/v{eventId}/schedule":
+  "/{eventId}/schedule":
     get:
       description: "Return event schedule data"
       operationId: "getSchedule"
@@ -658,8 +725,7 @@ paths:
       - name: eventId
         in: path
         required: true
-        type: integer
-        format: int64
+        type: string
       responses:
         200:
           description: Success
@@ -679,8 +745,7 @@ paths:
       - name: eventId
         in: path
         required: true
-        type: integer
-        format: int64
+        type: string
       - name: "X-SPLATHON-API-TOKEN"
         in: header
         type: string
@@ -1052,6 +1117,10 @@ definitions:
       numbering:
         type: integer
         format: int32
+      held_on_timestamp_sec:
+        description: "開催日のタイムスタンプ"
+        type: integer
+        format: int64
       rules:
         type: array
         items:
@@ -1064,6 +1133,14 @@ definitions:
         type: array
         items:
           $ref: "#/definitions/SupportedRoom"
+
+  Events:
+    type: object
+    properties:
+      events:
+        type: array
+        items:
+          $ref: "#/definitions/Event"
 
   Rule:
     type: object

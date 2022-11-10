@@ -22,14 +22,14 @@ class MatchApi {
   ///
   /// Parameters:
   ///
-  /// * [int] eventId (required):
+  /// * [String] eventId (required):
   ///
   /// * [int] matchId (required):
   ///   match id
-  Future<Response> getMatchWithHttpInfo(int eventId, int matchId,) async {
+  Future<Response> getMatchWithHttpInfo(String eventId, int matchId,) async {
     // ignore: prefer_const_declarations
-    final path = r'/v{eventId}/matches/{matchId}'
-      .replaceAll('{eventId}', eventId.toString())
+    final path = r'/{eventId}/matches/{matchId}'
+      .replaceAll('{eventId}', eventId)
       .replaceAll('{matchId}', matchId.toString());
 
     // ignore: prefer_final_locals
@@ -57,11 +57,11 @@ class MatchApi {
   ///
   /// Parameters:
   ///
-  /// * [int] eventId (required):
+  /// * [String] eventId (required):
   ///
   /// * [int] matchId (required):
   ///   match id
-  Future<Match?> getMatch(int eventId, int matchId,) async {
+  Future<Match?> getMatch(String eventId, int matchId,) async {
     final response = await getMatchWithHttpInfo(eventId, matchId,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
@@ -82,16 +82,16 @@ class MatchApi {
   ///
   /// Parameters:
   ///
-  /// * [int] eventId (required):
+  /// * [String] eventId (required):
   ///
   /// * [String] X_SPLATHON_API_TOKEN (required):
   ///
   /// * [int] teamId:
   ///   team id
-  Future<Response> getNextMatchWithHttpInfo(int eventId, String X_SPLATHON_API_TOKEN, { int? teamId, }) async {
+  Future<Response> getNextMatchWithHttpInfo(String eventId, String X_SPLATHON_API_TOKEN, { int? teamId, }) async {
     // ignore: prefer_const_declarations
-    final path = r'/v{eventId}/next-match'
-      .replaceAll('{eventId}', eventId.toString());
+    final path = r'/{eventId}/next-match'
+      .replaceAll('{eventId}', eventId);
 
     // ignore: prefer_final_locals
     Object? postBody;
@@ -124,13 +124,13 @@ class MatchApi {
   ///
   /// Parameters:
   ///
-  /// * [int] eventId (required):
+  /// * [String] eventId (required):
   ///
   /// * [String] X_SPLATHON_API_TOKEN (required):
   ///
   /// * [int] teamId:
   ///   team id
-  Future<GetNextMatchResponse?> getNextMatch(int eventId, String X_SPLATHON_API_TOKEN, { int? teamId, }) async {
+  Future<GetNextMatchResponse?> getNextMatch(String eventId, String X_SPLATHON_API_TOKEN, { int? teamId, }) async {
     final response = await getNextMatchWithHttpInfo(eventId, X_SPLATHON_API_TOKEN,  teamId: teamId, );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
@@ -151,7 +151,7 @@ class MatchApi {
   ///
   /// Parameters:
   ///
-  /// * [int] eventId (required):
+  /// * [String] eventId (required):
   ///
   /// * [int] matchId (required):
   ///   match id
@@ -159,10 +159,10 @@ class MatchApi {
   /// * [String] X_SPLATHON_API_TOKEN (required):
   ///
   /// * [Battle] battle (required):
-  Future<Response> updateBattleWithHttpInfo(int eventId, int matchId, String X_SPLATHON_API_TOKEN, Battle battle,) async {
+  Future<Response> updateBattleWithHttpInfo(String eventId, int matchId, String X_SPLATHON_API_TOKEN, Battle battle,) async {
     // ignore: prefer_const_declarations
-    final path = r'/v{eventId}/matches/{matchId}'
-      .replaceAll('{eventId}', eventId.toString())
+    final path = r'/{eventId}/matches/{matchId}'
+      .replaceAll('{eventId}', eventId)
       .replaceAll('{matchId}', matchId.toString());
 
     // ignore: prefer_final_locals
@@ -192,7 +192,7 @@ class MatchApi {
   ///
   /// Parameters:
   ///
-  /// * [int] eventId (required):
+  /// * [String] eventId (required):
   ///
   /// * [int] matchId (required):
   ///   match id
@@ -200,7 +200,7 @@ class MatchApi {
   /// * [String] X_SPLATHON_API_TOKEN (required):
   ///
   /// * [Battle] battle (required):
-  Future<void> updateBattle(int eventId, int matchId, String X_SPLATHON_API_TOKEN, Battle battle,) async {
+  Future<void> updateBattle(String eventId, int matchId, String X_SPLATHON_API_TOKEN, Battle battle,) async {
     final response = await updateBattleWithHttpInfo(eventId, matchId, X_SPLATHON_API_TOKEN, battle,);
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));

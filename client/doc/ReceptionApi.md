@@ -5,13 +5,13 @@
 import 'package:openapi/api.dart';
 ```
 
-All URIs are relative to *https://splathon-api-us.appspot.com/splathon*
+All URIs are relative to *https://splathon-api-dev.appspot.com/splathon*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**completeReception**](ReceptionApi.md#completereception) | **POST** /v{eventId}/reception/{splathonReceptionCode}/complete | 
-[**getParticipantsDataForReception**](ReceptionApi.md#getparticipantsdataforreception) | **GET** /v{eventId}/reception/{splathonReceptionCode} | 
-[**getReception**](ReceptionApi.md#getreception) | **GET** /v{eventId}/reception | 
+[**completeReception**](ReceptionApi.md#completereception) | **POST** /{eventId}/reception/{splathonReceptionCode}/complete | 
+[**getParticipantsDataForReception**](ReceptionApi.md#getparticipantsdataforreception) | **GET** /{eventId}/reception/{splathonReceptionCode} | 
+[**getReception**](ReceptionApi.md#getreception) | **GET** /{eventId}/reception | 
 
 
 # **completeReception**
@@ -26,7 +26,7 @@ Method | HTTP request | Description
 import 'package:openapi/api.dart';
 
 final api_instance = ReceptionApi();
-final eventId = 789; // int | 
+final eventId = eventId_example; // String | 
 final splathonReceptionCode = splathonReceptionCode_example; // String | ReceptionResponse.splathon.code と同じもの(たぶん内部SlackID).
 final X_SPLATHON_API_TOKEN = X_SPLATHON_API_TOKEN_example; // String | 
 
@@ -41,7 +41,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **eventId** | **int**|  | 
+ **eventId** | **String**|  | 
  **splathonReceptionCode** | **String**| ReceptionResponse.splathon.code と同じもの(たぶん内部SlackID). | 
  **X_SPLATHON_API_TOKEN** | **String**|  | 
 
@@ -72,7 +72,7 @@ No authorization required
 import 'package:openapi/api.dart';
 
 final api_instance = ReceptionApi();
-final eventId = 789; // int | 
+final eventId = eventId_example; // String | 
 final splathonReceptionCode = splathonReceptionCode_example; // String | ReceptionResponse.splathon.code と同じもの(たぶん内部SlackID).
 final X_SPLATHON_API_TOKEN = X_SPLATHON_API_TOKEN_example; // String | 
 
@@ -88,7 +88,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **eventId** | **int**|  | 
+ **eventId** | **String**|  | 
  **splathonReceptionCode** | **String**| ReceptionResponse.splathon.code と同じもの(たぶん内部SlackID). | 
  **X_SPLATHON_API_TOKEN** | **String**|  | 
 
@@ -117,7 +117,7 @@ No authorization required
 import 'package:openapi/api.dart';
 
 final api_instance = ReceptionApi();
-final eventId = 789; // int | 
+final eventId = eventId_example; // String | 
 final X_SPLATHON_API_TOKEN = X_SPLATHON_API_TOKEN_example; // String | 
 
 try {
@@ -132,7 +132,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **eventId** | **int**|  | 
+ **eventId** | **String**|  | 
  **X_SPLATHON_API_TOKEN** | **String**|  | 
 
 ### Return type

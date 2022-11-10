@@ -5,16 +5,17 @@
 import 'package:openapi/api.dart';
 ```
 
-All URIs are relative to *https://splathon-api-us.appspot.com/splathon*
+All URIs are relative to *https://splathon-api-dev.appspot.com/splathon*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**getEvent**](DefaultApi.md#getevent) | **GET** /v{eventId}/event | 
-[**getSchedule**](DefaultApi.md#getschedule) | **GET** /v{eventId}/schedule | 
-[**getTeamDetail**](DefaultApi.md#getteamdetail) | **GET** /v{eventId}/teams/{team_id} | 
-[**listNotices**](DefaultApi.md#listnotices) | **GET** /v{eventId}/notices | 
-[**listTeams**](DefaultApi.md#listteams) | **GET** /v{eventId}/teams | 
-[**login**](DefaultApi.md#login) | **POST** /v{eventId}/login | 
+[**getEvent**](DefaultApi.md#getevent) | **GET** /{eventId}/event | 
+[**getSchedule**](DefaultApi.md#getschedule) | **GET** /{eventId}/schedule | 
+[**getTeamDetail**](DefaultApi.md#getteamdetail) | **GET** /{eventId}/teams/{team_id} | 
+[**listEvents**](DefaultApi.md#listevents) | **GET** /events | 
+[**listNotices**](DefaultApi.md#listnotices) | **GET** /{eventId}/notices | 
+[**listTeams**](DefaultApi.md#listteams) | **GET** /{eventId}/teams | 
+[**login**](DefaultApi.md#login) | **POST** /{eventId}/login | 
 
 
 # **getEvent**
@@ -29,7 +30,7 @@ Return event data
 import 'package:openapi/api.dart';
 
 final api_instance = DefaultApi();
-final eventId = 789; // int | 
+final eventId = eventId_example; // String | 
 
 try {
     final result = api_instance.getEvent(eventId);
@@ -43,7 +44,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **eventId** | **int**|  | 
+ **eventId** | **String**|  | 
 
 ### Return type
 
@@ -72,7 +73,7 @@ Return event schedule data
 import 'package:openapi/api.dart';
 
 final api_instance = DefaultApi();
-final eventId = 789; // int | 
+final eventId = eventId_example; // String | 
 
 try {
     final result = api_instance.getSchedule(eventId);
@@ -86,7 +87,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **eventId** | **int**|  | 
+ **eventId** | **String**|  | 
 
 ### Return type
 
@@ -115,7 +116,7 @@ Return detail team data
 import 'package:openapi/api.dart';
 
 final api_instance = DefaultApi();
-final eventId = 789; // int | 
+final eventId = eventId_example; // String | 
 final teamId = 789; // int | team id
 
 try {
@@ -130,12 +131,51 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **eventId** | **int**|  | 
+ **eventId** | **String**|  | 
  **teamId** | **int**| team id | 
 
 ### Return type
 
 [**Team**](Team.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json; charset=utf-8
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **listEvents**
+> Events listEvents()
+
+
+
+Return event list data
+
+### Example
+```dart
+import 'package:openapi/api.dart';
+
+final api_instance = DefaultApi();
+
+try {
+    final result = api_instance.listEvents();
+    print(result);
+} catch (e) {
+    print('Exception when calling DefaultApi->listEvents: $e\n');
+}
+```
+
+### Parameters
+This endpoint does not need any parameter.
+
+### Return type
+
+[**Events**](Events.md)
 
 ### Authorization
 
@@ -160,7 +200,7 @@ Return notices
 import 'package:openapi/api.dart';
 
 final api_instance = DefaultApi();
-final eventId = 789; // int | 
+final eventId = eventId_example; // String | 
 final X_SPLATHON_API_TOKEN = X_SPLATHON_API_TOKEN_example; // String | 
 
 try {
@@ -175,7 +215,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **eventId** | **int**|  | 
+ **eventId** | **String**|  | 
  **X_SPLATHON_API_TOKEN** | **String**|  | 
 
 ### Return type
@@ -205,7 +245,7 @@ Return team list
 import 'package:openapi/api.dart';
 
 final api_instance = DefaultApi();
-final eventId = 789; // int | 
+final eventId = eventId_example; // String | 
 
 try {
     final result = api_instance.listTeams(eventId);
@@ -219,7 +259,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **eventId** | **int**|  | 
+ **eventId** | **String**|  | 
 
 ### Return type
 
@@ -246,7 +286,7 @@ No authorization required
 import 'package:openapi/api.dart';
 
 final api_instance = DefaultApi();
-final eventId = 789; // int | 
+final eventId = eventId_example; // String | 
 final request = LoginRequest(); // LoginRequest | 
 
 try {
@@ -261,7 +301,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **eventId** | **int**|  | 
+ **eventId** | **String**|  | 
  **request** | [**LoginRequest**](LoginRequest.md)|  | 
 
 ### Return type

@@ -5,11 +5,11 @@
 import 'package:openapi/api.dart';
 ```
 
-All URIs are relative to *https://splathon-api-us.appspot.com/splathon*
+All URIs are relative to *https://splathon-api-dev.appspot.com/splathon*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**getResult**](ResultApi.md#getresult) | **GET** /v{eventId}/results | 
+[**getResult**](ResultApi.md#getresult) | **GET** /{eventId}/results | 
 
 
 # **getResult**
@@ -24,7 +24,7 @@ Method | HTTP request | Description
 import 'package:openapi/api.dart';
 
 final api_instance = ResultApi();
-final eventId = 789; // int | 
+final eventId = eventId_example; // String | 
 final teamId = 789; // int | team id
 final X_SPLATHON_API_TOKEN = X_SPLATHON_API_TOKEN_example; // String | 
 
@@ -40,7 +40,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **eventId** | **int**|  | 
+ **eventId** | **String**|  | 
  **teamId** | **int**| team id | [optional] 
  **X_SPLATHON_API_TOKEN** | **String**|  | [optional] 
 

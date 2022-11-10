@@ -41,7 +41,7 @@ import 'package:openapi/api.dart';
 
 
 final api_instance = AdminApi();
-final eventId = 789; // int | 
+final eventId = eventId_example; // String | 
 final X_SPLATHON_API_TOKEN = X_SPLATHON_API_TOKEN_example; // String | 
 final request = AddTournamentRoundRequest(); // AddTournamentRoundRequest | 
 
@@ -55,38 +55,42 @@ try {
 
 ## Documentation for API Endpoints
 
-All URIs are relative to *https://splathon-api-us.appspot.com/splathon*
+All URIs are relative to *https://splathon-api-dev.appspot.com/splathon*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
-*AdminApi* | [**addTournamentRound**](doc//AdminApi.md#addtournamentround) | **POST** /v{eventId}/tournament/ | 
-*AdminApi* | [**completeReception**](doc//AdminApi.md#completereception) | **POST** /v{eventId}/reception/{splathonReceptionCode}/complete | 
-*AdminApi* | [**createNewQualifier**](doc//AdminApi.md#createnewqualifier) | **POST** /v{eventId}/qualifier | 
-*AdminApi* | [**deleteNotice**](doc//AdminApi.md#deletenotice) | **DELETE** /v{eventId}/notices/{noticeId} | 
-*AdminApi* | [**deleteQualifier**](doc//AdminApi.md#deletequalifier) | **POST** /v{eventId}/delete-qualifier | 
-*AdminApi* | [**getParticipantsDataForReception**](doc//AdminApi.md#getparticipantsdataforreception) | **GET** /v{eventId}/reception/{splathonReceptionCode} | 
-*AdminApi* | [**getReleaseQualifier**](doc//AdminApi.md#getreleasequalifier) | **GET** /v{eventId}/release-qualifier | 
-*AdminApi* | [**listReception**](doc//AdminApi.md#listreception) | **GET** /v{eventId}/list-reception | 
-*AdminApi* | [**updateBattle**](doc//AdminApi.md#updatebattle) | **POST** /v{eventId}/matches/{matchId} | 
-*AdminApi* | [**updateMatch**](doc//AdminApi.md#updatematch) | **PUT** /v{eventId}/matches/{matchId} | 
-*AdminApi* | [**updateReception**](doc//AdminApi.md#updatereception) | **POST** /v{eventId}/update-reception | 
-*AdminApi* | [**updateReleaseQualifier**](doc//AdminApi.md#updatereleasequalifier) | **PUT** /v{eventId}/release-qualifier | 
-*AdminApi* | [**updateSchedule**](doc//AdminApi.md#updateschedule) | **PUT** /v{eventId}/schedule | 
-*AdminApi* | [**writeNotice**](doc//AdminApi.md#writenotice) | **POST** /v{eventId}/notices | 
-*DefaultApi* | [**getEvent**](doc//DefaultApi.md#getevent) | **GET** /v{eventId}/event | 
-*DefaultApi* | [**getSchedule**](doc//DefaultApi.md#getschedule) | **GET** /v{eventId}/schedule | 
-*DefaultApi* | [**getTeamDetail**](doc//DefaultApi.md#getteamdetail) | **GET** /v{eventId}/teams/{team_id} | 
-*DefaultApi* | [**listNotices**](doc//DefaultApi.md#listnotices) | **GET** /v{eventId}/notices | 
-*DefaultApi* | [**listTeams**](doc//DefaultApi.md#listteams) | **GET** /v{eventId}/teams | 
-*DefaultApi* | [**login**](doc//DefaultApi.md#login) | **POST** /v{eventId}/login | 
-*MatchApi* | [**getMatch**](doc//MatchApi.md#getmatch) | **GET** /v{eventId}/matches/{matchId} | 
-*MatchApi* | [**getNextMatch**](doc//MatchApi.md#getnextmatch) | **GET** /v{eventId}/next-match | 
-*MatchApi* | [**updateBattle**](doc//MatchApi.md#updatebattle) | **POST** /v{eventId}/matches/{matchId} | 
-*RankingApi* | [**getRanking**](doc//RankingApi.md#getranking) | **GET** /v{eventId}/ranking | 
-*ReceptionApi* | [**completeReception**](doc//ReceptionApi.md#completereception) | **POST** /v{eventId}/reception/{splathonReceptionCode}/complete | 
-*ReceptionApi* | [**getParticipantsDataForReception**](doc//ReceptionApi.md#getparticipantsdataforreception) | **GET** /v{eventId}/reception/{splathonReceptionCode} | 
-*ReceptionApi* | [**getReception**](doc//ReceptionApi.md#getreception) | **GET** /v{eventId}/reception | 
-*ResultApi* | [**getResult**](doc//ResultApi.md#getresult) | **GET** /v{eventId}/results | 
+*AdminApi* | [**addTournamentRound**](doc//AdminApi.md#addtournamentround) | **POST** /{eventId}/tournament/ | 
+*AdminApi* | [**completeReception**](doc//AdminApi.md#completereception) | **POST** /{eventId}/reception/{splathonReceptionCode}/complete | 
+*AdminApi* | [**createEvent**](doc//AdminApi.md#createevent) | **POST** /create-event | 
+*AdminApi* | [**createNewQualifier**](doc//AdminApi.md#createnewqualifier) | **POST** /{eventId}/qualifier | 
+*AdminApi* | [**deleteEvent**](doc//AdminApi.md#deleteevent) | **DELETE** /{eventId}/event | 
+*AdminApi* | [**deleteNotice**](doc//AdminApi.md#deletenotice) | **DELETE** /{eventId}/notices/{noticeId} | 
+*AdminApi* | [**deleteQualifier**](doc//AdminApi.md#deletequalifier) | **POST** /{eventId}/delete-qualifier | 
+*AdminApi* | [**getParticipantsDataForReception**](doc//AdminApi.md#getparticipantsdataforreception) | **GET** /{eventId}/reception/{splathonReceptionCode} | 
+*AdminApi* | [**getReleaseQualifier**](doc//AdminApi.md#getreleasequalifier) | **GET** /{eventId}/release-qualifier | 
+*AdminApi* | [**listReception**](doc//AdminApi.md#listreception) | **GET** /{eventId}/list-reception | 
+*AdminApi* | [**updateBattle**](doc//AdminApi.md#updatebattle) | **POST** /{eventId}/matches/{matchId} | 
+*AdminApi* | [**updateEvent**](doc//AdminApi.md#updateevent) | **PUT** /{eventId}/event | 
+*AdminApi* | [**updateMatch**](doc//AdminApi.md#updatematch) | **PUT** /{eventId}/matches/{matchId} | 
+*AdminApi* | [**updateReception**](doc//AdminApi.md#updatereception) | **POST** /{eventId}/update-reception | 
+*AdminApi* | [**updateReleaseQualifier**](doc//AdminApi.md#updatereleasequalifier) | **PUT** /{eventId}/release-qualifier | 
+*AdminApi* | [**updateSchedule**](doc//AdminApi.md#updateschedule) | **PUT** /{eventId}/schedule | 
+*AdminApi* | [**writeNotice**](doc//AdminApi.md#writenotice) | **POST** /{eventId}/notices | 
+*DefaultApi* | [**getEvent**](doc//DefaultApi.md#getevent) | **GET** /{eventId}/event | 
+*DefaultApi* | [**getSchedule**](doc//DefaultApi.md#getschedule) | **GET** /{eventId}/schedule | 
+*DefaultApi* | [**getTeamDetail**](doc//DefaultApi.md#getteamdetail) | **GET** /{eventId}/teams/{team_id} | 
+*DefaultApi* | [**listEvents**](doc//DefaultApi.md#listevents) | **GET** /events | 
+*DefaultApi* | [**listNotices**](doc//DefaultApi.md#listnotices) | **GET** /{eventId}/notices | 
+*DefaultApi* | [**listTeams**](doc//DefaultApi.md#listteams) | **GET** /{eventId}/teams | 
+*DefaultApi* | [**login**](doc//DefaultApi.md#login) | **POST** /{eventId}/login | 
+*MatchApi* | [**getMatch**](doc//MatchApi.md#getmatch) | **GET** /{eventId}/matches/{matchId} | 
+*MatchApi* | [**getNextMatch**](doc//MatchApi.md#getnextmatch) | **GET** /{eventId}/next-match | 
+*MatchApi* | [**updateBattle**](doc//MatchApi.md#updatebattle) | **POST** /{eventId}/matches/{matchId} | 
+*RankingApi* | [**getRanking**](doc//RankingApi.md#getranking) | **GET** /{eventId}/ranking | 
+*ReceptionApi* | [**completeReception**](doc//ReceptionApi.md#completereception) | **POST** /{eventId}/reception/{splathonReceptionCode}/complete | 
+*ReceptionApi* | [**getParticipantsDataForReception**](doc//ReceptionApi.md#getparticipantsdataforreception) | **GET** /{eventId}/reception/{splathonReceptionCode} | 
+*ReceptionApi* | [**getReception**](doc//ReceptionApi.md#getreception) | **GET** /{eventId}/reception | 
+*ResultApi* | [**getResult**](doc//ResultApi.md#getresult) | **GET** /{eventId}/results | 
 
 
 ## Documentation For Models
@@ -96,6 +100,7 @@ Class | Method | HTTP request | Description
  - [DeleteQualifierRequest](doc//DeleteQualifierRequest.md)
  - [Error](doc//Error.md)
  - [Event](doc//Event.md)
+ - [Events](doc//Events.md)
  - [GetNextMatchResponse](doc//GetNextMatchResponse.md)
  - [ListNoticesResponse](doc//ListNoticesResponse.md)
  - [ListReceptionResponse](doc//ListReceptionResponse.md)

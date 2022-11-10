@@ -5,13 +5,13 @@
 import 'package:openapi/api.dart';
 ```
 
-All URIs are relative to *https://splathon-api-us.appspot.com/splathon*
+All URIs are relative to *https://splathon-api-dev.appspot.com/splathon*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**getMatch**](MatchApi.md#getmatch) | **GET** /v{eventId}/matches/{matchId} | 
-[**getNextMatch**](MatchApi.md#getnextmatch) | **GET** /v{eventId}/next-match | 
-[**updateBattle**](MatchApi.md#updatebattle) | **POST** /v{eventId}/matches/{matchId} | 
+[**getMatch**](MatchApi.md#getmatch) | **GET** /{eventId}/matches/{matchId} | 
+[**getNextMatch**](MatchApi.md#getnextmatch) | **GET** /{eventId}/next-match | 
+[**updateBattle**](MatchApi.md#updatebattle) | **POST** /{eventId}/matches/{matchId} | 
 
 
 # **getMatch**
@@ -26,7 +26,7 @@ Method | HTTP request | Description
 import 'package:openapi/api.dart';
 
 final api_instance = MatchApi();
-final eventId = 789; // int | 
+final eventId = eventId_example; // String | 
 final matchId = 789; // int | match id
 
 try {
@@ -41,7 +41,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **eventId** | **int**|  | 
+ **eventId** | **String**|  | 
  **matchId** | **int**| match id | 
 
 ### Return type
@@ -71,7 +71,7 @@ No authorization required
 import 'package:openapi/api.dart';
 
 final api_instance = MatchApi();
-final eventId = 789; // int | 
+final eventId = eventId_example; // String | 
 final X_SPLATHON_API_TOKEN = X_SPLATHON_API_TOKEN_example; // String | 
 final teamId = 789; // int | team id
 
@@ -87,7 +87,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **eventId** | **int**|  | 
+ **eventId** | **String**|  | 
  **X_SPLATHON_API_TOKEN** | **String**|  | 
  **teamId** | **int**| team id | [optional] 
 
@@ -118,7 +118,7 @@ Update a battle data in the match.
 import 'package:openapi/api.dart';
 
 final api_instance = MatchApi();
-final eventId = 789; // int | 
+final eventId = eventId_example; // String | 
 final matchId = 789; // int | match id
 final X_SPLATHON_API_TOKEN = X_SPLATHON_API_TOKEN_example; // String | 
 final battle = Battle(); // Battle | 
@@ -134,7 +134,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **eventId** | **int**|  | 
+ **eventId** | **String**|  | 
  **matchId** | **int**| match id | 
  **X_SPLATHON_API_TOKEN** | **String**|  | 
  **battle** | [**Battle**](Battle.md)|  | 
