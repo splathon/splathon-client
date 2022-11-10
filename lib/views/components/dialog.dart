@@ -4,8 +4,8 @@ import 'package:splathon_app/styles/text.dart';
 import 'package:splathon_app/styles/text_style.dart';
 
 class NormalDialog {
-  static show(BuildContext context, String title, String body) {
-    showDialog(
+  static Future show(BuildContext context, String title, String body) {
+    return showDialog(
       context: context,
       barrierDismissible: false,
       builder: (BuildContext build) {
@@ -48,7 +48,7 @@ class NormalDialog {
 }
 
 class ErrorDialog {
-  static show(BuildContext context, String message) {
-    NormalDialog.show(context, 'エラー', message);
+  static Future show(BuildContext context, String message) {
+    return NormalDialog.show(context, 'エラー', message);
   }
 }

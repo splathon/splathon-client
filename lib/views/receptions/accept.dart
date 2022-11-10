@@ -1,29 +1,25 @@
-import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:openapi/api.dart' as API;
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:openapi/api.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:splathon_app/domains/reception_provider.dart';
 import 'package:splathon_app/styles/color.dart';
 import 'package:splathon_app/styles/text_style.dart';
-import 'package:splathon_app/utils/config.dart';
-import 'package:splathon_app/utils/preference.dart';
 import 'package:splathon_app/views/components/dialog.dart';
 
-class Accept extends StatefulWidget {
+class Accept extends ConsumerStatefulWidget {
   const Accept({super.key});
 
   @override
   AcceptState createState() => AcceptState();
 }
 
-// TODO: QRコード読み取りライブラリのIntegration iOSしかやってない
-// https://pub.dev/packages/qr_code_scanner#android-integration
-class AcceptState extends State<Accept> with AutomaticKeepAliveClientMixin {
+class AcceptState extends ConsumerState<Accept>
+    with AutomaticKeepAliveClientMixin {
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   QRViewController? controller;
-
-  API.ReceptionPartcipantsDataResponse? _receptionModel;
 
   @override
   void initState() {
@@ -49,42 +45,9 @@ class AcceptState extends State<Accept> with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
 
-  bool isCompleting = false;
-  late String scannedCode;
-
-  Future fetchReceptionData(String receptionCode) async {
-    var client = API.ReceptionApi();
-    String token = Preference.getToken();
-    var result = client.getParticipantsDataForReception(
-        Config.eventNumber, receptionCode, token);
-    result.then((resultsObj) => setState(() {
-          _receptionModel = resultsObj;
-        }));
-  }
-
-  // TODO: implement confirm accept view
-  Future confirmAccept(String value) async {
-    if (isCompleting) {
-      return;
-    }
-    isCompleting = true;
-
-    var client = API.ReceptionApi();
-    String token = Preference.getToken();
-    var result = client.getParticipantsDataForReception(
-        Config.eventNumber, value, token);
-    result.then((resultsObj) {
-      if (resultsObj == null) {
-        return;
-      }
-      buildConfirmDialog(context, resultsObj);
-    }).catchError((onError) {
-      isCompleting = false;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return QRView(
       key: qrKey,
       onQRViewCreated: _onQRViewCreated,
@@ -95,6 +58,7 @@ class AcceptState extends State<Accept> with AutomaticKeepAliveClientMixin {
     this.controller = controller;
     controller.scannedDataStream.listen((scanData) {
       final code = scanData.code;
+      final state = ref.read(receptionStateProvider);
       if (code == null) {
         return;
       }
@@ -102,8 +66,19 @@ class AcceptState extends State<Accept> with AutomaticKeepAliveClientMixin {
     });
   }
 
+  Future confirmAccept(String code) async {
+    final state = ref.read(receptionStateProvider);
+    if (state == ReceptionState.ready) {
+      ref
+          .read(receptionStateProvider.notifier)
+          .recept(code: code)
+          .then((reception) => buildConfirmDialog(context, reception))
+          .catchError((error, stackTrace) {});
+    }
+  }
+
   buildConfirmDialog(
-      BuildContext context, API.ReceptionPartcipantsDataResponse reception) {
+      BuildContext context, ReceptionPartcipantsDataResponse reception) {
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -134,8 +109,7 @@ class AcceptState extends State<Accept> with AutomaticKeepAliveClientMixin {
     );
   }
 
-  List<Widget> receptionViews(
-      API.ReceptionPartcipantsDataResponse receptionData) {
+  List<Widget> receptionViews(ReceptionPartcipantsDataResponse receptionData) {
     return [hasCompanionView(receptionData)] +
         receptionData.participants
             .map((participant) => receptionView(participant))
@@ -143,282 +117,133 @@ class AcceptState extends State<Accept> with AutomaticKeepAliveClientMixin {
         [completeButtonView()];
   }
 
-  Widget hasCompanionView(API.ReceptionPartcipantsDataResponse receptionData) {
+  Widget hasCompanionView(ReceptionPartcipantsDataResponse receptionData) {
     final hasCompanion =
         receptionData.participants.indexWhere((a) => a.hasCompanion == true) !=
             -1;
 
-    return Container(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Container(
-            margin: const EdgeInsets.only(top: 10, left: 20, right: 20),
-            child: Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Container(
-                  child: Stack(
-                    children: <Widget>[
-                      Image.asset('assets/images/silverInc.png'),
-                      const Padding(
-                        padding: EdgeInsets.only(left: 12),
-                        child: Text('同伴者', style: headerStyle),
-                      ),
-                    ],
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Container(
+          margin: const EdgeInsets.only(top: 10, left: 20, right: 20),
+          child: Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              Stack(
+                children: <Widget>[
+                  Image.asset('assets/images/silverInc.png'),
+                  const Padding(
+                    padding: EdgeInsets.only(left: 12),
+                    child: Text('同伴者', style: headerStyle),
                   ),
-                ),
-                const SizedBox(
-                  width: 10,
-                ),
-                Container(
-                  child: hasCompanion
-                      ? const Text(
-                          'あり',
-                          style: hasCompanionStyle,
-                          maxLines: 1,
-                        )
-                      : const Text(
-                          'なし',
-                          style: headerStyle,
-                          maxLines: 1,
-                        ),
-                )
-              ],
-            ),
+                ],
+              ),
+              const SizedBox(
+                width: 10,
+              ),
+              Container(
+                child: hasCompanion
+                    ? const Text(
+                        'あり',
+                        style: hasCompanionStyle,
+                        maxLines: 1,
+                      )
+                    : const Text(
+                        'なし',
+                        style: headerStyle,
+                        maxLines: 1,
+                      ),
+              )
+            ],
           ),
-          Container(
-            margin: const EdgeInsets.only(top: 10),
-            color: borderColor,
-            height: 1,
-            width: double.maxFinite,
-          )
-        ],
-      ),
+        ),
+        Container(
+          margin: const EdgeInsets.only(top: 10),
+          color: borderColor,
+          height: 1,
+          width: double.maxFinite,
+        )
+      ],
     );
   }
 
-  Widget receptionView(API.ParticipantReception reception) {
+  Widget receptionView(ParticipantReception reception) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        receptionColumnView(
+          title: '名前',
+          body: '${reception.fullnameKana} さん',
+          index: 0,
+        ),
+        receptionColumnView(
+          title: 'ニックネーム',
+          body: '${reception.nickname} さん',
+          index: 1,
+        ),
+        receptionColumnView(
+          title: 'チーム名',
+          body: reception.teamName ??= 'チームなし',
+          index: 2,
+        ),
+        receptionColumnView(
+          title: '区分',
+          body: attendType(reception.isPlayer, reception.isStaff),
+          index: 3,
+        ),
+        receptionColumnView(
+          title: '会費',
+          body: '${reception.participantFee}円',
+          index: 4,
+        ),
+        receptionColumnView(
+          title: 'ドック有無',
+          body: reception.hasSwitchDock ? 'あり' : 'なし',
+          index: 5,
+        ),
+        receptionColumnView(
+          title: '懇親会',
+          body: reception.joinParty ? '参加' : '不参加',
+          index: 6,
+        ),
+        Container(
+          margin: const EdgeInsets.only(top: 10),
+          color: borderColor,
+          height: 1,
+          width: double.maxFinite,
+        ),
+      ],
+    );
+  }
+
+  Widget receptionColumnView(
+      {required String title, required String body, required int index}) {
     return Container(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      margin: const EdgeInsets.only(top: 10, left: 20, right: 20),
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
-          Container(
-            margin: const EdgeInsets.only(top: 10, left: 20, right: 20),
-            child: Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Container(
-                  child: Stack(
-                    children: <Widget>[
-                      Image.asset('assets/images/goldInc.png'),
-                      const Padding(
-                        padding: EdgeInsets.only(left: 12),
-                        child: Text('名前', style: headerStyle),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(
-                  width: 10,
-                ),
-                Container(
-                  child: Text(
-                    '${reception.fullnameKana} さん',
-                    style: headerStyle,
-                    maxLines: 1,
-                  ),
-                )
-              ],
-            ),
+          Stack(
+            children: <Widget>[
+              Image.asset(index % 2 == 0
+                  ? 'assets/images/goldInc.png'
+                  : 'assets/images/silverInc.png'),
+              Padding(
+                padding: const EdgeInsets.only(left: 12),
+                child: Text(title, style: headerStyle),
+              ),
+            ],
           ),
-          Container(
-            margin: const EdgeInsets.only(top: 10, left: 20, right: 20),
-            child: Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Container(
-                  child: Stack(
-                    children: <Widget>[
-                      Image.asset('assets/images/silverInc.png'),
-                      const Padding(
-                        padding: EdgeInsets.only(left: 12),
-                        child: Text('ニックネーム', style: headerStyle),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(
-                  width: 10,
-                ),
-                Container(
-                  child: Text(
-                    '${reception.nickname} さん',
-                    style: headerStyle,
-                    maxLines: 1,
-                  ),
-                )
-              ],
-            ),
+          const SizedBox(
+            width: 10,
           ),
-          Container(
-            margin: const EdgeInsets.only(top: 10, left: 20, right: 20),
-            child: Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Container(
-                  child: Stack(
-                    children: <Widget>[
-                      Image.asset('assets/images/goldInc.png'),
-                      const Padding(
-                        padding: EdgeInsets.only(left: 12),
-                        child: Text('チーム名', style: headerStyle),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(
-                  width: 10,
-                ),
-                Container(
-                  child: Text(
-                    reception.teamName ??= 'チームなし',
-                    style: headerStyle,
-                    maxLines: 1,
-                  ),
-                )
-              ],
-            ),
-          ),
-          Container(
-            margin: const EdgeInsets.only(top: 10, left: 20, right: 20),
-            child: Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Container(
-                  child: Stack(
-                    children: <Widget>[
-                      Image.asset('assets/images/silverInc.png'),
-                      const Padding(
-                        padding: EdgeInsets.only(left: 12),
-                        child: Text('区分', style: headerStyle),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(
-                  width: 10,
-                ),
-                Container(
-                  child: Text(
-                    attendType(reception.isPlayer, reception.isStaff),
-                    style: headerStyle,
-                    maxLines: 1,
-                  ),
-                )
-              ],
-            ),
-          ),
-          Container(
-            margin: const EdgeInsets.only(top: 10, left: 20, right: 20),
-            child: Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Container(
-                  child: Stack(
-                    children: <Widget>[
-                      Image.asset('assets/images/goldInc.png'),
-                      const Padding(
-                        padding: EdgeInsets.only(left: 12),
-                        child: Text('会費', style: headerStyle),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(
-                  width: 10,
-                ),
-                Container(
-                  child: Text(
-                    '${reception.participantFee}円',
-                    style: headerStyle,
-                    maxLines: 1,
-                  ),
-                )
-              ],
-            ),
-          ),
-          Container(
-            margin: const EdgeInsets.only(top: 10, left: 20, right: 20),
-            child: Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Container(
-                  child: Stack(
-                    children: <Widget>[
-                      Image.asset('assets/images/silverInc.png'),
-                      const Padding(
-                        padding: EdgeInsets.only(left: 12),
-                        child: Text('ドック有無', style: headerStyle),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(
-                  width: 10,
-                ),
-                Container(
-                  child: Text(
-                    reception.hasSwitchDock ? 'あり' : 'なし',
-                    style: headerStyle,
-                    maxLines: 1,
-                  ),
-                )
-              ],
-            ),
-          ),
-          Container(
-            margin: const EdgeInsets.only(top: 10, left: 20, right: 20),
-            child: Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Container(
-                  child: Stack(
-                    children: <Widget>[
-                      Image.asset('assets/images/goldInc.png'),
-                      const Padding(
-                        padding: EdgeInsets.only(left: 12),
-                        child: Text('懇親会', style: headerStyle),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(
-                  width: 10,
-                ),
-                Container(
-                  child: Text(
-                    reception.joinParty ? '参加' : '不参加',
-                    style: headerStyle,
-                    maxLines: 1,
-                  ),
-                )
-              ],
-            ),
-          ),
-          Container(
-            margin: const EdgeInsets.only(top: 10),
-            color: borderColor,
-            height: 1,
-            width: double.maxFinite,
+          Text(
+            body,
+            style: headerStyle,
+            maxLines: 1,
           )
         ],
       ),
@@ -441,8 +266,8 @@ class AcceptState extends State<Accept> with AutomaticKeepAliveClientMixin {
                 style: actionButtonStyle,
               ),
               onPressed: () {
-                isCompleting = false;
                 Navigator.pop(context, false);
+                ref.read(receptionStateProvider.notifier).cancel();
               },
             ),
             const SizedBox(
@@ -459,18 +284,21 @@ class AcceptState extends State<Accept> with AutomaticKeepAliveClientMixin {
                 style: actionButtonStyle,
               ),
               onPressed: () {
-                var client = API.ReceptionApi();
-                String token = Preference.getToken();
-                var result = client.completeReception(
-                    Config.eventNumber, scannedCode, token);
-                result.then((resultObjet) {
-                  isCompleting = false;
-                  Navigator.pop(context, false);
-                  NormalDialog.show(context, '受付', '受付を完了しました！');
-                }).catchError((onError) {
-                  isCompleting = false;
-                  ErrorDialog.show(context, '受付に失敗しました');
-                });
+                ref
+                    .read(receptionStateProvider.notifier)
+                    .completeReception()
+                    .then(
+                  (_) async {
+                    Navigator.pop(context, false);
+                    await NormalDialog.show(context, '受付', '受付を完了しました！');
+                    ref.read(receptionStateProvider.notifier).finish();
+                  },
+                ).catchError(
+                  (error, stackTrace) async {
+                    await ErrorDialog.show(context, '受付に失敗しました');
+                    ref.read(receptionStateProvider.notifier).finish();
+                  },
+                );
               },
             ),
           ],
