@@ -32,12 +32,9 @@ void main() async {
     ProviderScope(
       child: MaterialApp(
         title: 'Splathon App',
-        routes: <String, WidgetBuilder>{
-          '/': (_) => const Splash(),
-          '/login': (_) => Login(),
-          '/home': (_) => const HomeTabbedBar(),
-          '/admin': (_) => const AdminTabbedBar(),
-        },
+        home: isLogin
+            ? Login()
+            : (isAdmin ? const AdminTabbedBar() : const HomeTabbedBar()),
       ),
     ),
   );
