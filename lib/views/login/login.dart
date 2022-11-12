@@ -6,6 +6,8 @@ import 'package:splathon_app/styles/text.dart';
 import 'package:splathon_app/styles/text_style.dart';
 import 'package:splathon_app/utils/config.dart';
 import 'package:splathon_app/views/components/dialog.dart';
+import 'package:splathon_app/views/tabs/admin_tabbed_bar.dart';
+import 'package:splathon_app/views/tabs/home_tabbed_bar.dart';
 
 class Login extends HookConsumerWidget {
   Login({super.key});
@@ -84,9 +86,19 @@ class Login extends HookConsumerWidget {
         .then(
       (user) {
         if (user.isAdmin) {
-          Navigator.of(context).pushReplacementNamed("/admin");
+          //Navigator.of(context).pushReplacementNamed("/admin");
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const AdminTabbedBar(),
+              ));
         } else {
-          Navigator.of(context).pushReplacementNamed("/home");
+          //Navigator.of(context).pushReplacementNamed("/");
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const HomeTabbedBar(),
+              ));
         }
       },
     ).catchError((error, stackTrace) {
