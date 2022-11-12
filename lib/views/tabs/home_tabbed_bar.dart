@@ -36,7 +36,7 @@ class HomeTabbedBarState extends ConsumerState<HomeTabbedBar>
     super.initState();
 
     controller = TabController(length: 4, vsync: this);
-    setupFirebaseCloudMessaging(context);
+    _setupFirebaseCloudMessaging(context);
   }
 
   @override
@@ -141,21 +141,24 @@ class HomeTabbedBarState extends ConsumerState<HomeTabbedBar>
     // );
   }
 
-  // TODO: 隠蔽化したい
-  void setupFirebaseCloudMessaging(BuildContext context) {
+  void _setupFirebaseCloudMessaging(BuildContext context) async {
+    await messaging.requestPermission(
+      alert: true,
+      badge: true,
+      sound: true,
+    );
+
+    if (kIsWeb) {
+      final _ = await messaging.getToken(vapidKey: Config.vapidKey);
+      // need token for firebase cloud message test
+    }
+
     FirebaseMessaging.onMessage.listen((message) {
       RemoteNotification? notification = message.notification;
       if (notification != null) {
         buildDialog(context, notification);
       }
     });
-    messaging.requestPermission(
-      alert: true,
-      badge: true,
-      sound: true,
-    );
-    messaging.getAPNSToken().then((String? token) => {});
-    messaging.getToken().then((String? token) => {});
   }
 
   buildDialog(BuildContext context, RemoteNotification notification) {
