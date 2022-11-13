@@ -20,6 +20,7 @@ class AcceptState extends ConsumerState<Accept>
     with AutomaticKeepAliveClientMixin {
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   QRViewController? controller;
+  bool isVisibleQRScanView = true;
 
   @override
   void initState() {
@@ -48,9 +49,48 @@ class AcceptState extends ConsumerState<Accept>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return QRView(
-      key: qrKey,
-      onQRViewCreated: _onQRViewCreated,
+
+    return Stack(
+      children: [
+        isVisibleQRScanView
+            ? QRView(
+                key: qrKey,
+                onQRViewCreated: _onQRViewCreated,
+              )
+            : Center(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    const Text('非撮影モード', style: largeBlackTextStyle),
+                    const SizedBox(height: 30),
+                    Opacity(
+                      opacity: 0.5,
+                      child: Image.asset('assets/images/girl.png'),
+                    ),
+                  ],
+                ),
+              ),
+        Align(
+          alignment: Alignment.bottomRight,
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: IconButton(
+                onPressed: () {
+                  setState(() => isVisibleQRScanView = !isVisibleQRScanView);
+                  isVisibleQRScanView
+                      ? controller?.resumeCamera()
+                      : controller?.pauseCamera();
+                },
+                iconSize: 64,
+                color: splaBlueColor,
+                icon: Icon(isVisibleQRScanView
+                    ? Icons.disabled_visible
+                    : Icons.camera_outlined)),
+          ),
+        ),
+      ],
     );
   }
 
@@ -58,7 +98,6 @@ class AcceptState extends ConsumerState<Accept>
     this.controller = controller;
     controller.scannedDataStream.listen((scanData) {
       final code = scanData.code;
-      final state = ref.read(receptionStateProvider);
       if (code == null) {
         return;
       }
