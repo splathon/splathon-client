@@ -141,7 +141,8 @@ class ResultDetail extends HookConsumerWidget {
                       );
                     }
 
-                    bool isWinAlpha = battle.winner == 'alpha';
+                    bool isWinAlpha =
+                        battle.winner == API.BattleWinnerEnum.alpha;
                     return GestureDetector(
                       onTap: () async {
                         if (!isAdmin) {
