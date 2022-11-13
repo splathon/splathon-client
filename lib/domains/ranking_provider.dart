@@ -4,7 +4,7 @@ import 'package:splathon_app/utils/config.dart';
 
 final rankingProvider = FutureProvider<Ranking>((ref) async {
   var client = RankingApi();
-  var result = await client.getRanking(Config.eventNumber);
+  var result = await client.getRanking(Config.apiEventNumber);
   if (result == null) {
     throw Exception();
   }

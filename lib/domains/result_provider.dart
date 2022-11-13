@@ -9,8 +9,8 @@ import 'package:splathon_app/utils/preference.dart';
 final resultsProvider = FutureProvider<Results>((ref) async {
   var client = ResultApi();
   String token = Preference.getToken();
-  var result =
-      await client.getResult(Config.eventNumber, X_SPLATHON_API_TOKEN: token);
+  var result = await client.getResult(Config.apiEventNumber,
+      X_SPLATHON_API_TOKEN: token);
   if (result == null) {
     throw Exception();
   }
@@ -50,7 +50,7 @@ class SelectTeamResultStateNotifier extends StateNotifier<AsyncValue<Results>> {
 
   Future<List<Team>> _fetchTeams() async {
     var client = DefaultApi();
-    var result = await client.listTeams(Config.eventNumber);
+    var result = await client.listTeams(Config.apiEventNumber);
     if (result == null) {
       throw Exception();
     }
@@ -60,7 +60,7 @@ class SelectTeamResultStateNotifier extends StateNotifier<AsyncValue<Results>> {
   Future<Results> _fetchResult({required int teamId}) async {
     var client = ResultApi();
     String token = Preference.getToken();
-    var result = await client.getResult(Config.eventNumber,
+    var result = await client.getResult(Config.apiEventNumber,
         X_SPLATHON_API_TOKEN: token, teamId: teamId);
     if (result == null) {
       throw Exception();

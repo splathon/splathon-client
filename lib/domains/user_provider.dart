@@ -50,7 +50,7 @@ class UserStateNotifier extends StateNotifier<User?> {
     var client = DefaultApi();
     LoginRequest loginRequest =
         LoginRequest(userId: userId, password: password);
-    return client.login(Config.eventNumber, loginRequest).then((response) {
+    return client.login(Config.apiEventNumber, loginRequest).then((response) {
       if (response == null) {
         throw Exception();
       }

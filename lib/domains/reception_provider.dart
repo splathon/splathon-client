@@ -7,7 +7,7 @@ final receptionProvider =
     FutureProvider.autoDispose<ReceptionResponse>((ref) async {
   var client = ReceptionApi();
   String token = Preference.getToken();
-  var result = await client.getReception(Config.eventNumber, token);
+  var result = await client.getReception(Config.apiEventNumber, token);
   if (result == null) {
     throw Exception();
   }
@@ -36,7 +36,7 @@ class ReceptionStateNotifier extends StateNotifier<ReceptionState> {
     var client = ReceptionApi();
     String token = Preference.getToken();
     var result = await client
-        .getParticipantsDataForReception(Config.eventNumber, code, token)
+        .getParticipantsDataForReception(Config.apiEventNumber, code, token)
         .catchError((error, stackTrace) {
       state = ReceptionState.ready;
     });
@@ -51,7 +51,7 @@ class ReceptionStateNotifier extends StateNotifier<ReceptionState> {
   Future<void> completeReception() async {
     var client = ReceptionApi();
     String token = Preference.getToken();
-    return await client.completeReception(Config.eventNumber, qrCode, token);
+    return await client.completeReception(Config.apiEventNumber, qrCode, token);
   }
 
   void cancel() {

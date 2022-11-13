@@ -6,8 +6,10 @@ import 'package:splathon_app/firebase_options_splathon_11_stg.dart';
 import 'package:splathon_app/firebase_options_splathon_12.dart';
 
 class Config {
-  static String eventNumber =
+  static String apiEventNumber =
       'v${const int.fromEnvironment('EVENT_NUMBER', defaultValue: 11)}';
+  static String eventNumber =
+      '${const int.fromEnvironment('EVENT_NUMBER', defaultValue: 11)}';
   static String splathonApiHost = dotenv.env['SPLATHON_API_BASE_DOMAIN'] ?? '';
   static String vapidKey =
       _vapidEnv.env['FIREBASE_CLOUD_MESSAGE_VAPID_KEY'] ?? '';

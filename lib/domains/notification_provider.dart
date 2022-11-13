@@ -71,7 +71,7 @@ class NotificationStateNotifier
   Future<List<Notice>> _fetchNotices() async {
     var client = DefaultApi();
     String token = Preference.getToken();
-    var result = await client.listNotices(Config.eventNumber, token);
+    var result = await client.listNotices(Config.apiEventNumber, token);
     if (result == null) {
       throw Exception();
     }
@@ -80,7 +80,7 @@ class NotificationStateNotifier
 
   Future<List<ScheduleEntry>> _fetchSchedules() async {
     var client = DefaultApi();
-    var result = await client.getSchedule(Config.eventNumber);
+    var result = await client.getSchedule(Config.apiEventNumber);
     if (result == null) {
       throw Exception();
     }
@@ -91,7 +91,7 @@ class NotificationStateNotifier
     var client = MatchApi();
     String token = Preference.getToken();
     var result =
-        await client.getNextMatch(Config.eventNumber, token, teamId: teamId);
+        await client.getNextMatch(Config.apiEventNumber, token, teamId: teamId);
     if (result == null) {
       throw Exception();
     }
