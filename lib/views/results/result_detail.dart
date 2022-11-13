@@ -27,6 +27,14 @@ class ResultDetail extends HookConsumerWidget {
       appBar: AppBar(
         title: const SplaText('リザルト'),
         backgroundColor: const Color.fromRGBO(11, 49, 143, 1),
+        actions: [
+          IconButton(
+            icon: Image.asset('assets/images/reloadIcon.png'),
+            onPressed: () {
+              final _ = ref.refresh(matchProvider(matchId));
+            },
+          ),
+        ],
       ),
       body: match.when(
         data: (match) {
