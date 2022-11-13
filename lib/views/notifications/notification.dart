@@ -143,82 +143,87 @@ class Notifications extends HookConsumerWidget {
                       .firstMatch(notice.text);
                   url = match?.group(0);
                   return Container(
-                      decoration:
-                          notificationDecoration(index, data.notices.length),
-                      margin: isLast
-                          ? const EdgeInsets.only(
-                              left: 20, right: 20, bottom: 20)
-                          : const EdgeInsets.only(left: 20, right: 20),
-                      child: Center(
-                          child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: <Widget>[
-                          Container(
-                            padding: const EdgeInsets.only(left: 14),
-                            child: Column(
-                              children: <Widget>[
-                                SizedBox(
-                                  height: 40,
-                                  width: 50,
-                                  child: Stack(
-                                    children: <Widget>[
-                                      Padding(
-                                        padding: const EdgeInsets.only(left: 4),
-                                        child: Text(
-                                          dateString(
-                                              notice.timestampSec * 1000),
-                                          style: nextMatchTitleStyle,
-                                          maxLines: 1,
+                    decoration:
+                        notificationDecoration(index, data.notices.length),
+                    margin: isLast
+                        ? const EdgeInsets.only(left: 20, right: 20, bottom: 20)
+                        : const EdgeInsets.only(left: 20, right: 20),
+                    child: Center(
+                      child: ConstrainedBox(
+                        constraints: const BoxConstraints(minHeight: 45),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: <Widget>[
+                            Container(
+                              padding: const EdgeInsets.only(left: 14),
+                              child: Column(
+                                children: <Widget>[
+                                  SizedBox(
+                                    height: 40,
+                                    width: 50,
+                                    child: Stack(
+                                      children: <Widget>[
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 4),
+                                          child: Text(
+                                            dateString(
+                                                notice.timestampSec * 1000),
+                                            style: nextMatchTitleStyle,
+                                            maxLines: 1,
+                                          ),
                                         ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.only(
-                                            top: 15, left: 8),
-                                        child: Text(
-                                          timeString(
-                                              notice.timestampSec * 1000),
-                                          style: nextMatchTitleStyle,
-                                          maxLines: 1,
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                              top: 15, left: 8),
+                                          child: Text(
+                                            timeString(
+                                                notice.timestampSec * 1000),
+                                            style: nextMatchTitleStyle,
+                                            maxLines: 1,
+                                          ),
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
-                                ),
-                                Container(
-                                  margin: const EdgeInsets.only(bottom: 5),
-                                  child: notice.timestampSec * 1000 >
-                                          alreadyReadTime
-                                      ? RoundedView.accentNewView()
-                                      : Container(),
-                                ),
-                              ],
+                                  Container(
+                                    margin: const EdgeInsets.only(bottom: 5),
+                                    child: notice.timestampSec * 1000 >
+                                            alreadyReadTime
+                                        ? RoundedView.accentNewView()
+                                        : Container(),
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                          const SizedBox(
-                            width: 12.0,
-                          ),
-                          Expanded(
-                            child: Padding(
-                                padding: const EdgeInsets.only(
-                                  top: 3, // text style 微修正による調整
-                                  right: 10,
-                                ),
-                                child: InkWell(
-                                  child: Text(
-                                    notice.text,
-                                    style: notificationStyle,
+                            const SizedBox(
+                              width: 12.0,
+                            ),
+                            Expanded(
+                              child: Padding(
+                                  padding: const EdgeInsets.only(
+                                    top: 3, // text style 微修正による調整
+                                    right: 10,
                                   ),
-                                  onTap: () async {
-                                    if (url == null) {
-                                      return;
-                                    }
-                                    await launchUrlString(url);
-                                  },
-                                )),
-                          ),
-                        ],
-                      )));
+                                  child: InkWell(
+                                    child: Text(
+                                      notice.text,
+                                      style: notificationStyle,
+                                    ),
+                                    onTap: () async {
+                                      if (url == null) {
+                                        return;
+                                      }
+                                      await launchUrlString(url);
+                                    },
+                                  )),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
                 }
                 if (i - 4 == data.notices.length) {
                   return Container(
@@ -244,70 +249,75 @@ class Notifications extends HookConsumerWidget {
                       : null;
 
                   return Container(
-                      decoration:
-                          notificationDecoration(index, data.schedules.length),
-                      margin: isLast
-                          ? const EdgeInsets.only(
-                              left: 20, right: 20, bottom: 20)
-                          : const EdgeInsets.only(left: 20, right: 20),
-                      child: Center(
-                          child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: <Widget>[
-                          Container(
-                            padding: const EdgeInsets.only(left: 14),
-                            child: Column(
-                              children: <Widget>[
-                                SizedBox(
-                                  width: 60,
-                                  child: Stack(
-                                    children: <Widget>[
-                                      Padding(
-                                        padding: const EdgeInsets.only(left: 4),
-                                        child: Text(
-                                          "${timeString((schedule.startTimestampSec ?? 0) * 1000)}　", // TODO: null case
-                                          style: nextMatchTitleStyle,
-                                          maxLines: 1,
+                    decoration:
+                        notificationDecoration(index, data.schedules.length),
+                    margin: isLast
+                        ? const EdgeInsets.only(left: 20, right: 20, bottom: 20)
+                        : const EdgeInsets.only(left: 20, right: 20),
+                    child: Center(
+                      child: ConstrainedBox(
+                        constraints: const BoxConstraints(minHeight: 45),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: <Widget>[
+                            Container(
+                              padding: const EdgeInsets.only(left: 14),
+                              child: Column(
+                                children: <Widget>[
+                                  SizedBox(
+                                    width: 60,
+                                    child: Stack(
+                                      children: <Widget>[
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 4),
+                                          child: Text(
+                                            "${timeString((schedule.startTimestampSec ?? 0) * 1000)}　", // TODO: null case
+                                            style: nextMatchTitleStyle,
+                                            maxLines: 1,
+                                          ),
                                         ),
-                                      ),
-                                      hasDurationTime
-                                          ? Padding(
-                                              padding: const EdgeInsets.only(
-                                                  top: 15, left: 8),
-                                              child: Text(
-                                                endScheduleTimeStamp == null
-                                                    ? "-"
-                                                    : "～${timeString(endScheduleTimeStamp * 1000)}",
-                                                style: nextMatchTitleStyle,
-                                                maxLines: 1,
-                                              ),
-                                            )
-                                          : Container(),
-                                    ],
+                                        hasDurationTime
+                                            ? Padding(
+                                                padding: const EdgeInsets.only(
+                                                    top: 15, left: 8),
+                                                child: Text(
+                                                  endScheduleTimeStamp == null
+                                                      ? "-"
+                                                      : "～${timeString(endScheduleTimeStamp * 1000)}",
+                                                  style: nextMatchTitleStyle,
+                                                  maxLines: 1,
+                                                ),
+                                              )
+                                            : Container(),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
-                          ),
-                          const SizedBox(
-                            width: 12.0,
-                          ),
-                          Expanded(
-                            child: Padding(
-                                padding: const EdgeInsets.only(
-                                  top: 3, // text style 微修正による調整
-                                  right: 10,
-                                ),
-                                child: InkWell(
-                                  child: Text(
-                                    schedule.title ?? '', // TODO: null case
-                                    style: notificationStyle,
+                            const SizedBox(
+                              width: 12.0,
+                            ),
+                            Expanded(
+                              child: Padding(
+                                  padding: const EdgeInsets.only(
+                                    top: 3, // text style 微修正による調整
+                                    right: 10,
                                   ),
-                                )),
-                          ),
-                        ],
-                      )));
+                                  child: InkWell(
+                                    child: Text(
+                                      schedule.title ?? '', // TODO: null case
+                                      style: notificationStyle,
+                                    ),
+                                  )),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
                 }
               }),
         );
