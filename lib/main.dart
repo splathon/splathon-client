@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:splathon_app/domains/user_provider.dart';
 import 'package:splathon_app/utils/config.dart';
@@ -27,6 +28,9 @@ void main() async {
 
   final isLogin = user == null;
   final isAdmin = user?.isAdmin ?? false;
+
+  // Remove Web # url
+  setUrlStrategy(PathUrlStrategy());
 
   runApp(
     ProviderScope(
