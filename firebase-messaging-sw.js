@@ -26,6 +26,17 @@ const firebaseConfig = (() => {
         storageBucket: 'splathon-12-apps.appspot.com',
         measurementId: 'G-9QKJYCT4M4',
       };
+    case 'splathon-12-stg.netlify.com':
+      // Splathon 12 Stg
+      return {
+        apiKey: 'AIzaSyAkwzgRq79oauD0iRW-V9jul68gSuoGTpk',
+        appId: '1:961836068991:web:4299e0af29450af123cf4a',
+        messagingSenderId: '961836068991',
+        projectId: 'splathon12-stg-apps',
+        authDomain: 'splathon12-stg-apps.firebaseapp.com',
+        storageBucket: 'splathon12-stg-apps.appspot.com',
+        measurementId: 'G-1BRK77KYQ7',
+      }
     case 'localhost':
     case 'splathon-11-stg.netlify.com':
     default:
