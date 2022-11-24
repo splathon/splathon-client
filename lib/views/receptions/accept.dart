@@ -247,6 +247,11 @@ class AcceptState extends ConsumerState<Accept>
           body: reception.joinParty ? '参加' : '不参加',
           index: 6,
         ),
+        receptionColumnView(
+          title: '備考',
+          body: reception.receptionMemo ?? '',
+          index: 7,
+        ),
         Container(
           margin: const EdgeInsets.only(top: 10),
           color: borderColor,
