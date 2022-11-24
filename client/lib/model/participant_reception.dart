@@ -26,6 +26,7 @@ class ParticipantReception {
     required this.isPlayer,
     required this.hasSwitchDock,
     required this.hasCompanion,
+    this.receptionMemo,
     this.reception,
   });
 
@@ -80,6 +81,15 @@ class ParticipantReception {
   /// 同伴者がいるかどうか。いる場合は用スプレッドシート確認。
   bool hasCompanion;
 
+  /// 受付でべんりフリーテキストな備考メモ。弁当の種類・有無など。
+  ///
+  /// Please note: This property should have been non-nullable! Since the specification file
+  /// does not include a default value (using the "default:" property), however, the generated
+  /// source code must fall back to having a nullable type.
+  /// Consider adding a "default:" property in the specification file to hide this note.
+  ///
+  String? receptionMemo;
+
   ///
   /// Please note: This property should have been non-nullable! Since the specification file
   /// does not include a default value (using the "default:" property), however, the generated
@@ -103,6 +113,7 @@ class ParticipantReception {
      other.isPlayer == isPlayer &&
      other.hasSwitchDock == hasSwitchDock &&
      other.hasCompanion == hasCompanion &&
+     other.receptionMemo == receptionMemo &&
      other.reception == reception;
 
   @override
@@ -121,10 +132,11 @@ class ParticipantReception {
     (isPlayer.hashCode) +
     (hasSwitchDock.hashCode) +
     (hasCompanion.hashCode) +
+    (receptionMemo == null ? 0 : receptionMemo!.hashCode) +
     (reception == null ? 0 : reception!.hashCode);
 
   @override
-  String toString() => 'ParticipantReception[id=$id, slackUserId=$slackUserId, nickname=$nickname, fullnameKana=$fullnameKana, companyName=$companyName, teamName=$teamName, teamId=$teamId, participantFee=$participantFee, joinParty=$joinParty, isStaff=$isStaff, isPlayer=$isPlayer, hasSwitchDock=$hasSwitchDock, hasCompanion=$hasCompanion, reception=$reception]';
+  String toString() => 'ParticipantReception[id=$id, slackUserId=$slackUserId, nickname=$nickname, fullnameKana=$fullnameKana, companyName=$companyName, teamName=$teamName, teamId=$teamId, participantFee=$participantFee, joinParty=$joinParty, isStaff=$isStaff, isPlayer=$isPlayer, hasSwitchDock=$hasSwitchDock, hasCompanion=$hasCompanion, receptionMemo=$receptionMemo, reception=$reception]';
 
   Map<String, dynamic> toJson() {
     final json = <String, dynamic>{};
@@ -149,6 +161,11 @@ class ParticipantReception {
       json[r'is_player'] = this.isPlayer;
       json[r'has_switch_dock'] = this.hasSwitchDock;
       json[r'has_companion'] = this.hasCompanion;
+    if (this.receptionMemo != null) {
+      json[r'reception_memo'] = this.receptionMemo;
+    } else {
+      json[r'reception_memo'] = null;
+    }
     if (this.reception != null) {
       json[r'reception'] = this.reception;
     } else {
@@ -189,6 +206,7 @@ class ParticipantReception {
         isPlayer: mapValueOfType<bool>(json, r'is_player')!,
         hasSwitchDock: mapValueOfType<bool>(json, r'has_switch_dock')!,
         hasCompanion: mapValueOfType<bool>(json, r'has_companion')!,
+        receptionMemo: mapValueOfType<String>(json, r'reception_memo'),
         reception: Reception.fromJson(json[r'reception']),
       );
     }

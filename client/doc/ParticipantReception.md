@@ -21,6 +21,7 @@ Name | Type | Description | Notes
 **isPlayer** | **bool** | playerとして参加するかどうか。falseならスタッフか観戦 | 
 **hasSwitchDock** | **bool** | Nintendo Switch doc を持ってきたか | 
 **hasCompanion** | **bool** | 同伴者がいるかどうか。いる場合は用スプレッドシート確認。 | 
+**receptionMemo** | **String** | 受付でべんりフリーテキストな備考メモ。弁当の種類・有無など。 | [optional] 
 **reception** | [**Reception**](Reception.md) |  | [optional] 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
