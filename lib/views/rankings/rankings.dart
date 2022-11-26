@@ -108,8 +108,9 @@ class Rankings extends HookConsumerWidget {
   }
 
   Widget headerView(int index, API.Rank rank) {
-    final rankIndex = index + 1; // rankIndex: 1..N
-    final isTop3 = rankIndex <= 3;
+    final rankIndex = rank.rank;
+    // 試合開始前は全チーム0pt同率1位のため王冠マークを付けない(isTop3としない)
+    final isTop3 = rankIndex <= 3 && rank.point > 0;
     return Container(
       margin: index == 0
           ? const EdgeInsets.only(left: 20, right: 20)
