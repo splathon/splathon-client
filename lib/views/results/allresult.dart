@@ -30,7 +30,11 @@ class AllResult extends HookConsumerWidget {
             children: <Widget>[
               const Text('試合を待て！', style: largeBlackTextStyle),
               const SizedBox(height: 30),
-              Image.asset('assets/images/boy_and_girl.png'),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 60),
+                constraints: const BoxConstraints(maxWidth: 500),
+                child: Image.asset('assets/images/boys.png'),
+              ),
             ],
           );
         }

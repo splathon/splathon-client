@@ -40,7 +40,14 @@ class EachResult extends HookConsumerWidget {
                 style: noResultTextStyle,
               ),
               const SizedBox(height: 30),
-              Image.asset('assets/images/boys.png'),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 60),
+                constraints: const BoxConstraints(maxWidth: 500),
+                child: Image.asset(
+                  'assets/images/boy_and_girl.png',
+                  fit: BoxFit.contain,
+                ),
+              ),
             ],
           );
         }
