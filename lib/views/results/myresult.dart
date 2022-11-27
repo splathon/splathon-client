@@ -131,7 +131,7 @@ class EachResult extends HookConsumerWidget {
                             top: 10, left: 20, right: 20, bottom: 20)
                         : const EdgeInsets.only(top: 10, left: 20, right: 20),
                     padding: const EdgeInsets.only(left: 14.0, right: 14.0),
-                    height: 90.0,
+                    height: 92.0,
                     child: Row(
                       mainAxisSize: MainAxisSize.max,
                       children: <Widget>[
@@ -141,7 +141,7 @@ class EachResult extends HookConsumerWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               SizedBox(
-                                height: 20.0,
+                                height: 22.0,
                                 child: Text(
                                     "${round.name} ${room.name} 第$order試合",
                                     style: resultTitleStyle),
